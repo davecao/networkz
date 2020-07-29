@@ -27,10 +27,10 @@ namespace CLIARG {
   //int numOfvertex = 0;
   //int graphType = 1;
   std::string o_filename = "o_graphviz.gv";
-  //std::string o_graph_name;
+  std::string o_graph_name = "Gene Expression Network";
   std::string i_filename;
   std::string inputfile_size; // store the size of input file.
-double d_threshold = 0.0;
+  double d_threshold = 0.0;
   
   // all the options
   po::options_description general("General options");
@@ -40,25 +40,16 @@ double d_threshold = 0.0;
   void init(){
     general.add_options()
     ("version,V", "Show the version number")
-    //("num,n", po::value<int>(),"Specify the total number of vertices. Default is 0.")
-    //("type,t",po::value<int>(),"Graph types: 0->directed(not implemented yet) or 1->undirected. Default is 1.")
-    //("infile,f",po::value<std::string>(&i_filename)->required(),"The input data file. Only the dot format of graphviz is supported now.")
     ("infile,i",po::value<std::string>(&i_filename),"The input data file. Only the tsv format is supported now.")
     ("outfile,o", po::value<std::string>(&o_filename),"The output file of clusters in text format.Default name is 'o_graphviz.gv'.")
-    //("graph,g", po::value<std::string>(),"The output file in the dot format of Graphviz.")
     ("help,h", "print help info.")
     ;
     
     opt.add_options()
     ("verbose,v","The extra verbose.")
-    //("rmin",po::value<double>(),"The minimum rmsd for the cutoff between two pdb structures. For rmsd values of two structures, i.e., rmin<= r <= rmax, the edge will be created for the graph. rmin=0.0.")
-    //("rmax",po::value<double>(),"The maximium rmsd for the cutoff between two pdb structures. rmax = +inf.")
     ("threshold,t",po::value<double>(&d_threshold),"The threshold between two vertices which are linked by an edge if the distance less than it. default is 0.")
-    //("sim1,a",po::value<double>(),"The similarity cutoff for the structure A in the pairwised structure alignment. Together with rmsd cutoff. Default is zero.")
-    //("sim2,b",po::value<double>(),"The similarity cutoff for the structure B in the pairwised structure alignment. Used with rmsd cutoff together. Default is zero.")
-    //("optlen,l",po::value<int>(),"The optimal length cutoff for structure comparison.Default is 35 aa.")
+    ("title,n",po::value<std::string>(&o_graph_name),"The title of the graph used to label the png file. Default is Gene Expression Network.")
     ;
-    
     general.add(opt);
   }
   
@@ -115,29 +106,16 @@ double d_threshold = 0.0;
     if ( vm.count("verbose") ){
       verbose = true;
     }
-
-  /*
-    if ( vm.count("num") ) {
-      numOfvertex = vm["num"].as<int>();
+    if ( vm.count("title") ) {
+      o_graph_name = vm["title"].as<std::string>();
     }
-    
-    if ( vm.count("type") ) {
-      graphType = vm["type"].as<int>();
-    }
-
-    if ( vm.count("graph") ) {
-      o_graph_name = vm["graph"].as<std::string>();
-    }
-
-   */
-    
     if ( vm.count("outfile") ) {
       o_filename = vm["outfile"].as<std::string>();
     }
     if ( vm.count("threshold") ) {
       d_threshold = vm["threshold"].as<double>();
     }
-    // Required arguments
+    // Check required arguments
     if ( vm.count("infile") ) {
       i_filename = vm["infile"].as<std::string>();
       if( !FileExists(i_filename) ) {

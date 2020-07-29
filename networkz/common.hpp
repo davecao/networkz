@@ -49,6 +49,18 @@
 #include <boost/iostreams/device/mapped_file.hpp>
 //#include <boost/xpressive/xpressive.hpp>
 
+#if defined(PARALLEL_BGL)
+// Parallel BGL
+#include <mpi.h>
+#include <boost/mpi.hpp>
+#include <boost/graph/use_mpi.hpp>
+#include <boost/graph/distributed/mpi_process_group.hpp>
+#include <boost/graph/distributed/adjacency_list.hpp>
+#include <boost/graph/erdos_renyi_generator.hpp>
+#include <boost/random/linear_congruential.hpp>
+
+#else
+
 //Boost Graph Libraries
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
@@ -65,6 +77,8 @@
 #include <boost/graph/bc_clustering.hpp>
 #include <boost/graph/kruskal_min_spanning_tree.hpp>
 #include <boost/graph/prim_minimum_spanning_tree.hpp>
+
+#endif
 
 inline std::string byteConverter(long long byte)
 {
@@ -96,6 +110,15 @@ inline std::string byteConverter_s(long long byte)
   return ss.str();
 }
 
+inline std::string get_local_time() {
+  std::time_t t = std::time(nullptr);
+  std::tm* now = std::localtime(&t);
+  std::stringstream ss;
+  ss << (now->tm_year + 1900) << "-"
+     << (now->tm_mon + 1) << "-"
+  << now->tm_mday;
+  return ss.str();
+}
 /*
 typedef std::tuple<std::string, std::string> TupleKey;
 
@@ -121,8 +144,10 @@ struct KeyEqual : public std::binary_function<TupleKey, TupleKey, bool>
   }
 };
 // Usage: std::map use tuple as the key
-//EdgesMap *edge_map = new EdgesMap();
-//edge_map->insert(
+//
+// typedef std::unordered_map<TupleKey, double, KeyHash, KeyEqual> EdgesMap;
+// EdgesMap *edge_map = new EdgesMap();
+// edge_map->insert(
 //     std::pair<TupleKey, double>(
 //         std::tuple<std::string, std::string>(n1, n2), d));
 */

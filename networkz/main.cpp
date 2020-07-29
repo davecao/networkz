@@ -3,6 +3,7 @@
 //  networkz
 //
 //  Created by 曹巍 on 2020/07/25.
+//  Last Modified on 2020/07/29.
 //  Copyright © 2020 曹巍. All rights reserved.
 //
 //
@@ -29,6 +30,8 @@
  *  -t [ --threshold ] arg  The threshold between two vertices which are linked
  *                          by an edge if the distance less than it. default is
  *                          0.
+ * -n [ --title ] arg      The title of the graph used to label the png file.
+ *                         Default is Gene Expression Network.
  *
  * Example:
  *  1. Create a graphviz file.
@@ -41,12 +44,25 @@
 
 #include "common.hpp"
 #include "cli_opt.hpp"
-//#include "print.hpp"
 
 struct gVertex {
+  // Constructor
+  gVertex()
+  {}
+  
+  gVertex(std::string& name, double tpm = -1)
+    : name(name), tpm(tpm)
+  {}
+  // public fields
   std::string name;
   double tpm;
-  
+#if defined(PARALLEL_BGL)
+  // Serialization support for parallel processing
+  template<typename Archiver>
+  void serialize(Archiver& ar, const unsigned int /*version*/) {
+    ar & name & tpm;
+  }
+#endif
   std::string to_graphviz() {
     std::stringstream ss;
     ss << "[label=\"" << name << "\", tpm=" << tpm << "]";
@@ -55,7 +71,23 @@ struct gVertex {
 };
 
 struct gEdge {
+  // Constructor
+  gEdge()
+  {}
+  
+  gEdge(double distance=-1)
+    : distance(distance)
+  {}
+  
   double distance;
+
+#if defined(PARALLEL_BGL)
+  // Serialization support for parallel processing
+  template<typename Archiver>
+  void serialize(Archiver& ar, const unsigned int /*version*/) {
+    ar & distance;
+  }
+#endif
   
   std::string to_graphviz() {
     std::stringstream ss;
@@ -66,21 +98,46 @@ struct gEdge {
 };
 
 struct gGraph {
-  std::string name;
+  //Constructor
+  gGraph()
+  {}
   
+  gGraph(const std::string& glabel)
+    : glabel(glabel)
+  {}
+  
+  std::string glabel;
+
+#if defined(PARALLEL_BGL)
+  // Serialization support for parallel processing
+  template<typename Archiver>
+  void serialize(Archiver& ar, const unsigned int /*version*/) {
+    ar & glabel;
+  }
+#endif
+
   std::string to_graphviz() {
     std::stringstream ss;
-    ss << "label=\""<<name << "\";\n"
+    ss << "label=\""<< glabel << "("<< get_local_time()<<")\";\n"
        << "node [shape=\"circle\", filled=\"none\", color=\"purple\"];\n"
        << "edge [arrowType=\"dot\", color=\"purple\"];\n";
     return ss.str();
-
   }
 };
 
 typedef Eigen::MatrixXd Dynamic2D;
-//typedef std::unordered_map<TupleKey, double, KeyHash, KeyEqual> EdgesMap;
 
+#if defined(PARALLEL_BGL)
+// Use parallel BGL
+typedef boost::adjacency_list<
+  boost::vecS,
+  boost::distributedS<boost::graph::distributed::mpi_process_group, boost::vecS>,
+  boost::undirectedS,
+  gVertex, // bundled property for vertex
+  gEdge,   // bundled property for edge
+  gGraph   // bundled property for graph
+> Graph;
+#else
 typedef boost::adjacency_list<
   boost::listS, // edge container type: list
   boost::vecS,  // vertex container type: list
@@ -89,6 +146,9 @@ typedef boost::adjacency_list<
   gEdge,   // bundled property for edge
   gGraph   // bundled property for graph
 > Graph;
+
+#endif
+
 // Graph-specific definitions
 typedef boost::graph_traits<Graph>::vertex_descriptor Vertex;
 typedef boost::graph_traits<Graph>::edge_descriptor Edge;
@@ -386,6 +446,11 @@ int main(int argc, const char * argv[]) {
   std::string sep = "\t";
   std::string comment = "#";
   int header = 0;
+
+#if defined(PARALLEL_BGL)
+  boost::mpi::environment  env;
+  boost::mpi::communicator comm;
+#endif
   
   DataFrame *df = new DataFrame();
   // Show backend dependency

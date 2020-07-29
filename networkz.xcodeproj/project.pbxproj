@@ -27,10 +27,7 @@
 		F633D32124CC448A003EBA00 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		F633D32824CC4BB3003EBA00 /* cli_opt.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cli_opt.hpp; sourceTree = "<group>"; };
 		F633D32924CC4BE6003EBA00 /* common.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = common.hpp; sourceTree = "<group>"; };
-		F633D32A24CC5209003EBA00 /* print.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = print.hpp; sourceTree = "<group>"; };
 		F633D32B24CC5F7B003EBA00 /* networkz.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = networkz.entitlements; sourceTree = "<group>"; };
-		F633D32C24CC6958003EBA00 /* util.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = util.hpp; sourceTree = "<group>"; };
-		F6EA2DEE24CEC420007C6A8B /* safe_ptr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = safe_ptr.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,9 +64,6 @@
 				F633D32124CC448A003EBA00 /* main.cpp */,
 				F633D32824CC4BB3003EBA00 /* cli_opt.hpp */,
 				F633D32924CC4BE6003EBA00 /* common.hpp */,
-				F633D32A24CC5209003EBA00 /* print.hpp */,
-				F633D32C24CC6958003EBA00 /* util.hpp */,
-				F6EA2DEE24CEC420007C6A8B /* safe_ptr.h */,
 			);
 			path = networkz;
 			sourceTree = "<group>";
@@ -287,7 +281,20 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CEQA8ZDKRR;
 				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = (
+					"${BOOST_INC}",
+					"${OPENMPI_INC}",
+					"${EIGEN_INC}",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"${BOOST_LIBS}",
+					"${OPENMPI_LIBS}",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = (
+					"${BOOST_INC}",
+					"${EIGEN_INC}",
+				);
 			};
 			name = Debug;
 		};
@@ -299,7 +306,20 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CEQA8ZDKRR;
 				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = (
+					"${BOOST_INC}",
+					"${OPENMPI_INC}",
+					"${EIGEN_INC}",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"${BOOST_LIBS}",
+					"${OPENMPI_LIBS}",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = (
+					"${BOOST_INC}",
+					"${EIGEN_INC}",
+				);
 			};
 			name = Release;
 		};
