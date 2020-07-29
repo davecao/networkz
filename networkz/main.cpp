@@ -70,7 +70,7 @@ struct gGraph {
   
   std::string to_graphviz() {
     std::stringstream ss;
-    ss << "label=\""<<name << ";\n"
+    ss << "label=\""<<name << "\";\n"
        << "node [shape=\"circle\", filled=\"none\", color=\"purple\"];\n"
        << "edge [arrowType=\"dot\", color=\"purple\"];\n";
     return ss.str();
