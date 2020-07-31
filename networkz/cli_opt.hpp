@@ -21,16 +21,16 @@ namespace VersionInfo{
 
 namespace CLIARG {
   // General options
-  bool verbose = false;
-  bool directed = false;
-
-  //int numOfvertex = 0;
-  //int graphType = 1;
-  std::string o_filename = "o_graphviz.gv";
-  std::string o_graph_name = "Gene Expression Network";
-  std::string i_filename;
+  bool verbose = false; // output detailed info if true.
+  bool o_graph = false; // output graphviz file if true.
+  
+  std::string i_filename; // input file name
+  std::string o_filename = "o_graphviz.gv"; // default file name for graphviz.
   std::string inputfile_size; // store the size of input file.
-  double d_threshold = 0.0;
+  std::string column_name = "tpm"; // the name of the column in the input file.
+  // Graph options
+  std::string o_graph_name = "Gene Expression Network"; // title for graphviz
+  double d_threshold = 0.0; // the threshold for distance cutoff.
   
   // all the options
   po::options_description general("General options");
@@ -41,7 +41,9 @@ namespace CLIARG {
     general.add_options()
     ("version,V", "Show the version number")
     ("infile,i",po::value<std::string>(&i_filename),"The input data file. Only the tsv format is supported now.")
-    ("outfile,o", po::value<std::string>(&o_filename),"The output file of clusters in text format.Default name is 'o_graphviz.gv'.")
+    ("outfile,o", po::value<std::string>(&o_filename),"The output file of clusters in text format. Default is 'o_graphviz.gv'.")
+    ("column,c", po::value<std::string>(&column_name), "The column name in the input file. Default is 'tpm'")
+    ("graph,g","Output the graph to a file in the graphviz format if true.")
     ("help,h", "print help info.")
     ;
     
@@ -59,10 +61,10 @@ namespace CLIARG {
     struct stat FileInfo;
     int val;
     val = stat(fname.c_str(), &FileInfo);
-    if(FileInfo.st_size >1000000){
-      inputfile_size = byteConverter_s(FileInfo.st_size);
-      std::cout<<fname<<" is so large ("<<inputfile_size<<")"<<". Take a while to read..."<<std::endl;
-    }
+    //if(FileInfo.st_size >1000000){
+      //inputfile_size = byteConverter_s(FileInfo.st_size);
+      //std::cout<<fname<<" is so large ("<<inputfile_size<<")"<<". Take a while to analysis..."<<std::endl;
+    //}
     return (val == 0) ? true : false;
   }
 
@@ -102,7 +104,6 @@ namespace CLIARG {
       std::cout << VersionInfo::version << std::endl;
       exit(0);
     }
-    
     if ( vm.count("verbose") ){
       verbose = true;
     }
@@ -111,6 +112,12 @@ namespace CLIARG {
     }
     if ( vm.count("outfile") ) {
       o_filename = vm["outfile"].as<std::string>();
+    }
+    if ( vm.count("column") ) {
+      column_name = vm["column"].as<std::string>();
+    }
+    if ( vm.count("graph") ) {
+      o_graph = true;
     }
     if ( vm.count("threshold") ) {
       d_threshold = vm["threshold"].as<double>();

@@ -49,76 +49,6 @@
 #include <boost/iostreams/device/mapped_file.hpp>
 //#include <boost/xpressive/xpressive.hpp>
 
-#if defined(PARALLEL_BGL)
-// Parallel BGL
-#include <mpi.h>
-#include <boost/mpi.hpp>
-#include <boost/graph/use_mpi.hpp>
-#include <boost/graph/distributed/mpi_process_group.hpp>
-#include <boost/graph/distributed/adjacency_list.hpp>
-#include <boost/graph/erdos_renyi_generator.hpp>
-#include <boost/random/linear_congruential.hpp>
-
-#else
-
-//Boost Graph Libraries
-#include <boost/graph/graph_traits.hpp>
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/adjacency_matrix.hpp>
-#include <boost/graph/graph_utility.hpp>
-#include <boost/graph/exterior_property.hpp>
-#include <boost/graph/topological_sort.hpp>
-#include <boost/graph/dijkstra_shortest_paths.hpp>
-#include <boost/graph/depth_first_search.hpp>
-#include <boost/graph/clustering_coefficient.hpp>
-#include <boost/property_map/dynamic_property_map.hpp>
-#include <boost/graph/visitors.hpp>
-#include <boost/graph/graphviz.hpp>
-#include <boost/graph/bc_clustering.hpp>
-#include <boost/graph/kruskal_min_spanning_tree.hpp>
-#include <boost/graph/prim_minimum_spanning_tree.hpp>
-
-#endif
-
-inline std::string byteConverter(long long byte)
-{
-  std::stringstream ss;
-  if (byte < 1024){
-    ss << byte <<" Bytes";
-  }else if (byte <1048576 && byte >= 1024){
-    ss << static_cast<float>(byte/1024) <<" KB";
-  }else if (byte < 1073741824 && byte >= 1048576) {
-    ss << static_cast<float>(byte/1048576) <<" MB";
-  }else{
-    ss << static_cast<float>(byte/1073741824)<<" GB";
-  }
-  return ss.str();
-}
-
-inline std::string byteConverter_s(long long byte)
-{
-  std::stringstream ss;
-  if (byte < 1000){
-    ss << byte <<" Bytes";
-  }else if (byte <1000000 && byte >= 1000){
-    ss << static_cast<float>(byte)/1000 <<" KB";
-  }else if (byte < 1000000000 && byte >= 1000000) {
-    ss << static_cast<float>(byte)/1000000 <<" MB";
-  }else{
-    ss << static_cast<float>(byte)/1000000000<<" GB";
-  }
-  return ss.str();
-}
-
-inline std::string get_local_time() {
-  std::time_t t = std::time(nullptr);
-  std::tm* now = std::localtime(&t);
-  std::stringstream ss;
-  ss << (now->tm_year + 1900) << "-"
-     << (now->tm_mon + 1) << "-"
-  << now->tm_mday;
-  return ss.str();
-}
 /*
 typedef std::tuple<std::string, std::string> TupleKey;
 
@@ -151,38 +81,5 @@ struct KeyEqual : public std::binary_function<TupleKey, TupleKey, bool>
 //     std::pair<TupleKey, double>(
 //         std::tuple<std::string, std::string>(n1, n2), d));
 */
-std::vector<std::string> readFileToLines(const std::string& file,
-                                         const std::string& comment="#")
-{
-  namespace fs = std::filesystem;
-  std::vector<std::string> lines;
-  // 1. Check the existance of the tsv file
-  if (!fs::exists(file) && fs::is_regular_file(file))
-  {
-    std::cout << "Could not find the input file: "<< file << std::endl;
-  }
-  // 2. Open the file by Stream
-  std::ifstream f(file);
-  if (f) {
-    std::string str;
-    // Read the next line from File untill it reaches the end.
-    while (std::getline(f, str))
-    {
-      // Remove the newline
-      str.erase(std::remove(str.begin(), str.end(), '\n'), str.end());
-      // Remove the comment lines
-      if (str.substr(0, comment.length()) == comment){
-        continue;
-      }
-      // Line contains string of length > 0 then save it in vector
-      if(str.size() > 0)
-          lines.push_back(str);
-    }
-  } else {
-    std::cout << "Failed to open the file, "<< file << "." <<std::endl;
-  }
-  // 3. close
-  f.close();
-  return lines;
-}
+
 #endif /* common_h */

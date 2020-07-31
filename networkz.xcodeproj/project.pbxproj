@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		F633D32224CC448A003EBA00 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F633D32124CC448A003EBA00 /* main.cpp */; };
+		F672ED7924D28DEF00E4439C /* utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F672ED7824D28DEF00E4439C /* utility.cpp */; };
+		F672ED7B24D293FA00E4439C /* graph_auxiliary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F672ED7A24D293FA00E4439C /* graph_auxiliary.cpp */; };
+		F672ED7D24D2A14500E4439C /* file_reader_factory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F672ED7C24D2A14500E4439C /* file_reader_factory.cpp */; };
+		F672ED8624D2EF5500E4439C /* reader_tsv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F672ED8424D2EF5500E4439C /* reader_tsv.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +32,14 @@
 		F633D32824CC4BB3003EBA00 /* cli_opt.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cli_opt.hpp; sourceTree = "<group>"; };
 		F633D32924CC4BE6003EBA00 /* common.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = common.hpp; sourceTree = "<group>"; };
 		F633D32B24CC5F7B003EBA00 /* networkz.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = networkz.entitlements; sourceTree = "<group>"; };
+		F672ED7524D27EA200E4439C /* graph_auxiliary.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = graph_auxiliary.hpp; sourceTree = "<group>"; };
+		F672ED7624D27ED700E4439C /* utility.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = utility.hpp; sourceTree = "<group>"; };
+		F672ED7724D2835100E4439C /* file_reader_factory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = file_reader_factory.hpp; sourceTree = "<group>"; };
+		F672ED7824D28DEF00E4439C /* utility.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = utility.cpp; sourceTree = "<group>"; };
+		F672ED7A24D293FA00E4439C /* graph_auxiliary.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = graph_auxiliary.cpp; sourceTree = "<group>"; };
+		F672ED7C24D2A14500E4439C /* file_reader_factory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = file_reader_factory.cpp; sourceTree = "<group>"; };
+		F672ED8424D2EF5500E4439C /* reader_tsv.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = reader_tsv.cpp; sourceTree = "<group>"; };
+		F672ED8524D2EF5500E4439C /* reader_tsv.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = reader_tsv.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +76,14 @@
 				F633D32124CC448A003EBA00 /* main.cpp */,
 				F633D32824CC4BB3003EBA00 /* cli_opt.hpp */,
 				F633D32924CC4BE6003EBA00 /* common.hpp */,
+				F672ED7524D27EA200E4439C /* graph_auxiliary.hpp */,
+				F672ED7A24D293FA00E4439C /* graph_auxiliary.cpp */,
+				F672ED7624D27ED700E4439C /* utility.hpp */,
+				F672ED7824D28DEF00E4439C /* utility.cpp */,
+				F672ED7724D2835100E4439C /* file_reader_factory.hpp */,
+				F672ED7C24D2A14500E4439C /* file_reader_factory.cpp */,
+				F672ED8424D2EF5500E4439C /* reader_tsv.cpp */,
+				F672ED8524D2EF5500E4439C /* reader_tsv.hpp */,
 			);
 			path = networkz;
 			sourceTree = "<group>";
@@ -125,6 +145,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F672ED7B24D293FA00E4439C /* graph_auxiliary.cpp in Sources */,
+				F672ED7D24D2A14500E4439C /* file_reader_factory.cpp in Sources */,
+				F672ED8624D2EF5500E4439C /* reader_tsv.cpp in Sources */,
+				F672ED7924D28DEF00E4439C /* utility.cpp in Sources */,
 				F633D32224CC448A003EBA00 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -191,6 +215,10 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fdeclspec",
+				);
 				OTHER_LDFLAGS = (
 					"-lboost_graph",
 					"-lboost_iostreams",
@@ -258,6 +286,10 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fdeclspec",
+				);
 				OTHER_LDFLAGS = (
 					"-lboost_graph",
 					"-lboost_iostreams",

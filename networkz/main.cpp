@@ -23,6 +23,9 @@
  *                          now.
  *  -o [ --outfile ] arg    The output file of clusters in text format.Default
  *                          name is 'o_graphviz.gv'.
+ *  -c [ --column ] arg     The column name in the input file. Default is 'tpm'
+ *  -g [ --graph ] arg      Output the graph to a file in the graphviz format if
+ *                          true.
  *  -h [ --help ]           print help info.
  *
  * Graph options:
@@ -40,402 +43,17 @@
  *  $> dot -Tpng o_graphviz.gv -o o_graphviz.png
  * ---------------------------------------------------------------------------*/
 
-#include <Eigen/Core>
-
 #include "common.hpp"
 #include "cli_opt.hpp"
+#include "utility.hpp"
+#include "graph_auxiliary.hpp"
+#include "file_reader_factory.hpp"
 
-struct gVertex {
-  // Constructor
-  gVertex()
-  {}
-  
-  gVertex(std::string& name, double tpm = -1)
-    : name(name), tpm(tpm)
-  {}
-  // public fields
-  std::string name;
-  double tpm;
-#if defined(PARALLEL_BGL)
-  // Serialization support for parallel processing
-  template<typename Archiver>
-  void serialize(Archiver& ar, const unsigned int /*version*/) {
-    ar & name & tpm;
-  }
-#endif
-  std::string to_graphviz() {
-    std::stringstream ss;
-    ss << "[label=\"" << name << "\", tpm=" << tpm << "]";
-    return ss.str();
-  }
-};
-
-struct gEdge {
-  // Constructor
-  gEdge()
-  {}
-  
-  gEdge(double distance=-1)
-    : distance(distance)
-  {}
-  
-  double distance;
-
-#if defined(PARALLEL_BGL)
-  // Serialization support for parallel processing
-  template<typename Archiver>
-  void serialize(Archiver& ar, const unsigned int /*version*/) {
-    ar & distance;
-  }
-#endif
-  
-  std::string to_graphviz() {
-    std::stringstream ss;
-    ss << "[weight=" << distance << ", "
-    << "arrowhead=\"none\", color=\"purple\"]";
-    return ss.str();
-  }
-};
-
-struct gGraph {
-  //Constructor
-  gGraph()
-  {}
-  
-  gGraph(const std::string& glabel)
-    : glabel(glabel)
-  {}
-  
-  std::string glabel;
-
-#if defined(PARALLEL_BGL)
-  // Serialization support for parallel processing
-  template<typename Archiver>
-  void serialize(Archiver& ar, const unsigned int /*version*/) {
-    ar & glabel;
-  }
-#endif
-
-  std::string to_graphviz() {
-    std::stringstream ss;
-    ss << "label=\""<< glabel << "("<< get_local_time()<<")\";\n"
-       << "node [shape=\"circle\", filled=\"none\", color=\"purple\"];\n"
-       << "edge [arrowType=\"dot\", color=\"purple\"];\n";
-    return ss.str();
-  }
-};
-
-typedef Eigen::MatrixXd Dynamic2D;
-
-#if defined(PARALLEL_BGL)
-// Use parallel BGL
-typedef boost::adjacency_list<
-  boost::vecS,
-  boost::distributedS<boost::graph::distributed::mpi_process_group, boost::vecS>,
-  boost::undirectedS,
-  gVertex, // bundled property for vertex
-  gEdge,   // bundled property for edge
-  gGraph   // bundled property for graph
-> Graph;
-#else
-typedef boost::adjacency_list<
-  boost::listS, // edge container type: list
-  boost::vecS,  // vertex container type: list
-  boost::undirectedS, // Graph type: undirected graph
-  gVertex, // bundled property for vertex
-  gEdge,   // bundled property for edge
-  gGraph   // bundled property for graph
-> Graph;
-
-#endif
-
-// Graph-specific definitions
-typedef boost::graph_traits<Graph>::vertex_descriptor Vertex;
-typedef boost::graph_traits<Graph>::edge_descriptor Edge;
-typedef boost::vertex_bundle_type<Graph>::type VertexType;
-// Container for testing the existence of a vertex in the graph
-typedef std::map<std::string, Vertex> NameVertexMap;
-
-/**
- * Show Eigen version information.
- *
- */
-void show_eigen_info() {
-  std::cout << "Eigen version: "
-            << EIGEN_MAJOR_VERSION << "."
-            << EIGEN_MINOR_VERSION
-  << std::endl;
-}
-
-/**
- *  Boost version information.
- *
- */
-void show_boost_version() {
-  std::cout << "Boost version: "
-            << BOOST_VERSION / 100000     << "."  // major version
-            << BOOST_VERSION / 100 % 1000 << "."  // minor version
-            << BOOST_VERSION % 100                // patch level
-  << std::endl;
-}
-
-
-struct Index
-{
-  std::map<std::string, size_t> Names;
-  std::vector<std::pair<std::string, size_t>> OrderedNames;
-  bool sorted = false;
-
-  ssize_t GetIndex(std::string& name) const {
-    auto it = Names.find(name);
-    if ( it != Names.end())
-    {
-      return it->second;
-    }
-    return -1;
-  }
-  
-  std::vector<std::string> GetIndexNames() {
-    std::vector<std::string> keys;
-    if (!this->sorted) {
-      this->SortIndex();
-      this->sorted = true;
-    }
-    for (const auto& [key, ignored] : OrderedNames) {
-        keys.push_back(key);
-    }
-    return keys;
-  }
-
-private:
-
-  void SortIndex(){
-    // Construct a vector for sorting values
-    std::vector<std::pair<std::string, size_t>> v{
-      std::make_move_iterator(begin(this->Names)),
-      std::make_move_iterator(end(this->Names))};
-    // Sorting
-    /*
-    std::sort(std::execution::par, begin(v), end(v),
-              [](auto p1, auto p2){return p1.second < p2.second;});
-     */
-    std::sort(begin(v), end(v),
-              [](auto p1, auto p2){return p1.second < p2.second;});
-    this->OrderedNames = v;
-  }
-};
-
-struct DataFrame
-{
-  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-  size_t num_rows = 0;
-  size_t num_cols = 0;
-
-  Index *rowIndex;
-  Index *columnIndex;
-  
-  Dynamic2D data;
-
-  DataFrame() {
-    this->rowIndex = new Index();
-    this->columnIndex = new Index();
-  }
-  
-  DataFrame(size_t nrows, size_t ncols) {
-    this->num_rows = nrows;
-    this->num_cols = ncols;
-    this->data.resize(nrows, ncols);
-    this->rowIndex = new Index;
-    this->columnIndex = new Index;
-  }
-  
-  ~DataFrame() {
-    delete rowIndex;
-    delete columnIndex;
-  }
-
-  void resize(size_t nrows, size_t ncols) {
-    this->num_rows = nrows;
-    this->num_cols = ncols;
-    this->data.resize(nrows, ncols);
-  }
-
-  size_t size() {
-    return num_rows;
-  }
-
-  void set_data(Dynamic2D& d) {
-    this->data = d;
-  }
-  
-  double operator()(int r_inx, int c_inx) {
-    return this->data(r_inx, c_inx);
-  }
-
-  bool set_columnIndex_names(std::string& col_name, size_t i){
-    this->columnIndex->Names.insert(
-        std::pair<std::string, size_t>(col_name, i));
-    return true;
-  }
-
-  bool set_columnIndex_names(std::vector<std::string>& col_name){
-    for(size_t i = 0; i != col_name.size(); i++){
-      this->columnIndex->Names.insert(
-        std::pair<std::string, size_t>(col_name[i], i));
-    }
-    return true;
-  }
-  
-  std::vector<std::string> get_columnIndex_names() {
-    return this->columnIndex->GetIndexNames();
-  }
-  
-  bool set_rowIndex_names(std::vector<std::string>& row_name) {
-    for(size_t i = 0; i != row_name.size(); i++){
-      this->rowIndex->Names.insert(
-        std::pair<std::string, size_t>(row_name[i], i));
-    }
-    return true;
-  }
-
-  std::vector<std::string> get_rowIndex_names() {
-    return this->rowIndex->GetIndexNames();
-  }
-  
-  bool add_row(std::vector<std::string>& row, size_t rInx){
-    if ((row.size() - 1) != num_cols) {
-      std::cerr << "Malformat: the number of columns does not match"
-      << std::endl;
-        return false; //std::exit(-1);
-    }
-    // Row index
-    this->rowIndex->Names.insert(std::pair<std::string, size_t>(row[0], rInx));
-    // Data
-    for(size_t i = 1; i <= num_cols; i++){
-      //std::cout << row[0] <<" at Line " << rInx << "." <<std::endl;
-      this->data(rInx, i-1) = std::stod(row[i]);
-    }
-    return true;
-  }
-  /*
-   * Select data by a column name and return a copy of sub-dataset.
-   *  time-consuming and may cause the memory leaks
-   */
-  DataFrame select(std::string& c_name) {
-
-    size_t inx = this->columnIndex->GetIndex(c_name);
-    std::vector<std::string> rinx = this->rowIndex->GetIndexNames();
-    if (inx == -1) {
-      // Column name - Not found
-      std::cout<< c_name << " Not found." << std::endl;
-      std::exit(-1);
-    }
-    Dynamic2D sub = this->data(Eigen::all, inx-1);
-    DataFrame *sliced = new DataFrame(sub.rows(), sub.cols());
-    sliced->set_columnIndex_names(c_name, 0);
-    sliced->set_rowIndex_names(rinx);
-    sliced->set_data(sub);
-
-    return *sliced;
-  }
-  /*
-   * Modify the passed dataframe and store the sub dataset.
-   * Release the memory from the main function to avoid the memory leaks.
-   */
-  bool select(std::string& c_name, DataFrame* sliced) {
-    size_t inx = this->columnIndex->GetIndex(c_name);
-    std::vector<std::string> rinx = this->rowIndex->GetIndexNames();
-    if (inx == -1) {
-      // Column name - Not found
-      //std::cout<< c_name << " Not found." << std::endl;
-      return false;
-    }
-    Dynamic2D sub = this->data(Eigen::all, inx-1);
-    sliced->resize(sub.rows(), sub.cols());
-    //DataFrame *sliced = new DataFrame(sub.rows(), sub.cols());
-    sliced->set_columnIndex_names(c_name, 0);
-    sliced->set_rowIndex_names(rinx);
-    sliced->set_data(sub);
-
-    return true;
-  }
-  
-  Dynamic2D select(std::vector<std::string>& sel_columns) {
-    Dynamic2D dat;
-    std::vector<size_t> col_inx;
-    for (int i=0; i<sel_columns.size(); i++) {
-      size_t inx = this->columnIndex->GetIndex(sel_columns[i]);
-      if (inx == -1) {
-        // Column name - Not found
-        std::cout<< sel_columns[i] << " Not found." << std::endl;
-        std::exit(-1);
-      }
-      col_inx.push_back(inx-1);
-    }
-    // Return submatrix of data
-    return this->data(Eigen::all, col_inx);
-  }
-
-};
-
-
-bool read_tsv(const std::string& tsv_file,
-              DataFrame* df,
-              std::string sep="\t",
-              std::string comment="#",
-              int header=0) {
-  
-  std::vector<std::string> lines;
-  // read the file and skip comment lines
-  lines = readFileToLines(tsv_file, comment);
-
-  std::vector<std::string> l;
-  boost::split(l, lines[0], boost::is_any_of(sep));
-  
-  // Get the number of rows and columns
-  size_t nrows = static_cast<size_t>(lines.size());
-  size_t ncols = static_cast<size_t>(l.size());
-  
-  // Contain a header line or not?
-  if (header < 0) {
-    // No header line if header < 0
-    df->resize(nrows, ncols);
-  } else if (header == lines.size()){
-    std::cerr << "No data found" << std::endl;
-    std::exit(-1);
-  } else if (header > lines.size()) {
-    std::cerr << "Wrong input argument: header="<< header << std::endl;
-    std::cerr << "The argument value is larger than available lines."
-              << std::endl;
-    std::exit(-1);
-  } else {
-    df->resize(nrows - 1, ncols - 1);
-    // Set the header line
-    boost::split(l, lines[header], boost::is_any_of(sep));
-    if (!df->set_columnIndex_names(l)){
-      std::cerr << "Failed to set the header line." << std::endl;
-    }
-  }
-
-  // Read data
-  size_t row_counter = 0;
-  for(size_t i = header + 1; i < lines.size(); i++){
-    // split the line by the separator, boost::split
-    boost::split(l, lines[i], boost::is_any_of(sep));
-
-    // Store record lines
-    if (!df->add_row(l, row_counter)) {
-      std::cerr << "Failed to parse the format at line " << i << std::endl;
-    }
-    // increase the index
-    ++row_counter;
-  }
-  return true;
-}
 
 int main(int argc, const char * argv[]) {
   
   namespace fs = std::filesystem;
+
   std::chrono::duration<double> seconds;
 
   // Parse cmd line arguments
@@ -445,38 +63,51 @@ int main(int argc, const char * argv[]) {
   
   std::string sep = "\t";
   std::string comment = "#";
+  std::string col = CLIARG::column_name;
   int header = 0;
-
+  
 #if defined(PARALLEL_BGL)
   boost::mpi::environment  env;
   boost::mpi::communicator comm;
 #endif
   
-  DataFrame *df = new DataFrame();
+  bilab::DataFrame *df = new bilab::DataFrame();
   // Show backend dependency
-  show_eigen_info();
-  show_boost_version();
-
+  welcome_message();
+  
   // manually start timer
   boost::timer::cpu_timer timer;
-  timer.start();
+  if (CLIARG::verbose) {
+    timer.start();
+  }
+  // ---------------------------------------------------------------------------
   // 1. Read the tsv:
+  // ---------------------------------------------------------------------------
   if (read_tsv(filename, df, sep, comment, header)) {
     timer.stop();
     auto err = std::error_code{};
     auto filesize = byteConverter_s(fs::file_size(filename, err));
-    seconds =
-      std::chrono::nanoseconds(timer.elapsed().user);
-    std::cout << "Read "<< filename << "(" << filesize  << ") completed."
-    << " in " << seconds.count() << " seconds." << std::endl;
+    if (CLIARG::verbose) {
+      seconds =
+        std::chrono::nanoseconds(timer.elapsed().user);
+      std::cout << "Read "<< filename << "(" << filesize  << ") completed."
+                << " in " << seconds.count() << " seconds." << std::endl;
+    } else {
+      std::cout << "Read "<< filename << "(" << filesize  << ") completed."
+                << std::endl;
+    }
   }
   // 1.1 extract data ->  target_id  tpm
-  std::cout << "Extract data ...";
-  timer.start();
-  std::string col = "tpm";
+  if (CLIARG::verbose) {
+    std::cout << "Extract data ...";
+    timer.start();
+  } else {
+    std::cout << "Extract data ...";
+  }
+  
   auto rownames = df->get_rowIndex_names();
   //auto dat = df->select(col);
-  DataFrame *dat = new DataFrame();
+  bilab::DataFrame *dat = new bilab::DataFrame();
   if (!df->select(col, dat)) {
     std::cout<< col << " Not found." << std::endl;
     std::exit(-1);
@@ -487,29 +118,40 @@ int main(int argc, const char * argv[]) {
       sel_inx.push_back(i);
     }
   }
-  timer.stop();
-  seconds = std::chrono::nanoseconds(timer.elapsed().user);
-  std::cout << " Completed in " << seconds.count() << " seconds." << std::endl;
+  if (CLIARG::verbose){
+    timer.stop();
+    seconds = std::chrono::nanoseconds(timer.elapsed().user);
+    std::cout << " Completed in " << seconds.count() << " seconds." << std::endl;
+  } else {
+    std::cout << " Completed." << std::endl;
+  }
+  // ---------------------------------------------------------------------------
   // 2. Compute the cityblock distance between any two genes
-  //Instantiate a graph
-  std::cout << "Create a graph ... ";
-  timer.start();
-  Graph genes_graph(gGraph{"Gene Expression Network"});
+  // ---------------------------------------------------------------------------
+  // Instantiate a graph
+  if (CLIARG::verbose) {
+    std::cout << "Create a graph ... ";
+    timer.start();
+  } else {
+    std::cout << "Create a graph ... ";
+  }
   
-  NameVertexMap name2vertex;
-  NameVertexMap::iterator pos_u;
-  NameVertexMap::iterator pos_v;
+  bilab::Graph genes_graph(bilab::gGraph{CLIARG::o_graph_name});
+  
+  bilab::NameVertexMap name2vertex;
+  bilab::NameVertexMap::iterator pos_u;
+  bilab::NameVertexMap::iterator pos_v;
   bool inserted;
-  Vertex u, v;
+  bilab::Vertex u, v;
 
   for(int i = 0; i < sel_inx.size() - 1; i++) {
     int n1_inx = sel_inx[i];
     std::string n1 = rownames[n1_inx];
     double d_n1 = (*dat)(n1_inx, 0);
     boost::tie(pos_u, inserted) = name2vertex.insert(
-                                      std::make_pair(n1, Vertex()));
+                                      std::make_pair(n1, bilab::Vertex()));
     if (inserted) {
-      u = boost::add_vertex(gVertex{n1, d_n1}, genes_graph);
+      u = boost::add_vertex(bilab::gVertex{n1, d_n1}, genes_graph);
       pos_u->second = u;
     } else {
       u = pos_u->second;
@@ -521,9 +163,9 @@ int main(int argc, const char * argv[]) {
       double d_n2 = (*dat)(n2_inx, 0);
       // Create two vertices in the graph
       boost::tie(pos_v, inserted) = name2vertex.insert(
-                                    std::make_pair(n2, Vertex()));
+                                    std::make_pair(n2, bilab::Vertex()));
       if (inserted) {
-        v = boost::add_vertex(gVertex{n2, d_n2}, genes_graph);
+        v = boost::add_vertex(bilab::gVertex{n2, d_n2}, genes_graph);
         pos_v->second = v;
       } else {
         v = pos_v->second;
@@ -531,52 +173,61 @@ int main(int argc, const char * argv[]) {
       double d = abs(d_n1 - d_n2);
       if (d < CLIARG::d_threshold ) {
         // Create an edge conecting those two vertices
-        boost::add_edge(u, v, gEdge{d}, genes_graph);
+        boost::add_edge(u, v, bilab::gEdge{d}, genes_graph);
       }
     }
   }
-  timer.stop();
-  seconds = std::chrono::nanoseconds(timer.elapsed().user);
-  std::cout << " Completed in " << seconds.count() << " seconds." << std::endl;
-  
-  std::cout << "Write to a " << graphviz_file;
-  timer.start();
-  // Write the graph to the output file
-  std::ofstream graphfile(graphviz_file);
-  /*
-  boost::write_graphviz(std::cout, genes_graph,
-    [&] (auto& out, auto v) {
-      out << "[label=\"" << genes_graph[v].name << "\"]";
-    },
-    [&] (auto& out, auto e) {
-      out << "[label=\"" << genes_graph[e].distance << "\"]";
-  });
-  std::cout << std::flush;
-  */
-  boost::write_graphviz(graphfile, genes_graph,
-    /* Vertex */
-    [&] (auto& out, auto v) {
-      out << genes_graph[v].to_graphviz();},
-    /* Edge */
-    [&] (auto& out, auto e) {
-    out << genes_graph[e].to_graphviz();},
-    /* Graph property */
-    [&] (auto& out) {out<< genes_graph.m_property->to_graphviz();}
-  );
-  graphfile.close();
-
-  timer.stop();
-  seconds = std::chrono::nanoseconds(timer.elapsed().user);
-  std::cout << " completed in " << seconds.count() << " seconds." << std::endl;
-
-  timer.start();
+  if (CLIARG::verbose) {
+    timer.stop();
+    seconds = std::chrono::nanoseconds(timer.elapsed().user);
+    std::cout << " Completed in " << seconds.count() << " seconds." << std::endl;
+  } else {
+    std::cout << " Completed." << std::endl;
+  }
+  if (CLIARG::o_graph) {
+    std::cout << "Write to a " << graphviz_file << " ... ";
+    if (CLIARG::verbose) {
+      timer.start();
+    }
+    // Write the graph to the output file
+    std::ofstream graphfile(graphviz_file);
+    boost::write_graphviz(graphfile, genes_graph,
+      /* Vertex */
+      [&] (auto& out, auto v) {
+        out << genes_graph[v].to_graphviz();},
+      /* Edge */
+      [&] (auto& out, auto e) {
+      out << genes_graph[e].to_graphviz();},
+      /* Graph property */
+      [&] (auto& out) {out<< genes_graph.m_property->to_graphviz();}
+    );
+    graphfile.close();
+    if (CLIARG::verbose) {
+      timer.stop();
+      seconds = std::chrono::nanoseconds(timer.elapsed().user);
+      std::cout << " completed in " << seconds.count() << " seconds."
+                << std::endl;
+    }else{
+      std::cout << " completed." << std::endl;
+    }
+  }
+  if (CLIARG::verbose) {
+    std::cout << "Clean memory ... ";
+    timer.start();
+  } else {
+    std::cout << "Clean memory ... ";
+  }
   // Release Memory
   delete df;
   delete dat;
-  timer.stop();
-  seconds = std::chrono::nanoseconds(timer.elapsed().user);
-  std::cout << "Clean memory "
-            << "in " << seconds.count() << " seconds." << std::endl;
+  if (CLIARG::verbose) {
+    timer.stop();
+    seconds = std::chrono::nanoseconds(timer.elapsed().user);
+    std::cout << "Completed "
+              << "in " << seconds.count() << " seconds." << std::endl;
+  } else {
+    std::cout << "Completed." << std::endl;
+  }
   std::cout << "Program Exit." << std::endl;
   return EXIT_SUCCESS;
 }
