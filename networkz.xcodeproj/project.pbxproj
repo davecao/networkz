@@ -48,6 +48,8 @@
 		F6ECDCD624D8CB9E00230768 /* graph_report.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = graph_report.hpp; sourceTree = "<group>"; };
 		F6ECDCD724D8CB9E00230768 /* FileReaderBase.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FileReaderBase.hpp; sourceTree = "<group>"; };
 		F6ECDCD824D8CB9E00230768 /* FileReaderBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileReaderBase.cpp; sourceTree = "<group>"; };
+		F6ECDCE024D8D2B000230768 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		F6ECDCE124D8D30B00230768 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 		F633D32024CC448A003EBA00 /* networkz */ = {
 			isa = PBXGroup;
 			children = (
+				F6ECDCE024D8D2B000230768 /* CMakeLists.txt */,
 				F6ECDCD524D8CB9E00230768 /* cli_opt.hpp */,
 				F6ECDCC924D8CB9E00230768 /* common.hpp */,
 				F6ECDCD424D8CB9E00230768 /* config.hpp */,
@@ -98,6 +101,7 @@
 				F6ECDCCC24D8CB9E00230768 /* utility.cpp */,
 				F6ECDCCA24D8CB9E00230768 /* utility.hpp */,
 				F633D32B24CC5F7B003EBA00 /* networkz.entitlements */,
+				F6ECDCE124D8D30B00230768 /* README.md */,
 			);
 			path = networkz;
 			sourceTree = "<group>";
