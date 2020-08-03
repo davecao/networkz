@@ -41,12 +41,13 @@
 #include <boost/graph/bc_clustering.hpp>
 #include <boost/graph/kruskal_min_spanning_tree.hpp>
 #include <boost/graph/prim_minimum_spanning_tree.hpp>
+#include <boost/graph/connected_components.hpp>
 
 #endif
 
 #include "utility.hpp"
 
-namespace bilab {
+namespace NARO {
 
  typedef Eigen::MatrixXd Dynamic2D;
 
@@ -139,10 +140,11 @@ namespace bilab {
  typedef boost::graph_traits<Graph>::vertex_descriptor Vertex;
  typedef boost::graph_traits<Graph>::edge_descriptor Edge;
  typedef boost::vertex_bundle_type<Graph>::type VertexType;
+typedef boost::graph_traits<Graph>::vertex_iterator VertexIter;
  // Container for testing the existence of a vertex in the graph
  typedef std::map<std::string, Vertex> NameVertexMap;
 
-
+ // Data structure for CSV format based on Eigen::MatrixXd
  struct Index
  {
    std::map<std::string, size_t> Names;
@@ -193,7 +195,8 @@ namespace bilab {
     */
    bool select(std::string& c_name, DataFrame* sliced);
  };
- } // End of namespace bilab
+ 
+} // End of namespace NARO
 
 
 #endif /* graph_auxiliary_h */

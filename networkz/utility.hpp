@@ -22,6 +22,7 @@ void welcome_message();
 std::string byteConverter(long long byte);
 std::string byteConverter_s(long long byte);
 std::string get_local_time();
+std::string repeat(std::string str, const std::size_t n);
 std::vector<std::string> readFileToLines(const std::string& file,
                                          const std::string& comment);
 

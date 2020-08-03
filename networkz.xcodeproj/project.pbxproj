@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F633D32224CC448A003EBA00 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F633D32124CC448A003EBA00 /* main.cpp */; };
-		F672ED7924D28DEF00E4439C /* utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F672ED7824D28DEF00E4439C /* utility.cpp */; };
-		F672ED7B24D293FA00E4439C /* graph_auxiliary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F672ED7A24D293FA00E4439C /* graph_auxiliary.cpp */; };
-		F672ED7D24D2A14500E4439C /* file_reader_factory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F672ED7C24D2A14500E4439C /* file_reader_factory.cpp */; };
-		F672ED8624D2EF5500E4439C /* reader_tsv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F672ED8424D2EF5500E4439C /* reader_tsv.cpp */; };
+		F6ECDCD924D8CB9E00230768 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6ECDCC824D8CB9E00230768 /* main.cpp */; };
+		F6ECDCDA24D8CB9E00230768 /* TSVReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6ECDCCB24D8CB9E00230768 /* TSVReader.cpp */; };
+		F6ECDCDB24D8CB9E00230768 /* utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6ECDCCC24D8CB9E00230768 /* utility.cpp */; };
+		F6ECDCDC24D8CB9E00230768 /* graph_report.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6ECDCCE24D8CB9E00230768 /* graph_report.cpp */; };
+		F6ECDCDD24D8CB9E00230768 /* IFileReaderFuncs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6ECDCCF24D8CB9E00230768 /* IFileReaderFuncs.cpp */; };
+		F6ECDCDE24D8CB9E00230768 /* graph_auxiliary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6ECDCD024D8CB9E00230768 /* graph_auxiliary.cpp */; };
+		F6ECDCDF24D8CB9E00230768 /* FileReaderBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6ECDCD824D8CB9E00230768 /* FileReaderBase.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,18 +30,24 @@
 
 /* Begin PBXFileReference section */
 		F633D31E24CC448A003EBA00 /* networkz */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = networkz; sourceTree = BUILT_PRODUCTS_DIR; };
-		F633D32124CC448A003EBA00 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		F633D32824CC4BB3003EBA00 /* cli_opt.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cli_opt.hpp; sourceTree = "<group>"; };
-		F633D32924CC4BE6003EBA00 /* common.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = common.hpp; sourceTree = "<group>"; };
 		F633D32B24CC5F7B003EBA00 /* networkz.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = networkz.entitlements; sourceTree = "<group>"; };
-		F672ED7524D27EA200E4439C /* graph_auxiliary.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = graph_auxiliary.hpp; sourceTree = "<group>"; };
-		F672ED7624D27ED700E4439C /* utility.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = utility.hpp; sourceTree = "<group>"; };
-		F672ED7724D2835100E4439C /* file_reader_factory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = file_reader_factory.hpp; sourceTree = "<group>"; };
-		F672ED7824D28DEF00E4439C /* utility.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = utility.cpp; sourceTree = "<group>"; };
-		F672ED7A24D293FA00E4439C /* graph_auxiliary.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = graph_auxiliary.cpp; sourceTree = "<group>"; };
-		F672ED7C24D2A14500E4439C /* file_reader_factory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = file_reader_factory.cpp; sourceTree = "<group>"; };
-		F672ED8424D2EF5500E4439C /* reader_tsv.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = reader_tsv.cpp; sourceTree = "<group>"; };
-		F672ED8524D2EF5500E4439C /* reader_tsv.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = reader_tsv.hpp; sourceTree = "<group>"; };
+		F6ECDCC824D8CB9E00230768 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		F6ECDCC924D8CB9E00230768 /* common.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = common.hpp; sourceTree = "<group>"; };
+		F6ECDCCA24D8CB9E00230768 /* utility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = utility.hpp; sourceTree = "<group>"; };
+		F6ECDCCB24D8CB9E00230768 /* TSVReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TSVReader.cpp; sourceTree = "<group>"; };
+		F6ECDCCC24D8CB9E00230768 /* utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utility.cpp; sourceTree = "<group>"; };
+		F6ECDCCD24D8CB9E00230768 /* IFileReaderFuncs.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFileReaderFuncs.hpp; sourceTree = "<group>"; };
+		F6ECDCCE24D8CB9E00230768 /* graph_report.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = graph_report.cpp; sourceTree = "<group>"; };
+		F6ECDCCF24D8CB9E00230768 /* IFileReaderFuncs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IFileReaderFuncs.cpp; sourceTree = "<group>"; };
+		F6ECDCD024D8CB9E00230768 /* graph_auxiliary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = graph_auxiliary.cpp; sourceTree = "<group>"; };
+		F6ECDCD124D8CB9E00230768 /* graph_auxiliary.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = graph_auxiliary.hpp; sourceTree = "<group>"; };
+		F6ECDCD224D8CB9E00230768 /* FileReaderFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FileReaderFactory.hpp; sourceTree = "<group>"; };
+		F6ECDCD324D8CB9E00230768 /* TSVReader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TSVReader.hpp; sourceTree = "<group>"; };
+		F6ECDCD424D8CB9E00230768 /* config.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
+		F6ECDCD524D8CB9E00230768 /* cli_opt.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = cli_opt.hpp; sourceTree = "<group>"; };
+		F6ECDCD624D8CB9E00230768 /* graph_report.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = graph_report.hpp; sourceTree = "<group>"; };
+		F6ECDCD724D8CB9E00230768 /* FileReaderBase.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FileReaderBase.hpp; sourceTree = "<group>"; };
+		F6ECDCD824D8CB9E00230768 /* FileReaderBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileReaderBase.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,18 +80,24 @@
 		F633D32024CC448A003EBA00 /* networkz */ = {
 			isa = PBXGroup;
 			children = (
+				F6ECDCD524D8CB9E00230768 /* cli_opt.hpp */,
+				F6ECDCC924D8CB9E00230768 /* common.hpp */,
+				F6ECDCD424D8CB9E00230768 /* config.hpp */,
+				F6ECDCD824D8CB9E00230768 /* FileReaderBase.cpp */,
+				F6ECDCD724D8CB9E00230768 /* FileReaderBase.hpp */,
+				F6ECDCD224D8CB9E00230768 /* FileReaderFactory.hpp */,
+				F6ECDCD024D8CB9E00230768 /* graph_auxiliary.cpp */,
+				F6ECDCD124D8CB9E00230768 /* graph_auxiliary.hpp */,
+				F6ECDCCE24D8CB9E00230768 /* graph_report.cpp */,
+				F6ECDCD624D8CB9E00230768 /* graph_report.hpp */,
+				F6ECDCCF24D8CB9E00230768 /* IFileReaderFuncs.cpp */,
+				F6ECDCCD24D8CB9E00230768 /* IFileReaderFuncs.hpp */,
+				F6ECDCC824D8CB9E00230768 /* main.cpp */,
+				F6ECDCCB24D8CB9E00230768 /* TSVReader.cpp */,
+				F6ECDCD324D8CB9E00230768 /* TSVReader.hpp */,
+				F6ECDCCC24D8CB9E00230768 /* utility.cpp */,
+				F6ECDCCA24D8CB9E00230768 /* utility.hpp */,
 				F633D32B24CC5F7B003EBA00 /* networkz.entitlements */,
-				F633D32124CC448A003EBA00 /* main.cpp */,
-				F633D32824CC4BB3003EBA00 /* cli_opt.hpp */,
-				F633D32924CC4BE6003EBA00 /* common.hpp */,
-				F672ED7524D27EA200E4439C /* graph_auxiliary.hpp */,
-				F672ED7A24D293FA00E4439C /* graph_auxiliary.cpp */,
-				F672ED7624D27ED700E4439C /* utility.hpp */,
-				F672ED7824D28DEF00E4439C /* utility.cpp */,
-				F672ED7724D2835100E4439C /* file_reader_factory.hpp */,
-				F672ED7C24D2A14500E4439C /* file_reader_factory.cpp */,
-				F672ED8424D2EF5500E4439C /* reader_tsv.cpp */,
-				F672ED8524D2EF5500E4439C /* reader_tsv.hpp */,
 			);
 			path = networkz;
 			sourceTree = "<group>";
@@ -145,11 +159,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F672ED7B24D293FA00E4439C /* graph_auxiliary.cpp in Sources */,
-				F672ED7D24D2A14500E4439C /* file_reader_factory.cpp in Sources */,
-				F672ED8624D2EF5500E4439C /* reader_tsv.cpp in Sources */,
-				F672ED7924D28DEF00E4439C /* utility.cpp in Sources */,
-				F633D32224CC448A003EBA00 /* main.cpp in Sources */,
+				F6ECDCDB24D8CB9E00230768 /* utility.cpp in Sources */,
+				F6ECDCDD24D8CB9E00230768 /* IFileReaderFuncs.cpp in Sources */,
+				F6ECDCDA24D8CB9E00230768 /* TSVReader.cpp in Sources */,
+				F6ECDCDE24D8CB9E00230768 /* graph_auxiliary.cpp in Sources */,
+				F6ECDCDC24D8CB9E00230768 /* graph_report.cpp in Sources */,
+				F6ECDCDF24D8CB9E00230768 /* FileReaderBase.cpp in Sources */,
+				F6ECDCD924D8CB9E00230768 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

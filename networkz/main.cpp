@@ -47,13 +47,19 @@
 #include "cli_opt.hpp"
 #include "utility.hpp"
 #include "graph_auxiliary.hpp"
-#include "file_reader_factory.hpp"
-
+#include "graph_report.hpp"
+#include "FileReaderFactory.hpp"
+#include "TSVReader.hpp"
 
 int main(int argc, const char * argv[]) {
   
   namespace fs = std::filesystem;
+  NARO::FileReaderFactory::showClasses();
+  //std::unique_ptr<NARO::FileReaderBase> reader =
+  auto reader = NARO::FileReaderFactory::makeUnique("TSVReader");
 
+  std::cout << " type of reader = " << reader->getType() << "\n";
+  //NARO::FileReaderBase* reader = new NARO::TSVReader;
   std::chrono::duration<double> seconds;
 
   // Parse cmd line arguments
@@ -71,7 +77,7 @@ int main(int argc, const char * argv[]) {
   boost::mpi::communicator comm;
 #endif
   
-  bilab::DataFrame *df = new bilab::DataFrame();
+  NARO::DataFrame *df = new NARO::DataFrame();
   // Show backend dependency
   welcome_message();
   
@@ -83,7 +89,7 @@ int main(int argc, const char * argv[]) {
   // ---------------------------------------------------------------------------
   // 1. Read the tsv:
   // ---------------------------------------------------------------------------
-  if (read_tsv(filename, df, sep, comment, header)) {
+  if (reader->read(filename, df, sep, comment, header)) {
     timer.stop();
     auto err = std::error_code{};
     auto filesize = byteConverter_s(fs::file_size(filename, err));
@@ -96,6 +102,9 @@ int main(int argc, const char * argv[]) {
       std::cout << "Read "<< filename << "(" << filesize  << ") completed."
                 << std::endl;
     }
+  } else {
+    std::cerr << "Failed to read the input file, " << filename << std::endl;
+    std::exit(-1);
   }
   // 1.1 extract data ->  target_id  tpm
   if (CLIARG::verbose) {
@@ -104,14 +113,15 @@ int main(int argc, const char * argv[]) {
   } else {
     std::cout << "Extract data ...";
   }
-  
+
+  NARO::DataFrame *dat = new NARO::DataFrame();
+  // Select the column data
   auto rownames = df->get_rowIndex_names();
-  //auto dat = df->select(col);
-  bilab::DataFrame *dat = new bilab::DataFrame();
   if (!df->select(col, dat)) {
     std::cout<< col << " Not found." << std::endl;
     std::exit(-1);
   }
+  // Get non-zero
   std::vector<int> sel_inx;
   for (int i=0; i<dat->size(); i++) {
     if ((*dat)(i, 0) != 0) {
@@ -136,22 +146,22 @@ int main(int argc, const char * argv[]) {
     std::cout << "Create a graph ... ";
   }
   
-  bilab::Graph genes_graph(bilab::gGraph{CLIARG::o_graph_name});
+  NARO::Graph genes_graph(NARO::gGraph{CLIARG::o_graph_name});
   
-  bilab::NameVertexMap name2vertex;
-  bilab::NameVertexMap::iterator pos_u;
-  bilab::NameVertexMap::iterator pos_v;
+  NARO::NameVertexMap name2vertex;
+  NARO::NameVertexMap::iterator pos_u;
+  NARO::NameVertexMap::iterator pos_v;
   bool inserted;
-  bilab::Vertex u, v;
-
+  NARO::Vertex u, v;
+#pragma omp parallel for
   for(int i = 0; i < sel_inx.size() - 1; i++) {
     int n1_inx = sel_inx[i];
     std::string n1 = rownames[n1_inx];
     double d_n1 = (*dat)(n1_inx, 0);
     boost::tie(pos_u, inserted) = name2vertex.insert(
-                                      std::make_pair(n1, bilab::Vertex()));
+                                      std::make_pair(n1, NARO::Vertex()));
     if (inserted) {
-      u = boost::add_vertex(bilab::gVertex{n1, d_n1}, genes_graph);
+      u = boost::add_vertex(NARO::gVertex{n1, d_n1}, genes_graph);
       pos_u->second = u;
     } else {
       u = pos_u->second;
@@ -163,9 +173,9 @@ int main(int argc, const char * argv[]) {
       double d_n2 = (*dat)(n2_inx, 0);
       // Create two vertices in the graph
       boost::tie(pos_v, inserted) = name2vertex.insert(
-                                    std::make_pair(n2, bilab::Vertex()));
+                                    std::make_pair(n2, NARO::Vertex()));
       if (inserted) {
-        v = boost::add_vertex(bilab::gVertex{n2, d_n2}, genes_graph);
+        v = boost::add_vertex(NARO::gVertex{n2, d_n2}, genes_graph);
         pos_v->second = v;
       } else {
         v = pos_v->second;
@@ -173,7 +183,7 @@ int main(int argc, const char * argv[]) {
       double d = abs(d_n1 - d_n2);
       if (d < CLIARG::d_threshold ) {
         // Create an edge conecting those two vertices
-        boost::add_edge(u, v, bilab::gEdge{d}, genes_graph);
+        boost::add_edge(u, v, NARO::gEdge{d}, genes_graph);
       }
     }
   }
@@ -184,6 +194,19 @@ int main(int argc, const char * argv[]) {
   } else {
     std::cout << " Completed." << std::endl;
   }
+  // ---------------------------------------------------------------------------
+  // Create a report
+  //
+  
+  NARO::Report report{CLIARG::o_graph_name, get_local_time(), "Networkz"};
+  if (!report.write("networkz.log", &genes_graph, "md",
+                    CLIARG::d_threshold,
+                    CLIARG::verbose)){
+    std::cout << "Failed to write a log." <<std::endl;
+    std::exit(-1);
+  }
+
+  // Write to graphviz format if requested.
   if (CLIARG::o_graph) {
     std::cout << "Write to a " << graphviz_file << " ... ";
     if (CLIARG::verbose) {
@@ -218,8 +241,10 @@ int main(int argc, const char * argv[]) {
     std::cout << "Clean memory ... ";
   }
   // Release Memory
+  genes_graph.clear();
   delete df;
   delete dat;
+  
   if (CLIARG::verbose) {
     timer.stop();
     seconds = std::chrono::nanoseconds(timer.elapsed().user);
@@ -228,6 +253,7 @@ int main(int argc, const char * argv[]) {
   } else {
     std::cout << "Completed." << std::endl;
   }
+  
   std::cout << "Program Exit." << std::endl;
   return EXIT_SUCCESS;
 }

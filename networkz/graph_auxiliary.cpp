@@ -11,7 +11,7 @@
 // -----------------------------------------------------------------------------
 // bilab::gVertex::to_graphviz()
 //
-std::string bilab::gVertex::to_graphviz() {
+std::string NARO::gVertex::to_graphviz() {
   std::stringstream ss;
     ss << "[label=\"" << name << "\", tpm=" << tpm << "]";
     return ss.str();
@@ -20,7 +20,7 @@ std::string bilab::gVertex::to_graphviz() {
 // -----------------------------------------------------------------------------
 // bilab::gEdge::to_graphviz()
 //
-std::string bilab::gEdge::to_graphviz() {
+std::string NARO::gEdge::to_graphviz() {
   std::stringstream ss;
   ss << "[weight=" << distance << ", "
   << "arrowhead=\"none\", color=\"purple\"]";
@@ -30,7 +30,7 @@ std::string bilab::gEdge::to_graphviz() {
 // -----------------------------------------------------------------------------
 // bilab::gGraph::to_graphviz()
 //
-std::string bilab::gGraph::to_graphviz() {
+std::string NARO::gGraph::to_graphviz() {
   std::stringstream ss;
   ss << "label=\""<< glabel << "("<< get_local_time()<<")\";\n"
      << "node [shape=\"circle\", filled=\"none\", color=\"purple\"];\n"
@@ -41,7 +41,7 @@ std::string bilab::gGraph::to_graphviz() {
 // -----------------------------------------------------------------------------
 // bilab::Index::GetIndex const
 //
-ssize_t bilab::Index::GetIndex(std::string& name) const {
+ssize_t NARO::Index::GetIndex(std::string& name) const {
   auto it = Names.find(name);
   if ( it != Names.end())
   {
@@ -52,7 +52,7 @@ ssize_t bilab::Index::GetIndex(std::string& name) const {
 // -----------------------------------------------------------------------------
 // bilab::Index::GetIndexNames
 //
-std::vector<std::string> bilab::Index::GetIndexNames() {
+std::vector<std::string> NARO::Index::GetIndexNames() {
   std::vector<std::string> keys;
   if (!this->sorted) {
     this->SortIndex();
@@ -66,7 +66,7 @@ std::vector<std::string> bilab::Index::GetIndexNames() {
 // -----------------------------------------------------------------------------
 // bilab::Index::SortIndex
 //
-void bilab::Index::SortIndex() {
+void NARO::Index::SortIndex() {
   // Construct a vector for sorting values
   std::vector<std::pair<std::string, size_t>> v{
     std::make_move_iterator(begin(this->Names)),
@@ -85,12 +85,12 @@ void bilab::Index::SortIndex() {
 // bilab::DataFrame
 //
 
-bilab::DataFrame::DataFrame() {
+NARO::DataFrame::DataFrame() {
   this->rowIndex = new Index();
   this->columnIndex = new Index();
 }
 
-bilab::DataFrame::DataFrame(size_t nrows, size_t ncols) {
+NARO::DataFrame::DataFrame(size_t nrows, size_t ncols) {
   this->num_rows = nrows;
   this->num_cols = ncols;
   this->data.resize(nrows, ncols);
@@ -98,36 +98,36 @@ bilab::DataFrame::DataFrame(size_t nrows, size_t ncols) {
   this->columnIndex = new Index;
 }
 
-bilab::DataFrame::~DataFrame() {
+NARO::DataFrame::~DataFrame() {
   delete rowIndex;
   delete columnIndex;
 }
 
-void bilab::DataFrame::resize(size_t nrows, size_t ncols) {
+void NARO::DataFrame::resize(size_t nrows, size_t ncols) {
   this->num_rows = nrows;
   this->num_cols = ncols;
   this->data.resize(nrows, ncols);
 }
 
-size_t bilab::DataFrame::size() {
+size_t NARO::DataFrame::size() {
   return num_rows;
 }
 
-void bilab::DataFrame::set_data(Dynamic2D& d) {
+void NARO::DataFrame::set_data(Dynamic2D& d) {
   this->data = d;
 }
 
-double bilab::DataFrame::operator()(int r_inx, int c_inx) {
+double NARO::DataFrame::operator()(int r_inx, int c_inx) {
   return this->data(r_inx, c_inx);
 }
 
-bool bilab::DataFrame::set_columnIndex_names(std::string& col_name, size_t i){
+bool NARO::DataFrame::set_columnIndex_names(std::string& col_name, size_t i){
   this->columnIndex->Names.insert(
       std::pair<std::string, size_t>(col_name, i));
   return true;
 }
 
-bool bilab::DataFrame::set_columnIndex_names(std::vector<std::string>& col_name){
+bool NARO::DataFrame::set_columnIndex_names(std::vector<std::string>& col_name){
   for(size_t i = 0; i != col_name.size(); i++){
     this->columnIndex->Names.insert(
       std::pair<std::string, size_t>(col_name[i], i));
@@ -135,11 +135,11 @@ bool bilab::DataFrame::set_columnIndex_names(std::vector<std::string>& col_name)
   return true;
 }
 
-std::vector<std::string> bilab::DataFrame::get_columnIndex_names() {
+std::vector<std::string> NARO::DataFrame::get_columnIndex_names() {
   return this->columnIndex->GetIndexNames();
 }
 
-bool bilab::DataFrame::set_rowIndex_names(std::vector<std::string>& row_name) {
+bool NARO::DataFrame::set_rowIndex_names(std::vector<std::string>& row_name) {
   for(size_t i = 0; i != row_name.size(); i++){
     this->rowIndex->Names.insert(
       std::pair<std::string, size_t>(row_name[i], i));
@@ -147,11 +147,11 @@ bool bilab::DataFrame::set_rowIndex_names(std::vector<std::string>& row_name) {
   return true;
 }
 
-std::vector<std::string> bilab::DataFrame::get_rowIndex_names() {
+std::vector<std::string> NARO::DataFrame::get_rowIndex_names() {
   return this->rowIndex->GetIndexNames();
 }
 
-bool bilab::DataFrame::add_row(std::vector<std::string>& row, size_t rInx){
+bool NARO::DataFrame::add_row(std::vector<std::string>& row, size_t rInx){
   if ((row.size() - 1) != num_cols) {
     std::cerr << "Malformat: the number of columns does not match"
     << std::endl;
@@ -170,7 +170,7 @@ bool bilab::DataFrame::add_row(std::vector<std::string>& row, size_t rInx){
  * Select data by a column name and return a copy of sub-dataset.
  *  time-consuming and may cause the memory leaks
  */
-bilab::DataFrame bilab::DataFrame::select(std::string& c_name) {
+NARO::DataFrame NARO::DataFrame::select(std::string& c_name) {
 
   size_t inx = this->columnIndex->GetIndex(c_name);
   std::vector<std::string> rinx = this->rowIndex->GetIndexNames();
@@ -191,7 +191,7 @@ bilab::DataFrame bilab::DataFrame::select(std::string& c_name) {
  * Modify the passed dataframe and store the sub dataset.
  * Release the memory from the main function to avoid the memory leaks.
  */
-bool bilab::DataFrame::select(std::string& c_name, DataFrame* sliced) {
+bool NARO::DataFrame::select(std::string& c_name, DataFrame* sliced) {
   size_t inx = this->columnIndex->GetIndex(c_name);
   std::vector<std::string> rinx = this->rowIndex->GetIndexNames();
   if (inx == -1) {

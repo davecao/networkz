@@ -80,6 +80,27 @@ std::string get_local_time() {
   return ss.str();
 }
 
+std::string repeat(std::string str, const std::size_t n)
+{
+    if (n == 0) {
+        str.clear();
+        str.shrink_to_fit();
+        return str;
+    } else if (n == 1 || str.empty()) {
+        return str;
+    }
+    const auto period = str.size();
+    if (period == 1) {
+        str.append(n - 1, str.front());
+        return str;
+    }
+    str.reserve(period * n);
+    std::size_t m {2};
+    for (; m < n; m *= 2) str += str;
+    str.append(str.c_str(), (n - (m / 2)) * period);
+    return str;
+}
+
 std::vector<std::string> readFileToLines(const std::string& file,
                                          const std::string& comment="#")
 {
@@ -114,3 +135,4 @@ std::vector<std::string> readFileToLines(const std::string& file,
   f.close();
   return lines;
 }
+
