@@ -17,5 +17,7 @@
 The executable file will be generated in the ~build~ directory.
 
 ## Format of Input file
-Tab-Separated Values (TSV) format.
+
+Tab-Separated Values (TSV) format is only supported now.
+
 
