@@ -39,7 +39,7 @@ std::string NARO::gGraph::to_graphviz() {
 }
 
 // -----------------------------------------------------------------------------
-// bilab::Index::GetIndex const
+// bilab::Index::GetIndex() const
 //
 ssize_t NARO::Index::GetIndex(std::string& name) const {
   auto it = Names.find(name);
@@ -50,7 +50,7 @@ ssize_t NARO::Index::GetIndex(std::string& name) const {
   return -1;
 }
 // -----------------------------------------------------------------------------
-// bilab::Index::GetIndexNames
+// bilab::Index::GetIndexNames()
 //
 std::vector<std::string> NARO::Index::GetIndexNames() {
   std::vector<std::string> keys;
@@ -64,7 +64,7 @@ std::vector<std::string> NARO::Index::GetIndexNames() {
   return keys;
 }
 // -----------------------------------------------------------------------------
-// bilab::Index::SortIndex
+// bilab::Index::SortIndex()
 //
 void NARO::Index::SortIndex() {
   // Construct a vector for sorting values
@@ -82,14 +82,15 @@ void NARO::Index::SortIndex() {
 }
 
 // -----------------------------------------------------------------------------
-// bilab::DataFrame
+// bilab::DataFrame()
 //
-
 NARO::DataFrame::DataFrame() {
   this->rowIndex = new Index();
   this->columnIndex = new Index();
 }
-
+// -----------------------------------------------------------------------------
+// bilab::DataFrame()
+//
 NARO::DataFrame::DataFrame(size_t nrows, size_t ncols) {
   this->num_rows = nrows;
   this->num_cols = ncols;
@@ -97,36 +98,50 @@ NARO::DataFrame::DataFrame(size_t nrows, size_t ncols) {
   this->rowIndex = new Index;
   this->columnIndex = new Index;
 }
-
+// -----------------------------------------------------------------------------
+// bilab::DataFrame::~DataFrame()
+//
 NARO::DataFrame::~DataFrame() {
   delete rowIndex;
   delete columnIndex;
 }
-
+// -----------------------------------------------------------------------------
+// bilab::DataFrame::resize()
+//
 void NARO::DataFrame::resize(size_t nrows, size_t ncols) {
   this->num_rows = nrows;
   this->num_cols = ncols;
   this->data.resize(nrows, ncols);
 }
-
+// -----------------------------------------------------------------------------
+// bilab::DataFrame::size()
+//
 size_t NARO::DataFrame::size() {
   return num_rows;
 }
-
+// -----------------------------------------------------------------------------
+// bilab::DataFrame::set_data()
+//
 void NARO::DataFrame::set_data(Dynamic2D& d) {
   this->data = d;
 }
-
+// -----------------------------------------------------------------------------
+// bilab::DataFrame::operator()
+//
 double NARO::DataFrame::operator()(int r_inx, int c_inx) {
   return this->data(r_inx, c_inx);
 }
-
+// -----------------------------------------------------------------------------
+// bilab::DataFrame::set_columnIndex_names()
+//
 bool NARO::DataFrame::set_columnIndex_names(std::string& col_name, size_t i){
   this->columnIndex->Names.insert(
       std::pair<std::string, size_t>(col_name, i));
   return true;
 }
-
+// -----------------------------------------------------------------------------
+// bilab::DataFrame::set_columnIndex_names()
+//
 bool NARO::DataFrame::set_columnIndex_names(std::vector<std::string>& col_name){
   for(size_t i = 0; i != col_name.size(); i++){
     this->columnIndex->Names.insert(
@@ -134,11 +149,15 @@ bool NARO::DataFrame::set_columnIndex_names(std::vector<std::string>& col_name){
   }
   return true;
 }
-
+// -----------------------------------------------------------------------------
+// bilab::DataFrame::get_columnIndex_names()
+//
 std::vector<std::string> NARO::DataFrame::get_columnIndex_names() {
   return this->columnIndex->GetIndexNames();
 }
-
+// -----------------------------------------------------------------------------
+// bilab::DataFrame::set_rowIndex_names()
+//
 bool NARO::DataFrame::set_rowIndex_names(std::vector<std::string>& row_name) {
   for(size_t i = 0; i != row_name.size(); i++){
     this->rowIndex->Names.insert(
@@ -146,11 +165,15 @@ bool NARO::DataFrame::set_rowIndex_names(std::vector<std::string>& row_name) {
   }
   return true;
 }
-
+// -----------------------------------------------------------------------------
+// bilab::DataFrame::get_rowIndex_names()
+//
 std::vector<std::string> NARO::DataFrame::get_rowIndex_names() {
   return this->rowIndex->GetIndexNames();
 }
-
+// -----------------------------------------------------------------------------
+// bilab::DataFrame::add_row()
+//
 bool NARO::DataFrame::add_row(std::vector<std::string>& row, size_t rInx){
   if ((row.size() - 1) != num_cols) {
     std::cerr << "Malformat: the number of columns does not match"
@@ -166,10 +189,12 @@ bool NARO::DataFrame::add_row(std::vector<std::string>& row, size_t rInx){
   }
   return true;
 }
-/*
- * Select data by a column name and return a copy of sub-dataset.
- *  time-consuming and may cause the memory leaks
- */
+// -----------------------------------------------------------------------------
+// bilab::DataFrame::select()
+//
+// Select data by a column name and return a copy of sub-dataset.
+// time-consuming and may cause the memory leaks
+//
 NARO::DataFrame NARO::DataFrame::select(std::string& c_name) {
 
   size_t inx = this->columnIndex->GetIndex(c_name);
@@ -187,10 +212,13 @@ NARO::DataFrame NARO::DataFrame::select(std::string& c_name) {
 
   return *sliced;
 }
-/*
- * Modify the passed dataframe and store the sub dataset.
- * Release the memory from the main function to avoid the memory leaks.
- */
+// -----------------------------------------------------------------------------
+// bilab::DataFrame::select()
+//
+//
+// Modify the passed dataframe and store the sub dataset.
+// Release the memory from the main function to avoid the memory leaks.
+//
 bool NARO::DataFrame::select(std::string& c_name, DataFrame* sliced) {
   size_t inx = this->columnIndex->GetIndex(c_name);
   std::vector<std::string> rinx = this->rowIndex->GetIndexNames();

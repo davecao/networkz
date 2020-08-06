@@ -140,7 +140,7 @@ namespace NARO {
  typedef boost::graph_traits<Graph>::vertex_descriptor Vertex;
  typedef boost::graph_traits<Graph>::edge_descriptor Edge;
  typedef boost::vertex_bundle_type<Graph>::type VertexType;
-typedef boost::graph_traits<Graph>::vertex_iterator VertexIter;
+ typedef boost::graph_traits<Graph>::vertex_iterator VertexIter;
  // Container for testing the existence of a vertex in the graph
  typedef std::map<std::string, Vertex> NameVertexMap;
 
