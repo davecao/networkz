@@ -23,7 +23,7 @@
         Homebrew/homebrew-core (git revision 4dd70; last commit 2020-08-04). 
         Homebrew/homebrew-cask (git revision d77724; last commit 2020-08-04). 
 
-### Install CMake if not available
+### Install CMake by `brew`
 
     brew install cmake
 
