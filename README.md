@@ -69,7 +69,7 @@ You should find the similar info as follows,
 2.3 Install the code with CMake
 
     mkdir build; cd build
-    cmake -DCMAKE_INSTALL_PREFIX=$HOME/dist/eigen3 -DCMAKE_BUILD_TYPE=Release ../
+    cmake -DCMAKE_INSTALL_PREFIX=$HOME/dist/eigen -DCMAKE_BUILD_TYPE=Release ../
     make install
 
 2.4 Add the eigen3 to the include path to your start shell.
@@ -83,7 +83,9 @@ You should find the similar info as follows,
 
 ## Compile Networkz
 
-### Compile the source code of networkz by CMake
+Compile the source code by `CMake` or `Xcode` on MacOS
+
+### Compilation by CMake
 
     mkdir build; cd build
     cmake -DCMAKE_BUILD_TYPE=Release ../path/to/networkz
@@ -91,11 +93,14 @@ You should find the similar info as follows,
 
 The executable file will be generated in the *build* directory.
 
-### Compile the source code of networkz by Xcode
+### Compilation by Xcode
 
    Open the xcode project file, `networkz.xcodeproj`, by double click.  
    Choose the scheme to compile the source code.  
  
+##### Configure the xcode setting
+
+[[./pics/xcode1.png]]
 
 ## Format of Input file
 
