@@ -93,8 +93,8 @@ The executable file will be generated in the *build* directory.
 
 ### Compile the source code of networkz by Xcode
 
-    Open the xcode project file, `networkz.xcodeproj`, by double click.
-    Choose the scheme to compile the source code
+   Open the xcode project file, `networkz.xcodeproj`, by double click.  
+   Choose the scheme to compile the source code.  
  
 
 ## Format of Input file
