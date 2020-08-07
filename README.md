@@ -102,11 +102,11 @@ The executable file will be generated in the *build* directory.
 
 ![Settings](./pics/xcode1.png)
 
-![Compile](https://github.com/daveccao/networkz/blob/master/pics/xcode2.png)
+![Compile](./pics/xcode2.png)
 
-![Debug to Release](https://github.com/daveccao/networkz/blob/master/pics/xcode3.png)
+![Debug to Release](./pics/xcode3.png)
 
-![Environment setting](https://github.com/daveccao/networkz/blob/master/pics/xcode4.png)
+![Environment setting](./pics/xcode4.png)
 
 ## Format of Input file
 
