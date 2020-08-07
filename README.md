@@ -100,7 +100,7 @@ The executable file will be generated in the *build* directory.
  
 ##### Configure the xcode setting
 
-![Settings](https://github.com/daveccao/networkz/pics/xcode1.png?raw=true)
+![Settings](https://github.com/daveccao/networkz/blob/master/pics/xcode1.png?raw=true)
 
 ## Format of Input file
 
