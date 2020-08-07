@@ -100,13 +100,13 @@ The executable file will be generated in the *build* directory.
  
 ##### Configure the xcode setting
 
-![Settings](https://github.com/daveccao/networkz/blob/master/pics/xcode1.png?raw=true)
+![Settings](https://github.com/daveccao/networkz/blob/master/pics/xcode1.png)
 
-![Compile](https://github.com/daveccao/networkz/blob/master/pics/xcode2.png?raw=true)
+![Compile](https://github.com/daveccao/networkz/blob/master/pics/xcode2.png)
 
-![Debug to Release](https://github.com/daveccao/networkz/blob/master/pics/xcode3.png?raw=true)
+![Debug to Release](https://github.com/daveccao/networkz/blob/master/pics/xcode3.png)
 
-![Environment setting](https://github.com/daveccao/networkz/blob/master/pics/xcode4.png?raw=true)
+![Environment setting](https://github.com/daveccao/networkz/blob/master/pics/xcode4.png)
 
 ## Format of Input file
 
