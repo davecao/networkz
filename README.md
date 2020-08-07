@@ -43,9 +43,9 @@ https://apps.apple.com/jp/app/xcode/id497799835?mt=12
 
 You should find the similar info as follows,
 
-   Apple clang version 11.0.3 (clang-1103.0.32.62). 
-   Target: x86_64-apple-darwin19.6.0. 
-   Thread model: posix. 
+   Apple clang version 11.0.3 (clang-1103.0.32.62).   
+   Target: x86_64-apple-darwin19.6.0.   
+   Thread model: posix.   
    InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin. 
 
 ### Install the dependencies by Homebrew
@@ -100,7 +100,7 @@ The executable file will be generated in the *build* directory.
  
 ##### Configure the xcode setting
 
-![Settings](https://github.com/daveccao/networkz/pics/xcode1.png?raw=true)
+![Settings](https://github.com/daveccao/networkz/blob/pics/xcode1.png?raw=true)
 
 ## Format of Input file
 
