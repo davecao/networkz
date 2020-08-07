@@ -80,7 +80,10 @@ bool NARO::Report::write(const std::string& o_filename, Graph* g,
     for(boost::tie(vi, vend) = boost::vertices(*g); vi != vend; ++vi) {
       auto vertex_name = (*g)[*vi].name;
       auto degree = boost::degree(*vi, *g);
-      markdown_writer(ofile, vertex_name + ": " + std::to_string(degree));
+      auto component_num = component[*vi];
+      markdown_writer(ofile,
+                      vertex_name + ":" + std::to_string(component_num)
+                      + ": " + std::to_string(degree));
     }
 /*
     for (auto vd : boost::make_iterator_range(boost::vertices(*g))) {
@@ -99,4 +102,5 @@ bool NARO::Report::write(const std::string& o_filename, Graph* g,
     std::cout << "Completed in " << seconds.count() << " seconds." << std::endl;
   }
   return true;
-};
+}
+
