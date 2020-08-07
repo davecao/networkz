@@ -13,19 +13,19 @@
 
 1. Install homebrew
 
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
 2. Check the availability of `brew` command
 
-    $ brew -v  
+        brew -v  
     
-    Homebrew 2.4.9. 
-    Homebrew/homebrew-core (git revision 4dd70; last commit 2020-08-04). 
-    Homebrew/homebrew-cask (git revision d77724; last commit 2020-08-04). 
+        Homebrew 2.4.9. 
+        Homebrew/homebrew-core (git revision 4dd70; last commit 2020-08-04). 
+        Homebrew/homebrew-cask (git revision d77724; last commit 2020-08-04). 
 
 ### Install CMake if not available
 
-    $ brew install cmake
+    brew install cmake
 
 ### Install C++ compiler (Xcode)
 
@@ -35,11 +35,11 @@ https://apps.apple.com/jp/app/xcode/id497799835?mt=12
    
 2. Install xcode command line tools from a terminal
 
-   sudo xcode-select --install
+        sudo xcode-select --install
 
 3. Check the availability of clang compiler from the terminnal
 
-   cc --version
+        cc --version
 
 You should find the similar info as follows,
 
@@ -52,7 +52,7 @@ You should find the similar info as follows,
 
 1. Install Boost Libraries
 
-   brew install boost
+        brew install boost
 
 2. Install Eigens manually
 
@@ -78,8 +78,8 @@ You should find the similar info as follows,
 
 ## Download the soure code from github
 
-   cd $HOME/apps/
-   git clone https://github.com/davecao/networkz.git
+    cd $HOME/apps/
+    git clone https://github.com/davecao/networkz.git
 
 ## Compile Networkz
 
