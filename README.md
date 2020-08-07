@@ -13,14 +13,15 @@
 
 1. Install homebrew
 
-   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
 2. Check the availability of `brew` command
 
-    $ brew -v
-    Homebrew 2.4.9
-    Homebrew/homebrew-core (git revision 4dd70; last commit 2020-08-04)
-    Homebrew/homebrew-cask (git revision d77724; last commit 2020-08-04)
+    $ brew -v  
+    
+    Homebrew 2.4.9. 
+    Homebrew/homebrew-core (git revision 4dd70; last commit 2020-08-04). 
+    Homebrew/homebrew-cask (git revision d77724; last commit 2020-08-04). 
 
 ### Install CMake if not available
 
@@ -34,18 +35,18 @@ https://apps.apple.com/jp/app/xcode/id497799835?mt=12
    
 2. Install xcode command line tools from a terminal
 
-   $ sudo xcode-select --install
+   sudo xcode-select --install
 
 3. Check the availability of clang compiler from the terminnal
 
-   $ cc --version
+   cc --version
 
 You should find the similar info as follows,
 
-   Apple clang version 11.0.3 (clang-1103.0.32.62)
-   Target: x86_64-apple-darwin19.6.0
-   Thread model: posix
-   InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+   Apple clang version 11.0.3 (clang-1103.0.32.62). 
+   Target: x86_64-apple-darwin19.6.0. 
+   Thread model: posix. 
+   InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin. 
 
 ### Install the dependencies by Homebrew
 
