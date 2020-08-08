@@ -116,11 +116,6 @@ Tab-Separated Values (TSV) format is only supported now.
 
    networkz -h
 
-Registered classes.
- ===================
- + TSVReader
- type of reader = TSVReader
-
 General options:
 
   -V [ --version ]        Show the version number
