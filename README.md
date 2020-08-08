@@ -116,19 +116,19 @@ Tab-Separated Values (TSV) format is only supported now.
 
    networkz -h
 
-General options:
+General options:  
 
--V [ --version ]        Show the version number
--i [ --infile ] arg     The input data file. Only the tsv format is supported now.
--o [ --outfile ] arg    The output file of clusters in text format. Default is 'o_graphviz.gv'.
--c [ --column ] arg     The column name in the input file. Default is 'tpm'
--g [ --graph ]          Output the graph to a file in the graphviz format if true.
--h [ --help ]           print help info.
+-V [ --version ]        Show the version number.  
+-i [ --infile ] arg     The input data file. Only the tsv format is supported now.  
+-o [ --outfile ] arg    The output file of clusters in text format. Default is 'o_graphviz.gv'.  
+-c [ --column ] arg     The column name in the input file. Default is 'tpm'.  
+-g [ --graph ]          Output the graph to a file in the graphviz format if true.  
+-h [ --help ]           print help info.  
 
-Graph options:
+Graph options:  
 
--v [ --verbose ]        The extra verbose.
+-v [ --verbose ]        The extra verbose.  
 -t [ --threshold ] arg  The threshold between two vertices which are linked
-                          by an edge if the distance less than it. default is 0.
--n [ --title ] arg      The title of the graph used to label the png file.
+                          by an edge if the distance less than it. default is 0.  
+-n [ --title ] arg      The title of the graph used to label the png file.  
                           Default is Gene Expression Network.
