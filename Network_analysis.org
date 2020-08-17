@@ -74,12 +74,15 @@
     [[./pics/networks.jpg]]
 
 * ネットワークの構築
+
 ** 頂点間の距離
+
 頂点Aと頂点Bがどのぐらい離れることによって
 頂点Aと頂点Bの間に辺をつけます。いわゆる、{{{color(red, 辺)}}}が頂点間の距離による定義します。
 次は、よく使う距離の定義を紹介します。
 
 ** 都市ブロック距離 (City Block Distance)
+
 $$d = \sum_{i=1}^{k} |a_{i} - b_{i}|$$
 
 **Note**:　City Block distanceは $d \ge 0$, マンハッタン(Manhattan distance)距離とも呼ばれます.
@@ -139,11 +142,45 @@ $$d = -log_{2}(T_s)$$
 相同性がnon-zeroの場合, ここでの$\bigwedge$ と $\bigvee$ はbitwiseのand, orの操作です。
 
 
-***Note***: Tanimoto係数はバイナリのみに対応し、範囲が0から+1まで (+１はaとbの類似度が一番高いと示す).
+***Note***: Tanimoto係数はJaccard係数の拡張バーションです。バイナリーの場合、Jaccard係数になって
+範囲が0から+1まで (+１はaとbの類似度が一番高いと示す).
+
 #+BEGIN_NOTES
 $$d = \frac{\sum_{i=1}^{k}a_i\times b_i}{\sum_{i=1}^{k}a_{i}^2 + \sum_{i=1}^{k}b_{i}^2 - \sum_{i=1}^{k}a_i\times b_i}$$
 #+END_NOTES
 
+** Tanimoto係数(Jaccard係数の拡張バージョン)の例
+
+A = ["リンゴ","ブドウ","イチゴ","パイン","キウイ","メロン"]  
+
+B = ["メロン","イチゴ","リンゴ","パインアップル"] 
+
+全部の種類で、"リンゴ","ブドウ","イチゴ","パイン","キウイ","メロン","パインアップル"を用いて、
+AとBをベクトル化する。
+
+** Tanimoto係数とJaccard係数の例 - Con't
+
+AとBの長さは、 
+
+\begin{aligned}
+\|A\|^{2} &= 1^{2} + 1^{2} + 1^{2} + 1^{2} + 1^{2} + 1^{2} + 0^{2} = 6 \\
+\|B\|^{2} &= 1^{2} + 0^{2} + 1^{2} + 0^{2} + 0^{2} + 1^{2} + 1^{2} = 4  
+\end{aligned}
+
+** Tanimoto係数とJaccard係数の例 - Con't
+
+Tanimoto係数：　
+
+\begin{aligned}
+ T(A, B) &= \frac{A\cdot B}{\|A\|^{2} + \|B\|^{2} - A\cdot B} \\
+         &= \frac{3}{6+4-3} \\
+         &= \frac{3}{7} 
+\end{aligned}
+
+
+Jaccard係数: $A \cap B = 3$ と $A\cup B = 7$  
+
+$$J = \frac{ A\cap B}{A\cup B } = \frac{3}{7} $$
 
 ** データからネットワークの構築　
 $$d = \sum_{i=1}^{k} |a_{i} - b_{i}|$$
