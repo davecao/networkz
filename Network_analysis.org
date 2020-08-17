@@ -73,6 +73,45 @@
   
     [[./pics/networks.jpg]]
 
+** 有向グラフ(Directed graph)と無向グラフ(undirected graph)
+
+    [[./pics/graph_types.jpg]]
+
+** 有向グラフ: 非巡回と巡回 (Acyclic and cyclic graph)
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+有向非巡回グラフ
+  
+    [[./pics/graph_DAG.png]]
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+有向巡回グラフ
+    
+    [[./pics/graph_DCG.png]]
+#+REVEAL_HTML: </div>
+
+** グラフの表現：隣接行列(Adjacency matrix)
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+隣接行列: 無向グラフ 
+[[./pics/adjacency_matrix.png]]
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+隣接行列: 有向グラフ
+
+[[./pics/adjacency_matrix_d.jpg]]
+#+REVEAL_HTML: </div>
+
+** グラフの表現：隣接リスト (Adjacency list)
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+隣接リスト: 無向グラフ 
+
+[[./pics/adjacency_list_u.jpg]]
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+隣接リスト: 有向グラフ
+
+[[./pics/adjacency_list.jpg]]
+#+REVEAL_HTML: </div>
+
 * ネットワークの構築
 
 ** 頂点間の距離
@@ -225,9 +264,20 @@ $$d = \sum_{i=1}^{k} |a_{i} - b_{i}|$$
 [[./pics/ex.png]]
 #+REVEAL_HTML: </div>
 
-* ネットワークの解析
+
+* ネットワークの解析 (undirected graph)
+#+OPTIONS: toc:nil
+#+TOC: headlines 1 local
 
 ** クラスター係数
+1. Global cluster coefficient 
+
+
+Alternative: Network average clustering coefficient
+
+2. Local cluster coefficient
+
+
 ** 平均ノード間距離
 ** ネットワーク半径
 ** ネットワークの比較
