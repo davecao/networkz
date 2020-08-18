@@ -42,7 +42,6 @@
 [[./pics/internet.png]]
 
 
-
 ** ネットワークをモデリングは{{{color(red,なぜ)}}}
 
 - ネットワークモデルの構造  
@@ -69,7 +68,6 @@
  | 物理学                 | サイト(sites)  | ボンド(bonds)   |
  | 社会学                 | actors         | ties, relations |
  
-
 ** 例: Random network and Scale-free network
   
     [[./pics/networks.jpg]]
@@ -112,6 +110,7 @@
 
 [[./pics/adjacency_list.jpg]]
 #+REVEAL_HTML: </div>
+
 
 * ネットワークの構築
 
@@ -397,8 +396,13 @@ ffmpeg -i isomorphism.mov -r 24 -vf scale=300:-1 isomorphism.gif
 #+END_NOTES
 
 ** ネットワークのサブネットワーク
-Prize Collecting Steiner Forest(PCSF)アルゴリズムによって
+#+REVEAL_HTML: <div class="column" style="float:left; font-size:30px">
+頂点のprizeの和と辺のcostの和を最小化するというPrize Collecting Steiner Forest(PCSF)アルゴリズムによって
 コンテキストに関連する高信頼性サブネットワークを識別する。
+
+左図のような入力ネットワークから右図のよう出力ネットワークを得る。
+#+REVEAL_HTML: </div>
+
 [[./pics/graph_edge_cut.jpg]]
 
 #+BEGIN_NOTES
@@ -413,8 +417,25 @@ Prize Collecting Steiner Forest(PCSF)アルゴリズムによって
 - maximum spanning tree
 #+END_NOTES
 * ネットワークの可視化
+- Graphviz コマンドラインツール
+- Cytoscape
+- Gephi
 
-** Cytoscape
+** Graphviz: コマンドラインツール (C)
+
+[[./pics/graphviz.png]]
+
+** Cytoscape: (Java)
+
+[[./pics/cytoscape.png]]
+
+https://cytoscape.org/download.html
+
+** Gephi
+
+[[./pics/gephi.png]]
+
+https://gephi.org
 
 * 遺伝子発現によるネットワーク構築
 
