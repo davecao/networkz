@@ -68,7 +68,8 @@
  | コンピュータサイエンス   | 節点(nodes)    | リンク(links)   |
  | 物理学                 | サイト(sites)  | ボンド(bonds)   |
  | 社会学                 | actors         | ties, relations |
-  
+ 
+
 ** 例: Random network and Scale-free network
   
     [[./pics/networks.jpg]]
@@ -113,6 +114,9 @@
 #+REVEAL_HTML: </div>
 
 * ネットワークの構築
+
+論文によく使うシンボルは、グラフG、頂点セットV、辺セットEとし、
+あるグラフGが $G=(V, E)$ で表す。
 
 ** 頂点間の距離
 
@@ -343,12 +347,71 @@ over the total number of triplets (both open and closed).
 
 ** 平均ノード間距離
 
-** ネットワーク半径
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%; font-size:35px">
+[[./pics/ave_dist.png]]
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%; font-size:35px">
+ネットワーク(グラフ) $G$ 内の全てのノード間距離の平均値
+$$\bar{d} = \sum_{u,v\in V}\frac{d(u, v)}{n(n-1)} $$
+$d(u, v)$ は頂点セット $V$ 内に頂点 $u$ と頂点 $v$ の間に最短距離です。  
+$n$ はグラフ $G$ の頂点の数です。　
+
+左図の平均ノード間距離は、$d = 4.6$ です。 
+#+REVEAL_HTML: </div>
+** ネットワーク半径(radius)、径(diameter)と離心数(eccentricity)
+#+REVEAL_HTML: <div class="column" style="float:left; font-size:30px">
+ネットワーク(グラフ) $G(V, E)$ において, ある頂点 $v$ の離心数 $e_{G}(v)$ が $G$ 内他の頂点と最大距離と定義する。
+
+- ネットワーク半径(radius): 
+   $$ rad(G) = \min_{v\in V}e_{G}(v) $$
+- ネットワーク径(diameter):
+   $$ diam(G) = \max_{v\in V}e_{G}(v) $$
+- ネットワーク平均離心数(eccentricity):
+   $$ \bar{ecc(G)} = \frac{1}{n}\sum_{v\in V}e_{G}(v)$$
+#+REVEAL_HTML: </div>
+
+#+BEGIN_NOTES
+The eccentricity eG(v) of a vertex v in G is the largest distance from v to another vertex of
+G, i.e. max{d(v, w)| w ∈ V (G)}. The diameter of G is the maximum eccentricity in G,
+denoted by diam(G).
+#+END_NOTES
+
 ** ネットワークの比較
-** ネットワークの分割
-  Prize Collecting Steiner Forest(PCSF) algorithm to identify high confidence subnetwork 
+#+REVEAL_HTML: <div class="column" style="float:left; font-size:30px">
+ある2つ無向グラフ(unweighted) $G_{1}(V_{1}, E_{1})$ と $G_{2}(V_{2}, E_{2})$ の
+比較は、グラフ理論における概念の一つであるグラフ同型に由来する問題である、つまり、グラフ同型性判定問題です。
+
+以下の2つグラフは同じでしょうか。
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:50%; font-size:30px">
+[[./pics/g_isomorphism_A.png]]
+[[./pics/g_isomorphism_B.png]]
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:50%; font-size:30px">
+[[./pics/isomorphism.gif]]
+#+REVEAL_HTML: </div>
+
+Online tools used https://graphonline.ru/en/
+#+BEGIN_NOTES
+ffmpeg -i isomorphism.mov -r 24 -vf scale=300:-1 isomorphism.gif
+#+END_NOTES
+
+** ネットワークのサブネットワーク
+Prize Collecting Steiner Forest(PCSF)アルゴリズムによって
+コンテキストに関連する高信頼性サブネットワークを識別する。
+[[./pics/graph_edge_cut.jpg]]
+
+#+BEGIN_NOTES
+
+-  Prize Collecting Steiner Forest(PCSF) algorithm to identify high confidence subnetwork 
   relevant to the context.
 
+- a split graph is a graph in which the vertices can be partitioned into a clique and
+ an independent set. 
+
+- minimum (weight) spanning tree
+- maximum spanning tree
+#+END_NOTES
 * ネットワークの可視化
 
 ** Cytoscape
