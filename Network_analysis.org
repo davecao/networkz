@@ -272,15 +272,9 @@ $$d = \sum_{i=1}^{k} |a_{i} - b_{i}|$$
 
 クラスタリング係数は、グラフ内のノードが一緒にクラスタ化される傾向の程度の尺度です。
 以下の2つを紹介します。
+
 1. Global clustering coefficient 
 2. Local clustering coefficient
-
-*** Global clustering coefficient
-#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
-#+REVEAL_HTML: </div>
-
-#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
-#+REVEAL_HTML: </div>
 
 *** Local clustering coefficient
 
@@ -296,7 +290,50 @@ $$ C_i = \frac{2\times 2}{4\times(4-1)} = \frac{1}{3} $$
 $m_i$(青い線の数)が2、$d_i$ が4です。
 #+BEGIN_NOTES
 $d_i$ is the degree of node $i$. $m_i$ is the number of pairs among node $i$'s friends.
+The local clustering coefficient is 0 when the degree of nodes which is 1 
+since the denominator cannot be zero.
 #+END_NOTES
+
+#+REVEAL_HTML: </div>
+
+*** Global clustering coefficient
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+[[./pics/global_cluster_coefficient.jpg]]
+#+REVEAL_HTML: </div>
+
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%; font-size:35px">
+ネットワーク全体でのクラスタリングを測る。  
+
+- 方法1. グラフ中に各ノードのローカルクラスタリング係数の平均値。　　
+
+- 方法2. Closed triplets(或は3x三角形)が全tripletsに対しての割合です。　　
+
+\begin{aligned}
+CC &=\frac{\#\:of\:closed\:triplets}{\#\:of\:triplets} \\
+     &=\frac{3\times \#\:of\:triangles}{\#\:of\:triplets}
+\end{aligned}
+
+#+REVEAL_HTML: </div>
+
+#+BEGIN_NOTES
+Global clustering coefficient is the number of closed triplets (or 3 x triangles) 
+over the total number of triplets (both open and closed).
+#+END_NOTES
+
+*** Global clustering coefficientの例
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%; font-size:35px">
+[[./pics/global_cluster_coefficient_example.jpg]]
+#+REVEAL_HTML: </div>
+
+#+REVEAL_HTML: <div class="column" style="float:left; margin-top:15%;  width: 50%; font-size:35px">
+#+ATTR_HTML: :style font-size:20px;
+|   | 三角形の数(a) | 全体tripletsの数(b) | Global CC(a/b) |
+|---+---------------+---------------------+----------------|
+| A |             0 |                   4 |              0 |
+| B |             1 |                   4 |           0.25 |
+| C |             2 |                   4 |            0.5 |
+| D |             3 |                   4 |           0.75 |
+| E |             4 |                   4 |              1 |
 
 #+REVEAL_HTML: </div>
 
