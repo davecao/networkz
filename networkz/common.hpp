@@ -29,6 +29,7 @@
 #include <time.h>
 #include <fcntl.h>
 #include <string>
+#include <string_view>  // since C++17,
 #include <ctype.h>
 #include <assert.h>
 #include <filesystem>

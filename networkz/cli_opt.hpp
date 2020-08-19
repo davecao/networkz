@@ -10,6 +10,7 @@
 #define cli_opt_h
 
 #include <sys/stat.h>
+#include <array>
 
 #include "common.hpp"
 
@@ -30,7 +31,16 @@ namespace CLIARG {
   std::string column_name = "tpm"; // the name of the column in the input file.
   // Graph options
   std::string o_graph_name = "Gene Expression Network"; // title for graphviz
+  
+  // Distance type for graph construction, default is "city".
+  std::string distance_type = "city";
+  // Support distance type:
+  //    "city": city-block distance
+  //    "corr": pearson's correlation coefficient
+  std::array<std::string, 2> d_type_supported{"city", "corr"};
+
   double d_threshold = 0.0; // the threshold for distance cutoff.
+  
   
   // all the options
   po::options_description general("General options");
@@ -50,6 +60,7 @@ namespace CLIARG {
     opt.add_options()
     ("verbose,v","The extra verbose.")
     ("threshold,t",po::value<double>(&d_threshold),"The threshold between two vertices which are linked by an edge if the distance less than it. default is 0.")
+    ("distance,d", po::value<std::string>(&distance_type), "The distance type(string): 'city' for city-block, 'corr' for pearson correlation coefficient")
     ("title,n",po::value<std::string>(&o_graph_name),"The title of the graph used to label the png file. Default is Gene Expression Network.")
     ;
     general.add(opt);
@@ -96,7 +107,7 @@ namespace CLIARG {
     if( vm.count("help") ){
       // print help info
       std::cout << general << std::endl;
-      exit(0);
+      std::exit(0);
     }
     
     if( vm.count("version") ){
@@ -107,6 +118,7 @@ namespace CLIARG {
     if ( vm.count("verbose") ){
       verbose = true;
     }
+    /*
     if ( vm.count("title") ) {
       o_graph_name = vm["title"].as<std::string>();
     }
@@ -116,11 +128,24 @@ namespace CLIARG {
     if ( vm.count("column") ) {
       column_name = vm["column"].as<std::string>();
     }
+    if ( vm.count("threshold") ) {
+      d_threshold = vm["threshold"].as<double>();
+    }
+    */
     if ( vm.count("graph") ) {
       o_graph = true;
     }
-    if ( vm.count("threshold") ) {
-      d_threshold = vm["threshold"].as<double>();
+    
+    if ( vm.count("distance") ) {
+      // Check it was support or not?
+      auto found = std::find(d_type_supported.begin(),
+                             d_type_supported.end(),
+                             distance_type);
+      if (found == d_type_supported.end()) {
+        std::cerr << "Error: '-d, distance' option value INCORRECT."
+                  << std::endl;
+        std::exit(-1);
+      }
     }
     // Check required arguments
     if ( vm.count("infile") ) {
@@ -132,8 +157,10 @@ namespace CLIARG {
       }
     }else{
       std::cout << general << std::endl;
-      exit(0);
+      std::exit(0);
     }
+    // Check distance types
+    
   }
 }
 #endif /* cli_opt_h */

@@ -10,6 +10,7 @@
 #define FILE_READER_BASE_H
 
 #include <string>
+#include "dataframe.hpp"
 #include "IFileReaderFuncs.hpp"
 
 namespace NARO {

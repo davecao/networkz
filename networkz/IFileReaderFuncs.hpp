@@ -10,6 +10,7 @@
 #define IFileReaderFuncs_h
 
 #include <string>
+#include "dataframe.hpp"
 #include "graph_auxiliary.hpp"
 
 namespace NARO {

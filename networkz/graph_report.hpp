@@ -10,6 +10,7 @@
 #define graph_report_hpp
 
 #include "graph_auxiliary.hpp"
+#include "utility.hpp"
 
 namespace NARO {
 
