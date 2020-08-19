@@ -13,7 +13,7 @@
 		F6ECDCDB24D8CB9E00230768 /* utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6ECDCCC24D8CB9E00230768 /* utility.cpp */; };
 		F6ECDCDC24D8CB9E00230768 /* graph_report.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6ECDCCE24D8CB9E00230768 /* graph_report.cpp */; };
 		F6ECDCDD24D8CB9E00230768 /* IFileReaderFuncs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6ECDCCF24D8CB9E00230768 /* IFileReaderFuncs.cpp */; };
-		F6ECDCDE24D8CB9E00230768 /* graph_auxiliary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6ECDCD024D8CB9E00230768 /* graph_auxiliary.cpp */; };
+		F6ECDCDE24D8CB9E00230768 /* graph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6ECDCD024D8CB9E00230768 /* graph.cpp */; };
 		F6ECDCDF24D8CB9E00230768 /* FileReaderBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6ECDCD824D8CB9E00230768 /* FileReaderBase.cpp */; };
 /* End PBXBuildFile section */
 
@@ -42,8 +42,8 @@
 		F6ECDCCD24D8CB9E00230768 /* IFileReaderFuncs.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFileReaderFuncs.hpp; sourceTree = "<group>"; };
 		F6ECDCCE24D8CB9E00230768 /* graph_report.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = graph_report.cpp; sourceTree = "<group>"; };
 		F6ECDCCF24D8CB9E00230768 /* IFileReaderFuncs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IFileReaderFuncs.cpp; sourceTree = "<group>"; };
-		F6ECDCD024D8CB9E00230768 /* graph_auxiliary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = graph_auxiliary.cpp; sourceTree = "<group>"; };
-		F6ECDCD124D8CB9E00230768 /* graph_auxiliary.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = graph_auxiliary.hpp; sourceTree = "<group>"; };
+		F6ECDCD024D8CB9E00230768 /* graph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = graph.cpp; sourceTree = "<group>"; };
+		F6ECDCD124D8CB9E00230768 /* graph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = graph.hpp; sourceTree = "<group>"; };
 		F6ECDCD224D8CB9E00230768 /* FileReaderFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FileReaderFactory.hpp; sourceTree = "<group>"; };
 		F6ECDCD324D8CB9E00230768 /* TSVReader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TSVReader.hpp; sourceTree = "<group>"; };
 		F6ECDCD424D8CB9E00230768 /* config.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
@@ -91,8 +91,8 @@
 				F6ECDCD824D8CB9E00230768 /* FileReaderBase.cpp */,
 				F6ECDCD724D8CB9E00230768 /* FileReaderBase.hpp */,
 				F6ECDCD224D8CB9E00230768 /* FileReaderFactory.hpp */,
-				F6ECDCD024D8CB9E00230768 /* graph_auxiliary.cpp */,
-				F6ECDCD124D8CB9E00230768 /* graph_auxiliary.hpp */,
+				F6ECDCD024D8CB9E00230768 /* graph.cpp */,
+				F6ECDCD124D8CB9E00230768 /* graph.hpp */,
 				F6ECDCCE24D8CB9E00230768 /* graph_report.cpp */,
 				F6ECDCD624D8CB9E00230768 /* graph_report.hpp */,
 				F6ECDCCF24D8CB9E00230768 /* IFileReaderFuncs.cpp */,
@@ -170,7 +170,7 @@
 				F6ECDCDD24D8CB9E00230768 /* IFileReaderFuncs.cpp in Sources */,
 				F6ECDCDA24D8CB9E00230768 /* TSVReader.cpp in Sources */,
 				F670420724EDE82700F83258 /* dataframe.cpp in Sources */,
-				F6ECDCDE24D8CB9E00230768 /* graph_auxiliary.cpp in Sources */,
+				F6ECDCDE24D8CB9E00230768 /* graph.cpp in Sources */,
 				F6ECDCDC24D8CB9E00230768 /* graph_report.cpp in Sources */,
 				F6ECDCDF24D8CB9E00230768 /* FileReaderBase.cpp in Sources */,
 				F6ECDCD924D8CB9E00230768 /* main.cpp in Sources */,

@@ -6,7 +6,7 @@
 //  Copyright © 2020 曹巍. All rights reserved.
 //
 
-#include "graph_auxiliary.hpp"
+#include "graph.hpp"
 
 // -----------------------------------------------------------------------------
 // bilab::gVertex::to_graphviz()

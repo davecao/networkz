@@ -46,7 +46,7 @@
 #include "common.hpp"
 #include "cli_opt.hpp"
 #include "utility.hpp"
-#include "graph_auxiliary.hpp"
+#include "graph.hpp"
 #include "graph_report.hpp"
 #include "FileReaderFactory.hpp"
 #include "TSVReader.hpp"

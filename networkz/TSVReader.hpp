@@ -10,7 +10,7 @@
 #define TSV_READER_HPP
 
 #include "common.hpp"
-#include "graph_auxiliary.hpp"
+#include "graph.hpp"
 #include "utility.hpp"
 #include "FileReaderFactory.hpp"
 #include "FileReaderBase.hpp"

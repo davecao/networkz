@@ -11,7 +11,7 @@
 
 #include <string>
 #include "dataframe.hpp"
-#include "graph_auxiliary.hpp"
+#include "graph.hpp"
 
 namespace NARO {
 
