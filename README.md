@@ -1,16 +1,16 @@
 #  Networkz
-
+---
 ## Prerequisites
-
+---
 1. cmake (xcode project also provided)
 2. Boost Graph Library (version 1.70 or later)
 3. C++ compiler (support c++17, clang 9.0 had been tested on MacOS) 
 4. [Optional] Eigen (version 3.3.9 or later) 
 
 ## For MacOS 10.15
-
+---
 ### Install Homebrew
-
+---
 1. Install homebrew
 
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
@@ -24,10 +24,11 @@
         Homebrew/homebrew-cask (git revision d77724; last commit 2020-08-04). 
 
 ### Install CMake by `brew`
-
+---
     brew install cmake
 
 ### Install C++ compiler (Xcode)
+---
 
 1. Open Apple store by clicking the following URL
 
@@ -49,13 +50,14 @@ You should find the similar info as follows,
         InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin.  
 
 ### Install the dependencies by Homebrew
+---
 
 1. Install Boost Libraries
 
         brew install boost
 
 ## Download the soure code from github
-
+---
     cd $HOME/apps/
     git clone https://github.com/davecao/networkz.git
 
@@ -73,11 +75,13 @@ Compile the source code by `CMake` or `Xcode` on MacOS
 The executable file will be generated in the *build* directory.
 
 ### Compilation by Xcode
+---
 
    Open the xcode project file, `networkz.xcodeproj`, by double click.  
    Choose the scheme to compile the source code.  
  
 ##### Configure the xcode setting
+---
 
 ![Settings](./pics/xcode1.png)
 
@@ -88,11 +92,12 @@ The executable file will be generated in the *build* directory.
 ![Environment setting](./pics/xcode4.png)
 
 ## Format of Input file
+---
 
 Tab-Separated Values (TSV) format is only supported now.
 
 ## Usage
-
+---
     networkz -h
 
 General options:  
