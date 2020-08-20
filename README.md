@@ -4,8 +4,8 @@
 
 1. cmake (xcode project also provided)
 2. Boost Graph Library (version 1.70 or later)
-3. Eigen (version 3.3.9 or later)
-4. C++ compiler (support c++17, clang 9.0 had been tested on MacOS) 
+3. C++ compiler (support c++17, clang 9.0 had been tested on MacOS) 
+4. [Optional] Eigen (version 3.3.9 or later) 
 
 ## For MacOS 10.15
 
@@ -43,38 +43,16 @@ https://apps.apple.com/jp/app/xcode/id497799835?mt=12
 
 You should find the similar info as follows,
 
-   Apple clang version 11.0.3 (clang-1103.0.32.62). 
-   Target: x86_64-apple-darwin19.6.0. 
-   Thread model: posix. 
-   InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin. 
+        Apple clang version 11.0.3 (clang-1103.0.32.62).  
+        Target: x86_64-apple-darwin19.6.0.  
+        Thread model: posix.  
+        InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin.  
 
 ### Install the dependencies by Homebrew
 
 1. Install Boost Libraries
 
         brew install boost
-
-2. Install Eigens manually
-
->>Note: Eigen3 version is 3.3.7 which is lower than the requirement.
-
-2.1 Create a fold to store the source code, e.g., `apps` in the home directory
-
-    mkdir $HOME/{apps,dist}; cd $HOME/apps
-
-2.2 Download the source code by `git`  
-
-    git clone https://gitlab.com/libeigen/eigen.git
-
-2.3 Install the code with CMake
-
-    mkdir build; cd build
-    cmake -DCMAKE_INSTALL_PREFIX=$HOME/dist/eigen -DCMAKE_BUILD_TYPE=Release ../
-    make install
-
-2.4 Add the eigen3 to the include path to your start shell.
-
-    export EIGEN3_INCLUDE_DIR=$HOME/dist/eigen/include/eigen3
 
 ## Download the soure code from github
 
@@ -114,21 +92,22 @@ Tab-Separated Values (TSV) format is only supported now.
 
 ## Usage
 
-   networkz -h
+    networkz -h
 
-General options:  
+General options:
+  -V, --version    Show the version number
+  -i, --infile     The input data file. Only the tsv format is supported now.
+  -o, --outfile    The output file of clusters in text format. Default
+                   is 'o_graphviz.gv'.
+  -c, --column     The column name in the input file. Default is 'tpm'
+  -g, --graph      Output the graph to a file in the graphviz format if true.
+  -h, --help       print help info.
 
--V, --version        Show the version number.  
--i, --infile arg     The input data file. Only the tsv format is supported now.  
--o, --outfile arg    The output file of clusters in text format. Default is 'o_graphviz.gv'.  
--c, --column arg     The column name in the input file. Default is 'tpm'  
--g, --graph          Output the graph to a file in the graphviz format if true.  
--h, --help           print help info.  
-
-Graph options:  
-
--v, --verbose        The extra verbose.  
--t, --threshold arg  The threshold between two vertices which are linked
-                          by an edge if the distance less than it. default is 0.  
--n, --title arg      The title of the graph used to label the png file.
-                          Default is Gene Expression Network.  
+Graph options:
+  -v,--verbose     The extra verbose.
+  -t,--threshold   The threshold between two vertices which are linked
+                   by an edge if the distance less than it. default is 0.
+  -d,--distance    The distance type(string): 'city' for city-block,
+                   'corr' for pearson correlation coefficient
+  -n,--title       The title of the graph used to label the png file.
+                   Default is `Gene Expression Network`.
