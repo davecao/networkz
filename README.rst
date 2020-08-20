@@ -62,9 +62,10 @@ Install the dependencies by Homebrew
 
 Download the soure code from github
 -----------------------------------
-
+```
     cd $HOME/apps/
     git clone https://github.com/davecao/networkz.git
+```
 
 Compile Networkz
 ----------------
@@ -73,9 +74,11 @@ Compile the source code by `CMake` or `Xcode` on MacOS
 
 Compilation by CMake
 --------------------
+```shell
     mkdir build; cd build
     cmake -DCMAKE_BUILD_TYPE=Release ../path/to/networkz
     make VERBOSE=1
+```
 
 The executable file will be generated in the *build* directory.
 
