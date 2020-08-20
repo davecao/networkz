@@ -104,10 +104,10 @@ General options:
   -h, --help       print help info.  
 
 Graph options:  
-  -v,--verbose     The extra verbose.  
-  -t,--threshold   The threshold between two vertices which are linked  
+  -v, --verbose     The extra verbose.  
+  -t, --threshold   The threshold between two vertices which are linked  
                    by an edge if the distance less than it. default is 0.  
-  -d,--distance    The distance type(string): 'city' for city-block,  
+  -d, --distance    The distance type(string): 'city' for city-block,  
                    'corr' for pearson correlation coefficient  
-  -n,--title       The title of the graph used to label the png file.  
+  -n, --title       The title of the graph used to label the png file.  
                    Default is `Gene Expression Network`.  
