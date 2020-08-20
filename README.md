@@ -94,20 +94,20 @@ Tab-Separated Values (TSV) format is only supported now.
 
     networkz -h
 
-General options:
-  -V, --version    Show the version number
-  -i, --infile     The input data file. Only the tsv format is supported now.
-  -o, --outfile    The output file of clusters in text format. Default
-                   is 'o_graphviz.gv'.
-  -c, --column     The column name in the input file. Default is 'tpm'
-  -g, --graph      Output the graph to a file in the graphviz format if true.
-  -h, --help       print help info.
+General options:  
+  -V, --version    Show the version number  
+  -i, --infile     The input data file. Only the tsv format is supported now.  
+  -o, --outfile    The output file of clusters in text format. Default  
+                   is 'o_graphviz.gv'.  
+  -c, --column     The column name in the input file. Default is 'tpm'  
+  -g, --graph      Output the graph to a file in the graphviz format if true.  
+  -h, --help       print help info.  
 
-Graph options:
-  -v,--verbose     The extra verbose.
-  -t,--threshold   The threshold between two vertices which are linked
-                   by an edge if the distance less than it. default is 0.
-  -d,--distance    The distance type(string): 'city' for city-block,
-                   'corr' for pearson correlation coefficient
-  -n,--title       The title of the graph used to label the png file.
-                   Default is `Gene Expression Network`.
+Graph options:  
+  -v,--verbose     The extra verbose.  
+  -t,--threshold   The threshold between two vertices which are linked  
+                   by an edge if the distance less than it. default is 0.  
+  -d,--distance    The distance type(string): 'city' for city-block,  
+                   'corr' for pearson correlation coefficient  
+  -n,--title       The title of the graph used to label the png file.  
+                   Default is `Gene Expression Network`.  
