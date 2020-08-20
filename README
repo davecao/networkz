@@ -60,11 +60,12 @@ You should find the similar info as follows,
     git clone https://github.com/davecao/networkz.git
 
 ## Compile Networkz
+---
 
 Compile the source code by `CMake` or `Xcode` on MacOS
 
 ### Compilation by CMake
-
+---
     mkdir build; cd build
     cmake -DCMAKE_BUILD_TYPE=Release ../path/to/networkz
     make VERBOSE=1
