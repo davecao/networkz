@@ -13,10 +13,12 @@
 #+REVEAL_POSTAMBLE: <p> Created by 曹巍. </p>
 #+REVEAL_PLUGINS: (highlight markdown notes)
 #+REVEAL_EXTRA_CSS: https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css
+#+REVEAL_TITLE_SLIDE: <h2>%t</h2>
+#+REVEAL_TITLE_SLIDE: <h3>%a</h3>
+#+REVEAL_TITLE_SLIDE: <h3>%d</h3> 
 # +REVEAL_PREAMBLE: <div class="footer"><p>農研機構</p></div>
 # +REVEAL_HLEVEL: 
 # +REVEAL: split
-# +REVEAL_TITLE_SLIDE: %t \n %a \n %d \n %%
 # +REVEAL_SLIDE_HEADER: reveal_global_header:t 
 # +REVEAL_SLIDE_FOOTER: 農研機構,NARO
 #+MACRO: color @@html:<font color="$1">$2</font>@@
