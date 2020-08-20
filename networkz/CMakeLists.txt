@@ -42,10 +42,11 @@ set(CMAKE_CXX_FLAGS_RELEASE "-Os")
 
 # Add main.cpp file of project root directory as source file
 set(SOURCE_FILES
+  dataframe.cpp
   IFileReaderFuncs.cpp
   FileReaderBase.cpp
   TSVReader.cpp
-  graph_auxiliary.cpp
+  graph.cpp
   graph_report.cpp
   utility.cpp
   main.cpp
