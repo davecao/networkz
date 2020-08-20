@@ -24,7 +24,7 @@ find_package (Eigen3 3.3.90 REQUIRED)
 # --- Compiler options ---
 set(CMAKE_CXX_FLAGS "-fdeclspec")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
-set(CMAKE_CXX_FLAGS_RELEASE "-Os")
+set(CMAKE_CXX_FLAGS_RELEASE "-fvisibility=hidden -Os")
 
 # --- Include Header Files ---
 include_directories(${PROJECT_SOURCE_DIR})
