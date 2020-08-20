@@ -232,7 +232,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"${BOOST_INC}",
-					"${EIGEN_INC}",
+					"${PROJECT_DIR}/thirdparty/eigen/include/eigen3",
 				);
 				LIBRARY_SEARCH_PATHS = "${BOOST_LIBS}";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
@@ -253,7 +253,7 @@
 				SYSTEM_HEADER_SEARCH_PATHS = "${BOOST_INC}";
 				USER_HEADER_SEARCH_PATHS = (
 					"${BOOST_INC}",
-					"${EIGEN_INC}",
+					"${PROJECT_DIR}/thirdparty/eigen/include/eigen3",
 				);
 			};
 			name = Debug;
@@ -304,7 +304,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"${BOOST_INC}",
-					"${EIGEN_INC}",
+					"${PROJECT_DIR}/thirdparty/eigen/include/eigen3",
 				);
 				LIBRARY_SEARCH_PATHS = "${BOOST_LIBS}";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
@@ -324,7 +324,7 @@
 				SYSTEM_HEADER_SEARCH_PATHS = "${BOOST_INC}";
 				USER_HEADER_SEARCH_PATHS = (
 					"${BOOST_INC}",
-					"${EIGEN_INC}",
+					"${PROJECT_DIR}/thirdparty/eigen/include/eigen3",
 				);
 			};
 			name = Release;

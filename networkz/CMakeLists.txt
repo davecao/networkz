@@ -9,37 +9,26 @@ set(VERSION_MAJOR   1   CACHE STRING "networkz major version number.")
 set(VERSION_MINOR   0   CACHE STRING "networkz minor version number.")
 set(VERSION_PATCH   0   CACHE STRING "networkz patch version number.")
 
-# ------ Required packages ------
+# --- Required packages ---
+# Add self-contained eigen3
+include(${CMAKE_SOURCE_DIR}/thirdparty/eigen/share/eigen3/cmake/Eigen3Config.cmake)
 
 # ------ [ BOOST ] ------
-# BOOST 1.72,0 or later, EIGEN 3.90 or later
+# BOOST 1.72,0 or later, EIGEN 3.3.90 or later
 find_package( Boost REQUIRED COMPONENTS program_options graph iostreams timer )
 include_directories( ${Boost_INCLUDE_DIRS} )
 
-# ------ [ EIGEN ] ------
-# find_package(EIGEN REQUIRED)
-find_package (Eigen3 3.3.9 NO_MODULE)
-set(EIGEN3_INC "$ENV{EIGEN3_INCLUDE_DIR}")
+# ------ [ EIGEN self-contained version ] ------
+find_package (Eigen3 3.3.90 REQUIRED)
 
-if (NOT EIGEN3_INC)
-  if (TARGET Eigen3::Eigen)
-    set(EIGEN3_INC "${EIGEN3_INCLUDE_DIR}")
-  else ()
-    message(status " Could not find Eigen3 library")
-  endif (TARGET Eigen3::Eigen)
-endif (NOT EIGEN3_INC)
-
-include_directories("${EIGEN3_INC}")
-message(status " EIGEN3:" ${EIGEN3_INC})
-
-# Include source files
-include_directories(${PROJECT_SOURCE_DIR})
-
-# Compiler options
-set (CMAKE_CXX_FLAGS "-fdeclspec")
+# --- Compiler options ---
+set(CMAKE_CXX_FLAGS "-fdeclspec")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 set(CMAKE_CXX_FLAGS_RELEASE "-Os")
 
+# --- Include Header Files ---
+include_directories(${PROJECT_SOURCE_DIR})
+# --- Compile c++ code ---
 # Add main.cpp file of project root directory as source file
 set(SOURCE_FILES
   dataframe.cpp
@@ -52,10 +41,12 @@ set(SOURCE_FILES
   main.cpp
 )
 
-# Add executable target with source files listed in SOURCE_FILES variable
+# --- Create the executable target ---
+#  with source files listed in SOURCE_FILES variable.
 add_executable(networkz ${SOURCE_FILES})
 
+# --- Link to the library ---
 target_link_libraries(networkz
    ${Boost_LIBRARIES}
-   c++
+   Eigen3::Eigen
 )
