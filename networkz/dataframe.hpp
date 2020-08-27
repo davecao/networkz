@@ -14,6 +14,7 @@
 #include <map>
 #include <vector>
 #include <iostream>
+
 #include <Eigen/Core>
 
 namespace NARO {
@@ -52,25 +53,29 @@ struct DataFrame
   void resize(size_t nrows, size_t ncols);
   size_t size();
   void set_data(Dynamic2D& d);
+  
+  // Overload operators
   double operator()(int r_inx, int c_inx);
-
+   
+  // Operations for indices
+  // For columns
   bool set_columnIndex_names(std::string& col_name, size_t i);
   bool set_columnIndex_names(std::vector<std::string>& col_name);
-
   std::vector<std::string> get_columnIndex_names();
+  // For rows
   bool set_rowIndex_names(std::vector<std::string>& row_name);
   std::vector<std::string> get_rowIndex_names();
 
   bool add_row(std::vector<std::string>& row, size_t rInx);
-  /*
-   * Select data by a column name and return a copy of sub-dataset.
-   *  time-consuming and may cause the memory leaks
-   */
+  //
+  // Select data by a column name and return a copy of sub-dataset.
+  // time-consuming and may cause the memory leaks
+  //
   DataFrame select(std::string& c_name);
-  /*
-   * Modify the passed dataframe and store the sub dataset.
-   * Release the memory from the main function to avoid the memory leaks.
-   */
+  //
+  // Modify the passed dataframe and store the sub dataset.
+  // Release the memory from the main function to avoid the memory leaks.
+  //
   bool select(std::string& c_name, DataFrame* sliced);
 };
 } // Namespace NARO

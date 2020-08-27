@@ -13,6 +13,7 @@
 #include <vector>
 #include <map>
 
+
 #if defined(PARALLEL_BGL)
 // Parallel BGL
 #include <mpi.h>
@@ -54,17 +55,17 @@ namespace NARO {
    gVertex()
    {}
    
-   gVertex(std::string& name, double tpm = -1)
-     : name(name), tpm(tpm)
+   gVertex(std::string& name, double weight = -1)
+     : name(name), weight(weight)
    {}
    // public fields
    std::string name;
-   double tpm;
+   double weight;
  #if defined(PARALLEL_BGL)
    // Serialization support for parallel processing
    template<typename Archiver>
    void serialize(Archiver& ar, const unsigned int /*version*/) {
-     ar & name & tpm;
+     ar & name & weight;
    }
  #endif
    std::string to_graphviz();

@@ -418,6 +418,7 @@ ffmpeg -i isomorphism.mov -r 24 -vf scale=300:-1 isomorphism.gif
 - minimum (weight) spanning tree
 - maximum spanning tree
 #+END_NOTES
+
 * ネットワークの可視化
 - Graphviz コマンドラインツール
 - Cytoscape
@@ -438,6 +439,7 @@ https://cytoscape.org/download.html
 [[./pics/gephi.png]]
 
 https://gephi.org
+
 
 * 遺伝子発現によるネットワーク構築
 

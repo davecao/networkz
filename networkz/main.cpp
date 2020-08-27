@@ -50,10 +50,11 @@
 #include "graph_report.hpp"
 #include "FileReaderFactory.hpp"
 #include "TSVReader.hpp"
+#include "graph_util.hpp"
 
 int main(int argc, const char * argv[]) {
-  
-  namespace fs = std::filesystem;
+
+  //namespace fs = std::filesystem;
   NARO::FileReaderFactory::showClasses();
   //std::unique_ptr<NARO::FileReaderBase> reader =
   auto reader = NARO::FileReaderFactory::makeUnique("TSVReader");
@@ -91,8 +92,9 @@ int main(int argc, const char * argv[]) {
   // ---------------------------------------------------------------------------
   if (reader->read(filename, df, sep, comment, header)) {
     timer.stop();
-    auto err = std::error_code{};
-    auto filesize = byteConverter_s(fs::file_size(filename, err));
+    //auto err = std::error_code{};
+    NARO::ErrorCode err;
+    auto filesize = byteConverter_s(NARO::fs::file_size(filename, err));
     if (CLIARG::verbose) {
       seconds =
         std::chrono::nanoseconds(timer.elapsed().user);

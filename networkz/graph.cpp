@@ -13,7 +13,7 @@
 //
 std::string NARO::gVertex::to_graphviz() {
   std::stringstream ss;
-    ss << "[label=\"" << name << "\", tpm=" << tpm << "]";
+    ss << "[label=\"" << name << "\", tpm=" << weight << "]";
     return ss.str();
 }
 

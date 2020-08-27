@@ -10,6 +10,7 @@
 #include <fstream>
 #include "utility.hpp"
 
+
 /**
  * Show Eigen version information.
  *
@@ -104,10 +105,10 @@ std::string repeat(std::string str, const std::size_t n)
 std::vector<std::string> readFileToLines(const std::string& file,
                                          const std::string& comment="#")
 {
-  namespace fs = std::filesystem;
+  //namespace fs = std::filesystem;
   std::vector<std::string> lines;
   // 1. Check the existance of the tsv file
-  if (!fs::exists(file) && fs::is_regular_file(file))
+  if (!NARO::fs::exists(file) && NARO::fs::is_regular_file(file))
   {
     std::cout << "Could not find the input file: "<< file << std::endl;
   }

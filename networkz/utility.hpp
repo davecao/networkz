@@ -14,7 +14,26 @@
 #include <iostream>
 #include <vector>
 #include <string>
+//#include <filesystem>
+#ifdef __cpp_lib_system
 #include <filesystem>
+namespace NARO {
+  namespace fs = std::filesystem;
+  typedef std::error_code ErrorCode;
+}
+#elif __cpp_lib_experimental_filesystem
+#include <experimental/filesystem>
+namespace NARO {
+  namespace fs = std::experimental::filesystem;
+  typedef fs::error_code ErrorCode;
+}
+#else
+#include <boost/filesystem.hpp>
+namespace NARO {
+  namespace fs = boost::filesystem;
+  typedef boost::system::error_code ErrorCode;
+}
+#endif
 
 #include <boost/version.hpp>
 

@@ -37,6 +37,7 @@ set(SOURCE_FILES
   TSVReader.cpp
   graph.cpp
   graph_report.cpp
+  graph_util.cpp
   utility.cpp
   main.cpp
 )

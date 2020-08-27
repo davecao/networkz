@@ -32,7 +32,15 @@
 #include <string_view>  // since C++17,
 #include <ctype.h>
 #include <assert.h>
+
+#ifdef __cpp_lib_system
 #include <filesystem>
+#elif __cpp_lib_experimental_filesystem
+#include <experimental/filesystem>
+#else
+#include <boost/filesystem.hpp>
+#endif
+
 //#include <execution> // parallel not supported by clang 9.0 yet
 //#include <regex> // Not supported by clang++ with llvm 4.2.1
 
