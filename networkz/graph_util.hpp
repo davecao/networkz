@@ -19,25 +19,62 @@
 
 namespace NARO {
 
-enum class Distance: int
+/**
+ @brief CityBlock: a funcor to calculate city block distance for a given row-wised matrix.
+ 
+ The observations are arranged as row variables.
+ */
+struct CityBlock
 {
-  city_block,
-  euclidean,
-  correlation
+  /**
+   @param mat A Eigen double matrix (m x n). m is the number of samples and n is the dimension of
+             an observation..
+   @return a Eign double matrix.
+   */
+  Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat);
 };
 
-// Distance
-// City block distance
-Eigen::MatrixXd city_block(const Eigen::MatrixXd& mat);
+/*!
+ @brief Euclidean: a funcor to calculate euclidean distance for a given row-wised matrix.
+ 
+     The observations are arranged as row variables.
+*/
+struct Euclidean
+{
+  /**
+   @param mat A Eigen double matrix (m x n). m is the number of samples and n is the dimension of
+            an observation.
+   @return a Eign double matrix.
+   */
+  Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat);
+};
 
-// Euclidean distance
-Eigen::MatrixXd euclidean(const Eigen::MatrixXd& mat);
-
+/*!
+ @brief Corrcoef: a functor to calculate pearson's correlation coefficient for a given row-wised matrix
+ */
 // Pearson's correlation coefficient
-Eigen::MatrixXd corrcoef(const Eigen::MatrixXd& mat);
+struct Corrcoef
+{
+  /**
+   @param mat A Eigen double matrix (m x n). m is the number of samples and n is the dimension of
+            an observation.
+   @return a Eign double matrix.
+   */
+  Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat);
+};
 
+/*!
+ @brief create_graph: create a graph from a given dataframe defined in this project.
+ @param g A pointer of a Graph
+ @param df The dataframe data
+ @param dist_threshold A threshold in double  to create an edge
+        between two nodes if their distance be lower than this value.
+ @param dist_functor A template argument for selecting the method to calculate the distance.
+ */
 // Create a graph from a given dataframe.
-bool create_graph(Graph* g, DataFrame* df, Distance d);
+template<class DistType>
+bool create_graph(Graph* g, DataFrame* df, double dist_threshold,
+                  DistType dist_functor);
 
 } // Namespace NARO
 

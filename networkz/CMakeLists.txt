@@ -10,12 +10,15 @@ set(VERSION_MINOR   0   CACHE STRING "networkz minor version number.")
 set(VERSION_PATCH   0   CACHE STRING "networkz patch version number.")
 
 # --- Required packages ---
+# Doxygen to generate API document
+find_package(Doxygen)
+
 # Add self-contained eigen3
 include(${CMAKE_SOURCE_DIR}/thirdparty/eigen/share/eigen3/cmake/Eigen3Config.cmake)
 
 # ------ [ BOOST ] ------
 # BOOST 1.72,0 or later, EIGEN 3.3.90 or later
-find_package( Boost REQUIRED COMPONENTS program_options graph iostreams timer )
+find_package( Boost REQUIRED COMPONENTS program_options graph iostreams timer filesystem )
 include_directories( ${Boost_INCLUDE_DIRS} )
 
 # ------ [ EIGEN self-contained version ] ------
@@ -51,3 +54,23 @@ target_link_libraries(networkz
    ${Boost_LIBRARIES}
    Eigen3::Eigen
 )
+
+# --- Generate API docs by Oxygen ---
+if(DOXYGEN_FOUND)
+   # set input and output files
+   set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/../docs/Doxyfile.in)
+   set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+
+   # request to configure the file
+    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+    message("Doxygen build started")
+
+    # note the option ALL which allows to build the docs together with the application
+    add_custom_target( doc_doxygen ALL
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM )
+else(DOXYGEN_FOUND)
+  message("Doxygen need to be installed to generate the doxygen documentation")
+endif(DOXYGEN_FOUND)

@@ -8,7 +8,7 @@
 
 #include "graph_util.hpp"
 
-Eigen::MatrixXd NARO::city_block(const Eigen::MatrixXd& mat) {
+Eigen::MatrixXd NARO::CityBlock::operator()(const Eigen::MatrixXd& mat) {
   int nrows = static_cast<int>(mat.rows());
   Eigen::MatrixXd d_mat(nrows, nrows);
   std::cout << mat << std::endl;
@@ -22,7 +22,7 @@ Eigen::MatrixXd NARO::city_block(const Eigen::MatrixXd& mat) {
 // -----------------------------------------------------------------------------
 // Eigen uses Column Major definition of Matrix in general if not specified.
 //
-Eigen::MatrixXd NARO::euclidean(const Eigen::MatrixXd& mat) {
+Eigen::MatrixXd NARO::Euclidean::operator()(const Eigen::MatrixXd& mat) {
   auto d_mat = ((-2 * mat.transpose() * mat).colwise() +
                 mat.colwise().squaredNorm().transpose()).rowwise() +
                mat.colwise().squaredNorm();
@@ -33,7 +33,7 @@ Eigen::MatrixXd NARO::euclidean(const Eigen::MatrixXd& mat) {
 // Pearson's correlation coefficient for real numbers.
 //   mat - the observations are arranged as rows.
 //
-Eigen::MatrixXd NARO::corrcoef(const Eigen::MatrixXd& mat) {
+Eigen::MatrixXd NARO::Corrcoef::operator()(const Eigen::MatrixXd& mat) {
   double nrows = static_cast<double>(mat.rows());
   if (nrows == 1) {
     std::cerr << "Error: the input matrix at least contains two rows"
@@ -92,8 +92,62 @@ bool create_graph_corr(NARO::Graph* g, NARO::DataFrame* df)
   return result;
 }
 // -----------------------------------------------------------------------------
-//
-bool NARO::create_graph(Graph* g, DataFrame* df, Distance d) {
+// The observations arranged as row variables.
+template<class DistType>
+bool NARO::create_graph(Graph* g, DataFrame* df,
+                        double dist_threshold, DistType dist_functor) {
   bool result = false;
+  
+  NARO::NameVertexMap name2vertex;
+  NARO::NameVertexMap::iterator pos_u;
+  NARO::NameVertexMap::iterator pos_v;
+  bool inserted;
+  NARO::Vertex u, v;
+  // Get data:
+  auto dist_mat = dist_functor(df->data);
+  size_t num_rows = dist_mat.rows();
+  auto rownames = df->get_rowIndex_names();
+  if(rownames.size() != num_rows) {
+    std::cerr <<
+      "The input dataframe has errors: string index != number of rows"
+    << std::endl;
+  }
+#pragma omp parallel for
+  for(int i=0; i<(num_rows - 1); i++) {
+    int n1_inx = i;
+    std::string n1 = rownames[n1_inx];
+    double d_n1 = (*df)(n1_inx, 0);
+    // Insert one node
+    boost::tie(pos_u, inserted) = name2vertex.insert(
+                                      std::make_pair(n1, NARO::Vertex()));
+    if (inserted) {
+      u = boost::add_vertex(NARO::gVertex{n1, d_n1}, *g);
+      pos_u->second = u;
+    } else {
+      u = pos_u->second;
+    }
+
+    for(int j=i+1; j<num_rows; j++) {
+      int n2_inx = j;
+      std::string n2 = rownames[n2_inx];
+      double d_n2 = (*df)(n2_inx, 0);
+      // Create the other node in the graph
+      boost::tie(pos_v, inserted) = name2vertex.insert(
+                                    std::make_pair(n2, NARO::Vertex()));
+      // Create an edge between these two nodes
+      // if the distance between them be less than the dist_threshold
+      if (inserted) {
+        v = boost::add_vertex(NARO::gVertex{n2, d_n2}, *g);
+        pos_v->second = v;
+      } else {
+        v = pos_v->second;
+      }
+      double d = dist_mat(i, j);
+      if (d < dist_threshold ) {
+        // Create an edge conecting those two vertices
+        boost::add_edge(u, v, NARO::gEdge{d}, *g);
+      }
+    }
+  }
   return result;
 }

@@ -26,20 +26,21 @@ namespace CLIARG {
   bool o_graph = false; // output graphviz file if true.
   
   std::string i_filename; // input file name
-  std::string o_filename = "o_graphviz.gv"; // default file name for graphviz.
+  std::string o_filename = "describe_networkz.log"; // default file name for graphviz.
   std::string inputfile_size; // store the size of input file.
-  std::string column_name = "tpm"; // the name of the column in the input file.
+  std::vector<std::string> column_names; // the name of the column in the input file.
   // Graph options
   std::string o_graph_name = "Gene Expression Network"; // title for graphviz
-  
+  std::string o_graph_file = "";
   // Distance type for graph construction, default is "city".
   std::string distance_type = "city";
   // Support distance type:
   //    "city": city-block distance
+  //    "euc" : euclidean distance
   //    "corr": pearson's correlation coefficient
-  std::array<std::string, 2> d_type_supported{"city", "corr"};
+  std::array<std::string, 3> d_type_supported{"city", "euc", "corr"};
 
-  double d_threshold = 0.0; // the threshold for distance cutoff.
+  double d_threshold = 0.01; // the threshold for distance cutoff.
   
   
   // all the options
@@ -51,16 +52,16 @@ namespace CLIARG {
     general.add_options()
     ("version,V", "Show the version number")
     ("infile,i",po::value<std::string>(&i_filename),"The input data file. Only the tsv format is supported now.")
-    ("outfile,o", po::value<std::string>(&o_filename),"The output file of clusters in text format. Default is 'o_graphviz.gv'.")
-    ("column,c", po::value<std::string>(&column_name), "The column name in the input file. Default is 'tpm'")
-    ("graph,g","Output the graph to a file in the graphviz format if true.")
+    ("outfile,o", po::value<std::string>(&o_filename),"The output file of clusters in text format. Default is 'describe_networkz.log'.")
+    ("column,c", po::value<std::vector<std::string>>(&column_names)->multitoken(), "Specify the column names in the input file.")
+    ("graph,g",po::value<std::string>(&o_graph_name),"Output the graph to a file in the graphviz format.")
     ("help,h", "print help info.")
     ;
     
     opt.add_options()
     ("verbose,v","The extra verbose.")
     ("threshold,t",po::value<double>(&d_threshold),"The threshold between two vertices which are linked by an edge if the distance less than it. default is 0.")
-    ("distance,d", po::value<std::string>(&distance_type), "The distance type(string): 'city' for city-block, 'corr' for pearson correlation coefficient")
+    ("distance,d", po::value<std::string>(&distance_type), "The distance type(string): 'city' for city-block, 'euc' for euclidean, 'corr' for pearson correlation coefficient")
     ("title,n",po::value<std::string>(&o_graph_name),"The title of the graph used to label the png file. Default is Gene Expression Network.")
     ;
     general.add(opt);
@@ -135,7 +136,7 @@ namespace CLIARG {
     if ( vm.count("graph") ) {
       o_graph = true;
     }
-    
+
     if ( vm.count("distance") ) {
       // Check it was support or not?
       auto found = std::find(d_type_supported.begin(),

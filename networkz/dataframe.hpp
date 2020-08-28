@@ -77,6 +77,9 @@ struct DataFrame
   // Release the memory from the main function to avoid the memory leaks.
   //
   bool select(std::string& c_name, DataFrame* sliced);
+  //
+  //
+  bool select(std::vector<std::string>& c_names, DataFrame* sliced);
 };
 } // Namespace NARO
 #endif /* dataframe_hpp */

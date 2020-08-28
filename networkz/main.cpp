@@ -66,11 +66,10 @@ int main(int argc, const char * argv[]) {
   // Parse cmd line arguments
   CLIARG::ParseCmdLine(argc, argv);
   std::string filename = CLIARG::i_filename;
-  std::string graphviz_file = CLIARG::o_filename;
+  std::string graphviz_file = CLIARG::o_graph_file;
   
   std::string sep = "\t";
   std::string comment = "#";
-  std::string col = CLIARG::column_name;
   int header = 0;
   
 #if defined(PARALLEL_BGL)
@@ -117,19 +116,7 @@ int main(int argc, const char * argv[]) {
   }
 
   NARO::DataFrame *dat = new NARO::DataFrame();
-  // Select the column data
-  auto rownames = df->get_rowIndex_names();
-  if (!df->select(col, dat)) {
-    std::cout<< col << " Not found." << std::endl;
-    std::exit(-1);
-  }
-  // Get non-zero
-  std::vector<int> sel_inx;
-  for (int i=0; i<dat->size(); i++) {
-    if ((*dat)(i, 0) != 0) {
-      sel_inx.push_back(i);
-    }
-  }
+
   if (CLIARG::verbose){
     timer.stop();
     seconds = std::chrono::nanoseconds(timer.elapsed().user);
@@ -149,44 +136,29 @@ int main(int argc, const char * argv[]) {
   }
   
   NARO::Graph genes_graph(NARO::gGraph{CLIARG::o_graph_name});
-  
-  NARO::NameVertexMap name2vertex;
-  NARO::NameVertexMap::iterator pos_u;
-  NARO::NameVertexMap::iterator pos_v;
-  bool inserted;
-  NARO::Vertex u, v;
-#pragma omp parallel for
-  for(int i = 0; i < sel_inx.size() - 1; i++) {
-    int n1_inx = sel_inx[i];
-    std::string n1 = rownames[n1_inx];
-    double d_n1 = (*dat)(n1_inx, 0);
-    boost::tie(pos_u, inserted) = name2vertex.insert(
-                                      std::make_pair(n1, NARO::Vertex()));
-    if (inserted) {
-      u = boost::add_vertex(NARO::gVertex{n1, d_n1}, genes_graph);
-      pos_u->second = u;
-    } else {
-      u = pos_u->second;
+  if (CLIARG::distance_type == "city") {
+    NARO::CityBlock dist;
+    if (!NARO::create_graph<NARO::CityBlock>(&genes_graph,
+                                             dat,
+                                             CLIARG::d_threshold,
+                                             dist)) {
+      std::cerr << "Failed to create the graph" << std::endl;
     }
-
-    for (int j = i + 1; j < sel_inx.size(); j++) {
-      int n2_inx = sel_inx[j];
-      std::string n2 = rownames[n2_inx];
-      double d_n2 = (*dat)(n2_inx, 0);
-      // Create two vertices in the graph
-      boost::tie(pos_v, inserted) = name2vertex.insert(
-                                    std::make_pair(n2, NARO::Vertex()));
-      if (inserted) {
-        v = boost::add_vertex(NARO::gVertex{n2, d_n2}, genes_graph);
-        pos_v->second = v;
-      } else {
-        v = pos_v->second;
-      }
-      double d = abs(d_n1 - d_n2);
-      if (d < CLIARG::d_threshold ) {
-        // Create an edge conecting those two vertices
-        boost::add_edge(u, v, NARO::gEdge{d}, genes_graph);
-      }
+  }else if (CLIARG::distance_type == "euc") {
+    NARO::Euclidean dist;
+    if (!NARO::create_graph<NARO::Euclidean>(&genes_graph,
+                                             dat,
+                                             CLIARG::d_threshold,
+                                             dist)) {
+      std::cerr << "Failed to create the graph" << std::endl;
+    }
+  } else {
+    NARO::Corrcoef dist;
+    if (!NARO::create_graph<NARO::Corrcoef>(&genes_graph,
+                                             dat,
+                                             CLIARG::d_threshold,
+                                             dist)) {
+      std::cerr << "Failed to create the graph" << std::endl;
     }
   }
   if (CLIARG::verbose) {
@@ -199,9 +171,8 @@ int main(int argc, const char * argv[]) {
   // ---------------------------------------------------------------------------
   // Create a report
   //
-  
   NARO::Report report{CLIARG::o_graph_name, get_local_time(), "Networkz"};
-  if (!report.write("networkz.log", &genes_graph, "md",
+  if (!report.write(CLIARG::o_filename, &genes_graph, "md",
                     CLIARG::d_threshold,
                     CLIARG::verbose)){
     std::cout << "Failed to write a log." <<std::endl;
@@ -209,7 +180,7 @@ int main(int argc, const char * argv[]) {
   }
 
   // Write to graphviz format if requested.
-  if (CLIARG::o_graph) {
+  if (!graphviz_file.empty()) {
     std::cout << "Write to a " << graphviz_file << " ... ";
     if (CLIARG::verbose) {
       timer.start();

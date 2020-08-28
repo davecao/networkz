@@ -159,6 +159,7 @@ bool NARO::DataFrame::add_row(std::vector<std::string>& row, size_t rInx){
   }
   return true;
 }
+
 // -----------------------------------------------------------------------------
 // bilab::DataFrame::select()
 //
@@ -182,6 +183,7 @@ NARO::DataFrame NARO::DataFrame::select(std::string& c_name) {
 
   return *sliced;
 }
+
 // -----------------------------------------------------------------------------
 // bilab::DataFrame::select()
 //
@@ -189,9 +191,10 @@ NARO::DataFrame NARO::DataFrame::select(std::string& c_name) {
 // Modify the passed dataframe and store the sub dataset.
 // Release the memory from the main function to avoid the memory leaks.
 //
-bool NARO::DataFrame::select(std::string& c_name, DataFrame* sliced) {
-  size_t inx = this->columnIndex->GetIndex(c_name);
+bool NARO::DataFrame::select(std::string& c_name, DataFrame* sliced)
+{
   std::vector<std::string> rinx = this->rowIndex->GetIndexNames();
+  size_t inx = this->columnIndex->GetIndex(c_name);
   if (inx == -1) {
     // Column name - Not found
     //std::cout<< c_name << " Not found." << std::endl;
@@ -201,6 +204,37 @@ bool NARO::DataFrame::select(std::string& c_name, DataFrame* sliced) {
   sliced->resize(sub.rows(), sub.cols());
   //DataFrame *sliced = new DataFrame(sub.rows(), sub.cols());
   sliced->set_columnIndex_names(c_name, 0);
+  sliced->set_rowIndex_names(rinx);
+  sliced->set_data(sub);
+
+  return true;
+}
+// -----------------------------------------------------------------------------
+// bilab::DataFrame::select()
+//
+bool NARO::DataFrame::select(std::vector<std::string>& c_names,
+                             DataFrame* sliced)
+{
+  // Check the column names in dataframe
+  size_t inx;
+  std::vector<size_t> c_inx;
+  for (auto c_name : c_names) {
+    inx = this->columnIndex->GetIndex(c_name);
+    if (inx == -1) {
+      // Column name - Not found
+      std::cerr<< "Specified column name, " << c_name <<
+                  ", is not found in the data file." << std::endl;
+      return false;
+    }
+    c_inx.push_back(inx);
+  }
+  
+  std::vector<std::string> rinx = this->rowIndex->GetIndexNames();
+  
+  Dynamic2D sub = this->data(Eigen::all, c_inx);
+  sliced->resize(sub.rows(), sub.cols());
+  // Create new indices
+  sliced->set_columnIndex_names(c_names);
   sliced->set_rowIndex_names(rinx);
   sliced->set_data(sub);
 

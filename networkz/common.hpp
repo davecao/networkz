@@ -8,7 +8,8 @@
 
 #ifndef common_h
 #define common_h
-
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdocumentation"
 // all the system #include's we'll ever need
 #include <fstream>
 #include <cmath>
@@ -60,4 +61,5 @@
 
 // Config
 #include "config.hpp"
+#pragma clang diagnostic pop
 #endif /* common_h */
