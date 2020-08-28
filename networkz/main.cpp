@@ -138,7 +138,7 @@ int main(int argc, const char * argv[]) {
   NARO::Graph genes_graph(NARO::gGraph{CLIARG::o_graph_name});
   if (CLIARG::distance_type == "city") {
     NARO::CityBlock dist;
-    if (!NARO::create_graph<NARO::CityBlock>(&genes_graph,
+    if (!NARO::create_graph(&genes_graph,
                                              dat,
                                              CLIARG::d_threshold,
                                              dist)) {
@@ -146,7 +146,7 @@ int main(int argc, const char * argv[]) {
     }
   }else if (CLIARG::distance_type == "euc") {
     NARO::Euclidean dist;
-    if (!NARO::create_graph<NARO::Euclidean>(&genes_graph,
+    if (!NARO::create_graph(&genes_graph,
                                              dat,
                                              CLIARG::d_threshold,
                                              dist)) {
@@ -154,7 +154,7 @@ int main(int argc, const char * argv[]) {
     }
   } else {
     NARO::Corrcoef dist;
-    if (!NARO::create_graph<NARO::Corrcoef>(&genes_graph,
+    if (!NARO::create_graph(&genes_graph,
                                              dat,
                                              CLIARG::d_threshold,
                                              dist)) {

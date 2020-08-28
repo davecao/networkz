@@ -151,3 +151,19 @@ bool NARO::create_graph(Graph* g, DataFrame* df,
   }
   return result;
 }
+
+template
+bool NARO::create_graph<NARO::CityBlock>(Graph *g, DataFrame *df,
+                                         double dist_threshold,
+                                         NARO::CityBlock dist_functor);
+
+template
+bool NARO::create_graph<NARO::Euclidean>(Graph *g, DataFrame *df,
+                                         double dist_threshold,
+                                         NARO::Euclidean dist_functor);
+
+template
+bool NARO::create_graph<NARO::Corrcoef>(Graph *g, DataFrame *df,
+                                         double dist_threshold,
+                                         NARO::Corrcoef dist_functor);
+
