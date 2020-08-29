@@ -7,42 +7,6 @@
 //  Copyright © 2020 曹巍. All rights reserved.
 //
 //
-/* -----------------------------------------------------------------------------
- * Compilation:
- * clang++ -Os -std=c++17 main.cpp -o networkz \
- *      -I/Users/davecao/dist/eigen/include/eigen3 \
- *      -I/Users/davecao/dist/boost/include \
- *      -L/Users/davecao/dist/boost/lib \
- *      -lboost_program_options -lboost_iostreams -lboost_timer -lboost_graph \
- *      -lc++
- *
- * Usage:
- *  General options:
- *  -V [ --version ]        Show the version number
- *  -i [ --infile ] arg     The input data file. Only the tsv format is supported
- *                          now.
- *  -o [ --outfile ] arg    The output file of clusters in text format.Default
- *                          name is 'o_graphviz.gv'.
- *  -c [ --column ] arg     The column name in the input file. Default is 'tpm'
- *  -g [ --graph ] arg      Output the graph to a file in the graphviz format if
- *                          true.
- *  -h [ --help ]           print help info.
- *
- * Graph options:
- *  -v [ --verbose ]        The extra verbose.
- *  -t [ --threshold ] arg  The threshold between two vertices which are linked
- *                          by an edge if the distance less than it. default is
- *                          0.
- * -n [ --title ] arg      The title of the graph used to label the png file.
- *                         Default is Gene Expression Network.
- *
- * Example:
- *  1. Create a graphviz file.
- *  $> ./networkz -i /path/to/your/abundance.tsv -t 2.0 -o abundance.gv
- *  2. Generate a png by `dot` command in Graphviz package.
- *  $> dot -Tpng o_graphviz.gv -o o_graphviz.png
- * ---------------------------------------------------------------------------*/
-
 #include "common.hpp"
 #include "cli_opt.hpp"
 #include "utility.hpp"
@@ -135,6 +99,7 @@ int main(int argc, const char * argv[]) {
   } else {
     std::cout << "Extract data ...";
   }
+  df->describe();
   // ---------------------------------------------------------------------------
   // 1.1 Select columns
   // ---------------------------------------------------------------------------
@@ -154,6 +119,7 @@ int main(int argc, const char * argv[]) {
   } else {
     std::cout << " Completed." << std::endl;
   }
+  dat->describe();
   // ---------------------------------------------------------------------------
   // 2. Compute the cityblock distance between any two genes
   // ---------------------------------------------------------------------------

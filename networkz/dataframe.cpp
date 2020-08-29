@@ -5,13 +5,13 @@
 //  Created by CAO Wei on 2020/08/20.
 //  Copyright © 2020 曹巍. All rights reserved.
 //
-
+#include "utility.hpp"
 #include "dataframe.hpp"
 
 // -----------------------------------------------------------------------------
 // bilab::Index::GetIndex() const
 //
-ssize_t NARO::Index::GetIndex(std::string& name) const {
+size_t NARO::Index::GetIndex(std::string& name) const {
   auto it = Names.find(name);
   if ( it != Names.end())
   {
@@ -69,6 +69,17 @@ NARO::DataFrame::DataFrame(size_t nrows, size_t ncols) {
   this->columnIndex = new Index;
 }
 // -----------------------------------------------------------------------------
+//
+NARO::DataFrame::DataFrame(const DataFrame &other) {
+  this->num_rows = other.num_rows;
+  this->num_cols = other.num_cols;
+  this->data.resize(this->num_rows, this->num_cols);
+  this->rowIndex = other.rowIndex;
+  this->columnIndex = other.columnIndex;
+  // copy data
+  this->data = other.data;
+}
+// -----------------------------------------------------------------------------
 // bilab::DataFrame::~DataFrame()
 //
 NARO::DataFrame::~DataFrame() {
@@ -87,6 +98,9 @@ void NARO::DataFrame::resize(size_t nrows, size_t ncols) {
 // bilab::DataFrame::size()
 //
 size_t NARO::DataFrame::size() {
+  if (num_rows != this->data.rows()){
+    return this->data.rows();
+  }
   return num_rows;
 }
 // -----------------------------------------------------------------------------
@@ -216,10 +230,10 @@ bool NARO::DataFrame::select(std::vector<std::string>& c_names,
                              DataFrame* sliced)
 {
   // Check the column names in dataframe
-  size_t inx;
-  std::vector<size_t> c_inx;
+  int inx;
+  std::vector<int> c_inx;
   for (auto c_name : c_names) {
-    inx = this->columnIndex->GetIndex(c_name);
+    inx = static_cast<int>(this->columnIndex->GetIndex(c_name));
     if (inx == -1) {
       // Column name - Not found
       std::cerr<< "Specified column name, " << c_name <<
@@ -232,6 +246,8 @@ bool NARO::DataFrame::select(std::vector<std::string>& c_names,
   std::vector<std::string> rinx = this->rowIndex->GetIndexNames();
   
   Dynamic2D sub = this->data(Eigen::all, c_inx);
+  std::cout<< sub << std::endl;
+  std::cout << this->data(Eigen::all, 4) << std::endl;
   sliced->resize(sub.rows(), sub.cols());
   // Create new indices
   sliced->set_columnIndex_names(c_names);
@@ -239,4 +255,32 @@ bool NARO::DataFrame::select(std::vector<std::string>& c_names,
   sliced->set_data(sub);
 
   return true;
+}
+// -----------------------------------------------------------------------------
+// head()
+//
+void NARO::DataFrame::head(int n=5)
+{
+  int nrows = static_cast<int>(this->num_rows);
+  std::vector<std::string> col_names = this->get_columnIndex_names();
+  std::vector<std::string> row_names = this->get_rowIndex_names();
+  // print header
+  std::cout<< "\t" << join(col_names, "\t") << std::endl;
+  int n_headers = (n > nrows) ? n : nrows;
+  for (int i=0; i<n_headers; i++) {
+    std::cout << row_names[i] <<"\t" << this->data.row(i) << std::endl;
+  }
+}
+// -----------------------------------------------------------------------------
+// describe()
+//
+void NARO::DataFrame::describe()
+{
+  size_t nrows = this->num_rows;
+  size_t ncols = this->num_cols;
+  std::cout << "The shape of dataframe:\n";
+  std::cout << "(" << nrows << "," << ncols << ")" <<std::endl;
+  head();
+  std::cout << "Column-wise Mean:" << std::endl;
+  std::cout << this->data.colwise().mean() << std::endl;
 }

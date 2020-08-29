@@ -19,8 +19,7 @@ namespace NARO {
 /**
  * @brief A reader for the TSV file
  *
- * TSVReader inherits \link FileReaderBase\endlink, and automatically registered to the
- * \link FileReaderFactory\endlink.
+ * TSVReader inherits FileReaderBase, and automatically registered to the FileReaderFactory.
  */
 class TSVReader: public FileReaderBase
 {

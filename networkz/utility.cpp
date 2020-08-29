@@ -10,7 +10,7 @@
 #include <fstream>
 #include "utility.hpp"
 
-
+// -----------------------------------------------------------------------------
 /**
  * Show Eigen version information.
  *
@@ -22,7 +22,7 @@ void show_eigen_info() {
             << EIGEN_MINOR_VERSION
   << std::endl;
 }
-
+// -----------------------------------------------------------------------------
 /**
  *  Boost version information.
  *
@@ -34,13 +34,15 @@ void show_boost_version() {
             << BOOST_VERSION % 100                // patch level
   << std::endl;
 }
-
+// -----------------------------------------------------------------------------
+//
 void welcome_message() {
   std::cout << "Networkz is using the following packages:" <<std::endl;
   show_boost_version();
   show_eigen_info();
 }
-
+// -----------------------------------------------------------------------------
+//
 std::string byteConverter(long long byte)
 {
   std::stringstream ss;
@@ -55,7 +57,8 @@ std::string byteConverter(long long byte)
   }
   return ss.str();
 }
-
+// -----------------------------------------------------------------------------
+//
 std::string byteConverter_s(long long byte)
 {
   std::stringstream ss;
@@ -80,7 +83,8 @@ std::string get_local_time() {
   << now->tm_mday;
   return ss.str();
 }
-
+// -----------------------------------------------------------------------------
+//
 std::string repeat(std::string str, const std::size_t n)
 {
     if (n == 0) {
@@ -101,7 +105,8 @@ std::string repeat(std::string str, const std::size_t n)
     str.append(str.c_str(), (n - (m / 2)) * period);
     return str;
 }
-
+// -----------------------------------------------------------------------------
+//
 std::vector<std::string> readFileToLines(const std::string& file,
                                          const std::string& comment="#")
 {
@@ -137,3 +142,16 @@ std::vector<std::string> readFileToLines(const std::string& file,
   return lines;
 }
 
+// -----------------------------------------------------------------------------
+// join a vector of string with a delimiter
+//
+std::string join(const std::vector<std::string> & v,
+                 const std::string & delimiter = ",") {
+    std::string out;
+    if (auto i = v.begin(), e = v.end(); i != e) {
+        out += *i++;
+        for (; i != e; ++i)
+          out.append(delimiter).append(*i);
+    }
+    return out;
+}
