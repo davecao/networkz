@@ -13,6 +13,9 @@
 //
 size_t NARO::Index::GetIndex(std::string& name) const {
   auto it = Names.find(name);
+  for (const auto& [key, value] : Names){
+      std::cout << key << " => " << value << "\n";
+  }
   if ( it != Names.end())
   {
     return it->second;
@@ -240,7 +243,7 @@ bool NARO::DataFrame::select(std::vector<std::string>& c_names,
                   ", is not found in the data file." << std::endl;
       return false;
     }
-    c_inx.push_back(inx);
+    c_inx.push_back(inx-1);
   }
   
   std::vector<std::string> rinx = this->rowIndex->GetIndexNames();
