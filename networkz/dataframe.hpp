@@ -222,7 +222,7 @@ struct DataFrame
    *
    * @param[in] n the number of rows to be displayed.
    */
-  void head(int n);
+  void head(int n=5);
 };
 } // Namespace NARO
 #endif /* dataframe_hpp */

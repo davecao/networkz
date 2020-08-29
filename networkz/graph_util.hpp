@@ -88,7 +88,16 @@ bool create_graph(Graph* g,
                   DataFrame* df,
                   double dist_threshold,
                   DistType dist_functor);
-
+/**
+ * @brief A writer for graphviz format (dot file)
+ *
+ * Write to a graphviz file for a given graph
+ *
+ * @param[in] filename the path of the output file
+ * @param[in] g A pointer of a Graph
+ * @returns bool, true for success; false for failure
+ */
+bool write_to_graphviz(std::string& filename, Graph& g);
 } // Namespace NARO
 
 #endif /* graph_util_hpp */

@@ -88,6 +88,7 @@ int main(int argc, const char * argv[]) {
       std::cout << "Read "<< filename << "(" << filesize  << ") completed."
                 << std::endl;
     }
+    df->head();
   } else {
     std::cerr << "Failed to read the input file, " << filename << std::endl;
     std::exit(-1);
@@ -99,7 +100,6 @@ int main(int argc, const char * argv[]) {
   } else {
     std::cout << "Extract data ...";
   }
-  df->describe();
   // ---------------------------------------------------------------------------
   // 1.1 Select columns
   // ---------------------------------------------------------------------------
@@ -116,10 +116,10 @@ int main(int argc, const char * argv[]) {
     seconds = std::chrono::nanoseconds(timer.elapsed().user);
     std::cout << " Completed in " << seconds.count() << " seconds."
               << std::endl;
+    dat->describe();
   } else {
     std::cout << " Completed." << std::endl;
   }
-  dat->describe();
   // ---------------------------------------------------------------------------
   // 2. Compute the cityblock distance between any two genes
   // ---------------------------------------------------------------------------
@@ -158,19 +158,7 @@ int main(int argc, const char * argv[]) {
     if (verbose) {
       timer.start();
     }
-    // Write the graph to the output file
-    std::ofstream graphfile(graphviz_file);
-    boost::write_graphviz(graphfile, genes_graph,
-      /* Vertex */
-      [&] (auto& out, auto v) {
-        out << genes_graph[v].to_graphviz();},
-      /* Edge */
-      [&] (auto& out, auto e) {
-      out << genes_graph[e].to_graphviz();},
-      /* Graph property */
-      [&] (auto& out) {out<< genes_graph.m_property->to_graphviz();}
-    );
-    graphfile.close();
+    NARO::write_to_graphviz(graphviz_file, genes_graph);
     if (verbose) {
       timer.stop();
       seconds = std::chrono::nanoseconds(timer.elapsed().user);

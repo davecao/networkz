@@ -40,12 +40,31 @@ void markdown_writer(std::ofstream& out, const std::string& message,
 }
 
 // -----------------------------------------------------------------------------
-//
+// filesystem : path test/tes.log
+// path.root_name() -
+// path.root_path() -
+// path.relative_path() -
+// path.filename() -
+// path.stem() -
+// path.extension() -
 bool NARO::Report::write(const std::string& o_filename, Graph* g,
                          const std::string& fmt, double threshold,
                          bool verbose=false) {
   std::chrono::duration<double> seconds;
   boost::timer::cpu_timer timer;
+
+  NARO::fs::path path = o_filename;
+  if (!NARO::fs::exists(path)){
+    if (!path.parent_path().empty()) {
+      try {
+        // Create directory
+        NARO::fs::create_directory(path.parent_path());
+      }
+      catch (NARO::fs::filesystem_error& err) {
+        std::cerr << err.what() << std::endl;
+      }
+    }
+  }
   std::ofstream ofile(o_filename);
   
   auto n_vertices = boost::num_vertices(*g);
@@ -74,7 +93,8 @@ bool NARO::Report::write(const std::string& o_filename, Graph* g,
     markdown_writer(ofile, "Connected components : " + std::to_string(num));
     markdown_writer(ofile, "\n");
     
-    markdown_writer(ofile, "Vertex degree", 2);
+    markdown_writer(ofile, "Vertex", 2);
+    markdown_writer(ofile, "[](Format - vertex name:component number:degree");
     //auto vd = boost::vertices(*g);
     VertexIter vi, vend;
     for(boost::tie(vi, vend) = boost::vertices(*g); vi != vend; ++vi) {

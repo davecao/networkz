@@ -58,7 +58,7 @@ namespace CLIARG {
                "The input data file. Only the tsv format is supported now.")
     ("outfile,o", po::value<std::string>(&o_filename), "The output file of clusters in text format. Default is 'describe_networkz.log'.")
     ("column,c", po::value<std::vector<std::string>>(&column_names)->multitoken(), "Specify the column names in the input file.")
-    ("graph,g",po::value<std::string>(&o_graph_name),"Output the graph to a file in the graphviz format.")
+    ("graph,g",po::value<std::string>(&o_graph_file),"Output the graph to a file in the graphviz format.")
     ("help,h", "print help info.")
     ;
     
@@ -66,7 +66,7 @@ namespace CLIARG {
     ("verbose,v","The extra verbose.")
     ("threshold,t",po::value<double>(&d_threshold),"The threshold between two vertices which are linked by an edge if the distance less than it. default is 0.")
     ("distance,d", po::value<std::string>(&distance_type), "The distance type(string): 'city' for city-block, 'euc' for euclidean, 'corr' for pearson correlation coefficient")
-    ("title,n",po::value<std::string>(&o_graph_name),"The title of the graph used to label the png file. Default is Gene Expression Network.")
+    ("title,n",po::value<std::string>(&o_graph_name),"The title of the graph used to label the png file. 'Default is Gene Expression Network'.")
     ;
     general.add(opt);
   }

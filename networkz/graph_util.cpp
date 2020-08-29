@@ -7,15 +7,19 @@
 //
 
 #include "graph_util.hpp"
-
+// -----------------------------------------------------------------------------
+//
+//
 Eigen::MatrixXd NARO::CityBlock::operator()(const Eigen::MatrixXd& mat) {
   int nrows = static_cast<int>(mat.rows());
   Eigen::MatrixXd d_mat(nrows, nrows);
-  std::cout << mat << std::endl;
   for (int rowIdx=0; rowIdx < nrows; rowIdx++) {
     d_mat.row(rowIdx) = (mat.rowwise() - mat.row(rowIdx)).matrix().rowwise().sum();
-    std::cout << d_mat << std::endl;
   }
+  std::cout << "Original matrix:\n";
+  std::cout << mat << std::endl;
+  std::cout << "City block distance matrix:\n";
+  std::cout << d_mat.cwiseAbs() << std::endl;
   return d_mat.cwiseAbs();
 }
 
@@ -96,8 +100,6 @@ bool create_graph_corr(NARO::Graph* g, NARO::DataFrame* df)
 template<class DistType>
 bool NARO::create_graph(Graph* g, DataFrame* df,
                         double dist_threshold, DistType dist_functor) {
-  bool result = false;
-  
   NARO::NameVertexMap name2vertex;
   NARO::NameVertexMap::iterator pos_u;
   NARO::NameVertexMap::iterator pos_v;
@@ -149,7 +151,7 @@ bool NARO::create_graph(Graph* g, DataFrame* df,
       }
     }
   }
-  return result;
+  return true;
 }
 // -----------------------------------------------------------------------------
 // Specialization of create_graph
@@ -197,4 +199,36 @@ bool NARO::create_graph(Graph* g, DataFrame* df, double dist_threshold,
     std::cerr << "Unknown method for distance computation" << std::endl;
   }
   return result;
+}
+
+// -----------------------------------------------------------------------------
+//
+bool NARO::write_to_graphviz(std::string& filename, Graph& g)
+{
+  // Write the graph to the output file
+  NARO::fs::path path = filename;
+  if (!NARO::fs::exists(path)){
+    if (!path.parent_path().empty()) {
+      try {
+        // Create directory
+        NARO::fs::create_directory(path.parent_path());
+      }
+      catch (NARO::fs::filesystem_error& err) {
+        std::cerr << err.what() << std::endl;
+      }
+    }
+  }
+  std::ofstream graphfile(filename);
+  boost::write_graphviz(graphfile, g,
+    /* Vertex */
+    [&] (auto& out, auto v) {
+      out << g[v].to_graphviz();},
+    /* Edge */
+    [&] (auto& out, auto e) {
+    out << g[e].to_graphviz();},
+    /* Graph property */
+    [&] (auto& out) {out<< g.m_property->to_graphviz();}
+  );
+  graphfile.close();
+  return true;
 }

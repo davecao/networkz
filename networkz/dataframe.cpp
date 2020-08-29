@@ -13,9 +13,6 @@
 //
 size_t NARO::Index::GetIndex(std::string& name) const {
   auto it = Names.find(name);
-  for (const auto& [key, value] : Names){
-      std::cout << key << " => " << value << "\n";
-  }
   if ( it != Names.end())
   {
     return it->second;
@@ -260,7 +257,7 @@ bool NARO::DataFrame::select(std::vector<std::string>& c_names,
 // -----------------------------------------------------------------------------
 // head()
 //
-void NARO::DataFrame::head(int n=5)
+void NARO::DataFrame::head(int n)
 {
   int nrows = static_cast<int>(this->num_rows);
   std::vector<std::string> col_names = this->get_columnIndex_names();
