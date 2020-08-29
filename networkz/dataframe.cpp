@@ -249,7 +249,6 @@ bool NARO::DataFrame::select(std::vector<std::string>& c_names,
   std::vector<std::string> rinx = this->rowIndex->GetIndexNames();
   
   Dynamic2D sub = this->data(Eigen::all, c_inx);
-  std::cout<< sub << std::endl;
   sliced->resize(sub.rows(), sub.cols());
   // Create new indices
   sliced->set_columnIndex_names(c_names);
