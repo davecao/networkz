@@ -20,60 +20,73 @@
 namespace NARO {
 
 /**
- @brief CityBlock: a funcor to calculate city block distance for a given row-wised matrix.
- 
- The observations are arranged as row variables.
+ * @brief CityBlock: a funcor to calculate city block distance for a given row-wised matrix.
+ *
+ * The observations are arranged as row variables.
  */
 struct CityBlock
 {
   /**
-   @param mat A Eigen double matrix (m x n). m is the number of samples and n is the dimension of
-             an observation..
-   @return a Eign double matrix.
+   * @param[in] mat A Eigen double matrix (m x n). m is the number of samples and n is the dimension of
+   *          an observation..
+   * @returns a Eign double matrix.
    */
   Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat);
 };
 
-/*!
- @brief Euclidean: a funcor to calculate euclidean distance for a given row-wised matrix.
- 
-     The observations are arranged as row variables.
-*/
+/**
+ * @brief Euclidean: a funcor to calculate euclidean distance for a given row-wised matrix.
+ *
+ * The observations are arranged as row variables.
+ */
 struct Euclidean
 {
   /**
-   @param mat A Eigen double matrix (m x n). m is the number of samples and n is the dimension of
-            an observation.
-   @return a Eign double matrix.
+   * @param[in] mat A Eigen double matrix (m x n). m is the number of samples and n is the dimension of
+   *         an observation.
+   * @return a Eign double matrix.
    */
   Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat);
 };
 
-/*!
- @brief Corrcoef: a functor to calculate pearson's correlation coefficient for a given row-wised matrix
+/**
+ * @brief Corrcoef: a functor to calculate pearson's correlation coefficient for a given row-wised matrix
  */
-// Pearson's correlation coefficient
 struct Corrcoef
 {
   /**
-   @param mat A Eigen double matrix (m x n). m is the number of samples and n is the dimension of
-            an observation.
-   @return a Eign double matrix.
+   * @param[in] mat A Eigen double matrix (m x n). m is the number of samples and n is the dimension of
+   *         an observation.
+   * @return a Eign double matrix.
    */
   Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat);
 };
-
-/*!
- @brief create_graph: create a graph from a given dataframe defined in this project.
- @param g A pointer of a Graph
- @param df The dataframe data
- @param dist_threshold A threshold in double  to create an edge
-        between two nodes if their distance be lower than this value.
- @param dist_functor A template argument for selecting the method to calculate the distance.
+/**
+ * @brief create_graph: create a graph from a given data
+ *
+ * @param[out] g A pointer of a Graph
+ * @param[in] df The dataframe data
+ * @param[in] dist_threshold A threshold in double  to create an edge
+ *       between two nodes if their distance be lower than this value.
+ * @param[in] distance_type the method name for distance computation. ['city', 'euc', 'corr'].
  */
-// Create a graph from a given dataframe.
+bool create_graph(Graph* g,
+                  DataFrame* df,
+                  double dist_threshold,
+                  std::string distance_type);
+/**
+ * @brief create_graph: create a graph from a given dataframe defined in this project.
+ *
+ * @param[out] g A pointer of a Graph
+ * @param[in] df The dataframe data
+ * @param[in] dist_threshold A threshold in double  to create an edge
+ *       between two nodes if their distance be lower than this value.
+ * @param[in] dist_functor A template argument for selecting the method to calculate the distance.
+ */
 template<class DistType>
-bool create_graph(Graph* g, DataFrame* df, double dist_threshold,
+bool create_graph(Graph* g,
+                  DataFrame* df,
+                  double dist_threshold,
                   DistType dist_functor);
 
 } // Namespace NARO

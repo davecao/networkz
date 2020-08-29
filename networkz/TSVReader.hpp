@@ -16,7 +16,12 @@
 #include "FileReaderBase.hpp"
 
 namespace NARO {
-
+/**
+ * @brief A reader for the TSV file
+ *
+ * TSVReader inherits \link FileReaderBase\endlink, and automatically registered to the
+ * \link FileReaderFactory\endlink.
+ */
 class TSVReader: public FileReaderBase
 {
 public:

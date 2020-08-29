@@ -53,37 +53,59 @@
 #include "graph_util.hpp"
 
 int main(int argc, const char * argv[]) {
-
-  //namespace fs = std::filesystem;
-  NARO::FileReaderFactory::showClasses();
-  //std::unique_ptr<NARO::FileReaderBase> reader =
-  auto reader = NARO::FileReaderFactory::makeUnique("TSVReader");
-
-  std::cout << " type of reader = " << reader->getType() << "\n";
-  //NARO::FileReaderBase* reader = new NARO::TSVReader;
-  std::chrono::duration<double> seconds;
-
+  // ---------------------------------------------------------------------------
   // Parse cmd line arguments
+  // ---------------------------------------------------------------------------
   CLIARG::ParseCmdLine(argc, argv);
+  // Parser name.
+  std::string parser_name = CLIARG::parser_name;
+  // log level
+  bool verbose = CLIARG::verbose;
+  // Input data file name.
   std::string filename = CLIARG::i_filename;
+  // graphviz dot file name.
   std::string graphviz_file = CLIARG::o_graph_file;
+  // graph description file name.
+  std::string o_filename = CLIARG::o_filename;
+  // graph title
+  std::string o_graph_name = CLIARG::o_graph_name;
+  // distance threshold to create an edge.
+  double d_threshold = CLIARG::d_threshold;
+  // method name for distance computation
+  std::string distance_type = CLIARG::distance_type;
   
+  // Options for file parser
   std::string sep = "\t";
   std::string comment = "#";
   int header = 0;
+  
+  // For measuring elapsed time
+  std::chrono::duration<double> seconds;
+  // manually start timer
+  boost::timer::cpu_timer timer;
+  // Prepare dataframe to store data.
+  NARO::DataFrame *df = new NARO::DataFrame();
+
+  // ---------------------------------------------------------------------------
+  // Load the file parsers
+  // ---------------------------------------------------------------------------
+  if (verbose) {
+    NARO::FileReaderFactory::showClasses();
+  }
+  auto reader = NARO::FileReaderFactory::makeUnique(parser_name);
+  std::cout << " type of reader = " << reader->getType() << "\n";
+
+  // ---------------------------------------------------------------------------
+  // Show backend dependency
+  // ---------------------------------------------------------------------------
+  welcome_message();
   
 #if defined(PARALLEL_BGL)
   boost::mpi::environment  env;
   boost::mpi::communicator comm;
 #endif
-  
-  NARO::DataFrame *df = new NARO::DataFrame();
-  // Show backend dependency
-  welcome_message();
-  
-  // manually start timer
-  boost::timer::cpu_timer timer;
-  if (CLIARG::verbose) {
+
+  if (verbose) {
     timer.start();
   }
   // ---------------------------------------------------------------------------
@@ -91,10 +113,9 @@ int main(int argc, const char * argv[]) {
   // ---------------------------------------------------------------------------
   if (reader->read(filename, df, sep, comment, header)) {
     timer.stop();
-    //auto err = std::error_code{};
     NARO::ErrorCode err;
     auto filesize = byteConverter_s(NARO::fs::file_size(filename, err));
-    if (CLIARG::verbose) {
+    if (verbose) {
       seconds =
         std::chrono::nanoseconds(timer.elapsed().user);
       std::cout << "Read "<< filename << "(" << filesize  << ") completed."
@@ -108,19 +129,28 @@ int main(int argc, const char * argv[]) {
     std::exit(-1);
   }
   // 1.1 extract data ->  target_id  tpm
-  if (CLIARG::verbose) {
+  if (verbose) {
     std::cout << "Extract data ...";
     timer.start();
   } else {
     std::cout << "Extract data ...";
   }
-
+  // ---------------------------------------------------------------------------
+  // 1.1 Select columns
+  // ---------------------------------------------------------------------------
   NARO::DataFrame *dat = new NARO::DataFrame();
-
-  if (CLIARG::verbose){
+  if (CLIARG::column_names.empty()) {
+    dat = df;
+  } else {
+    if(!df->select(CLIARG::column_names, dat)){
+      std::cout<< "Failed to select the columns in the data file." << std::endl;
+    }
+  }
+  if (verbose){
     timer.stop();
     seconds = std::chrono::nanoseconds(timer.elapsed().user);
-    std::cout << " Completed in " << seconds.count() << " seconds." << std::endl;
+    std::cout << " Completed in " << seconds.count() << " seconds."
+              << std::endl;
   } else {
     std::cout << " Completed." << std::endl;
   }
@@ -128,7 +158,7 @@ int main(int argc, const char * argv[]) {
   // 2. Compute the cityblock distance between any two genes
   // ---------------------------------------------------------------------------
   // Instantiate a graph
-  if (CLIARG::verbose) {
+  if (verbose) {
     std::cout << "Create a graph ... ";
     timer.start();
   } else {
@@ -136,32 +166,11 @@ int main(int argc, const char * argv[]) {
   }
   
   NARO::Graph genes_graph(NARO::gGraph{CLIARG::o_graph_name});
-  if (CLIARG::distance_type == "city") {
-    NARO::CityBlock dist;
-    if (!NARO::create_graph(&genes_graph,
-                                             dat,
-                                             CLIARG::d_threshold,
-                                             dist)) {
-      std::cerr << "Failed to create the graph" << std::endl;
-    }
-  }else if (CLIARG::distance_type == "euc") {
-    NARO::Euclidean dist;
-    if (!NARO::create_graph(&genes_graph,
-                                             dat,
-                                             CLIARG::d_threshold,
-                                             dist)) {
-      std::cerr << "Failed to create the graph" << std::endl;
-    }
-  } else {
-    NARO::Corrcoef dist;
-    if (!NARO::create_graph(&genes_graph,
-                                             dat,
-                                             CLIARG::d_threshold,
-                                             dist)) {
-      std::cerr << "Failed to create the graph" << std::endl;
-    }
+  if(!NARO::create_graph(&genes_graph, dat, d_threshold, distance_type)){
+    std::cerr << "Failed to create the graph" << std::endl;
   }
-  if (CLIARG::verbose) {
+  
+  if (verbose) {
     timer.stop();
     seconds = std::chrono::nanoseconds(timer.elapsed().user);
     std::cout << " Completed in " << seconds.count() << " seconds." << std::endl;
@@ -171,10 +180,8 @@ int main(int argc, const char * argv[]) {
   // ---------------------------------------------------------------------------
   // Create a report
   //
-  NARO::Report report{CLIARG::o_graph_name, get_local_time(), "Networkz"};
-  if (!report.write(CLIARG::o_filename, &genes_graph, "md",
-                    CLIARG::d_threshold,
-                    CLIARG::verbose)){
+  NARO::Report report{o_graph_name, get_local_time(), "Networkz"};
+  if (!report.write(o_filename, &genes_graph, "md", d_threshold, verbose)){
     std::cout << "Failed to write a log." <<std::endl;
     std::exit(-1);
   }
@@ -182,7 +189,7 @@ int main(int argc, const char * argv[]) {
   // Write to graphviz format if requested.
   if (!graphviz_file.empty()) {
     std::cout << "Write to a " << graphviz_file << " ... ";
-    if (CLIARG::verbose) {
+    if (verbose) {
       timer.start();
     }
     // Write the graph to the output file
@@ -198,7 +205,7 @@ int main(int argc, const char * argv[]) {
       [&] (auto& out) {out<< genes_graph.m_property->to_graphviz();}
     );
     graphfile.close();
-    if (CLIARG::verbose) {
+    if (verbose) {
       timer.stop();
       seconds = std::chrono::nanoseconds(timer.elapsed().user);
       std::cout << " completed in " << seconds.count() << " seconds."
@@ -207,18 +214,20 @@ int main(int argc, const char * argv[]) {
       std::cout << " completed." << std::endl;
     }
   }
-  if (CLIARG::verbose) {
+  if (verbose) {
     std::cout << "Clean memory ... ";
     timer.start();
   } else {
     std::cout << "Clean memory ... ";
   }
+  // ---------------------------------------------------------------------------
   // Release Memory
+  // ---------------------------------------------------------------------------
   genes_graph.clear();
   delete df;
   delete dat;
   
-  if (CLIARG::verbose) {
+  if (verbose) {
     timer.stop();
     seconds = std::chrono::nanoseconds(timer.elapsed().user);
     std::cout << "Completed "

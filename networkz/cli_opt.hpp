@@ -25,15 +25,18 @@ namespace CLIARG {
   bool verbose = false; // output detailed info if true.
   bool o_graph = false; // output graphviz file if true.
   
+  std::string parser_name = "TSVReader"; // parser name "TSVReader"
   std::string i_filename; // input file name
   std::string o_filename = "describe_networkz.log"; // default file name for graphviz.
   std::string inputfile_size; // store the size of input file.
   std::vector<std::string> column_names; // the name of the column in the input file.
+
   // Graph options
   std::string o_graph_name = "Gene Expression Network"; // title for graphviz
   std::string o_graph_file = "";
   // Distance type for graph construction, default is "city".
   std::string distance_type = "city";
+
   // Support distance type:
   //    "city": city-block distance
   //    "euc" : euclidean distance
@@ -41,7 +44,6 @@ namespace CLIARG {
   std::array<std::string, 3> d_type_supported{"city", "euc", "corr"};
 
   double d_threshold = 0.01; // the threshold for distance cutoff.
-  
   
   // all the options
   po::options_description general("General options");
@@ -51,8 +53,10 @@ namespace CLIARG {
   void init(){
     general.add_options()
     ("version,V", "Show the version number")
-    ("infile,i",po::value<std::string>(&i_filename),"The input data file. Only the tsv format is supported now.")
-    ("outfile,o", po::value<std::string>(&o_filename),"The output file of clusters in text format. Default is 'describe_networkz.log'.")
+    ("parser,p",po::value<std::string>(&parser_name),"File parser name. Default is 'TSVReader'.")
+    ("infile,i",po::value<std::string>(&i_filename),
+               "The input data file. Only the tsv format is supported now.")
+    ("outfile,o", po::value<std::string>(&o_filename), "The output file of clusters in text format. Default is 'describe_networkz.log'.")
     ("column,c", po::value<std::vector<std::string>>(&column_names)->multitoken(), "Specify the column names in the input file.")
     ("graph,g",po::value<std::string>(&o_graph_name),"Output the graph to a file in the graphviz format.")
     ("help,h", "print help info.")
@@ -75,7 +79,8 @@ namespace CLIARG {
     val = stat(fname.c_str(), &FileInfo);
     //if(FileInfo.st_size >1000000){
       //inputfile_size = byteConverter_s(FileInfo.st_size);
-      //std::cout<<fname<<" is so large ("<<inputfile_size<<")"<<". Take a while to analysis..."<<std::endl;
+      //std::cout<<fname<<" is so large ("<<inputfile_size<<")"
+      //         <<". Take a while to analysis..."<<std::endl;
     //}
     return (val == 0) ? true : false;
   }
@@ -119,20 +124,7 @@ namespace CLIARG {
     if ( vm.count("verbose") ){
       verbose = true;
     }
-    /*
-    if ( vm.count("title") ) {
-      o_graph_name = vm["title"].as<std::string>();
-    }
-    if ( vm.count("outfile") ) {
-      o_filename = vm["outfile"].as<std::string>();
-    }
-    if ( vm.count("column") ) {
-      column_name = vm["column"].as<std::string>();
-    }
-    if ( vm.count("threshold") ) {
-      d_threshold = vm["threshold"].as<double>();
-    }
-    */
+
     if ( vm.count("graph") ) {
       o_graph = true;
     }
@@ -160,8 +152,6 @@ namespace CLIARG {
       std::cout << general << std::endl;
       std::exit(0);
     }
-    // Check distance types
-    
   }
 }
 #endif /* cli_opt_h */

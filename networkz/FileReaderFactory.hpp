@@ -11,9 +11,10 @@
 
 #include <iostream>
 #include <map>
+
 #include "FileReaderBase.hpp"
 
-// Macro for class registration
+/// Macro for class registration
 #define REGISTER_FACTORY(derivedClass) \
 namespace { \
 auto registry_ ## derivedClass = \
@@ -21,7 +22,11 @@ auto registry_ ## derivedClass = \
 }
 
 namespace NARO {
-
+/**
+ * @brief Factory class for file reader
+ *
+ * It uses std::map to automatically register derived reader classes.
+ */
 class FileReaderFactory{
 
 private:
@@ -34,21 +39,27 @@ private:
     }
 
 public:
-    /** Register factory object of derived class */
+    /**
+     * Register factory object of derived class
+     */
     static auto registerFactory(
                 const std::string& name,
                 FileReaderFactory* factory) -> void {
          auto& reg = FileReaderFactory::getRegister();
          reg[name] = factory;
     }
-    /** Show all registered classes */
+    /**
+     * Show all registered classes
+     */
     static auto showClasses() -> void {
          std::cout << " Registered classes. " << "\n";
          std::cout << " =================== " << "\n";
          for(const auto& pair: FileReaderFactory::getRegister())
                  std::cout << " + " << pair.first << "\n";
     }
-    /**  Construct derived class returning a raw pointer */
+    /**
+     * Construct derived class returning a raw pointer
+     */
     static auto makeRaw(const std::string& name) -> FileReaderBase* {
          auto it = FileReaderFactory::getRegister().find(name);
          if(it != FileReaderFactory::getRegister().end())
@@ -56,24 +67,44 @@ public:
          return nullptr;
     }
 
-    /** Construct derived class returning an unique ptr  */
+    /**
+     * Construct derived class returning an unique ptr
+     */
     static auto makeUnique(const std::string& name) -> std::unique_ptr<FileReaderBase>{
         return std::unique_ptr<FileReaderBase>(FileReaderFactory::makeRaw(name));
     }
 
-    // Destructor
+    /**
+     * Destructor
+     * the virtual function
+     */
     virtual ~FileReaderFactory() = default;
+    /**
+     * @fn construct
+     * A pure virtual function
+     */
     virtual auto construct() const -> FileReaderBase* = 0;
 };
-
+/**
+ * The concrete factory class to register the derived class
+ * @tparam DerivedClass the user defined class
+ */
 template<typename DerivedClass>
 class ConcreteFactory: FileReaderFactory { 
 public:
-   // Register this global object on the Factory register
+   /**
+    * Constructor
+    *
+    * Register this global object on the Factory register
+    */
    ConcreteFactory(const std::string& name){
       //std::cerr << " [TRACE] " << " Registered Class = " << name << "\n";
       FileReaderFactory::registerFactory(name, this);
    }
+  /**
+   * @fn construct
+   * The implementation of the pure virtual function defined in the \link FileReaderFactory \endlink.
+   */
    auto construct() const -> DerivedClass* {
       return new DerivedClass;
    }
