@@ -1,5 +1,5 @@
 //
-//  graph_auxiliary.hpp
+//  graph.hpp
 //  networkz
 //
 //  Created by CAO Wei on 2020/07/30.
@@ -56,10 +56,10 @@ namespace NARO {
  * @see [boost bundled properties](https://www.boost.org/doc/libs/1_72_0/libs/graph/doc/bundles.html).
  */
  struct gVertex {
-   // Constructor
+   /// Constructor
    gVertex()
    {}
-   //
+   /// Constructor with vertex name and weight
    gVertex(std::string& name, double weight = -1)
      : name(name), weight(weight)
    {}
@@ -87,10 +87,10 @@ namespace NARO {
  *  @see [boost bundled properties](https://www.boost.org/doc/libs/1_72_0/libs/graph/doc/bundles.html).
 */
  struct gEdge {
-   // Constructor
+   /// Constructor
    gEdge()
    {}
-   
+   /// Constructor with the default distance as -1
    gEdge(double distance=-1)
      : distance(distance)
    {}
@@ -116,10 +116,10 @@ namespace NARO {
  *  @see [boost bundled properties](https://www.boost.org/doc/libs/1_72_0/libs/graph/doc/bundles.html).
  */
  struct gGraph {
-   //Constructor
+   /// Constructor
    gGraph()
    {}
-   
+   /// Constructor with a string label as title
    gGraph(const std::string& glabel)
      : glabel(glabel)
    {}

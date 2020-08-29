@@ -1,5 +1,5 @@
 //
-//  reader_tsv.cpp
+//  TSVReader.cpp
 //  networkz
 //
 //  Created by CAO Wei on 2020/07/30.

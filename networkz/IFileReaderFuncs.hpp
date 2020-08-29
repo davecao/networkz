@@ -14,16 +14,21 @@
 #include "graph.hpp"
 
 namespace NARO {
-
+/**
+ * @brief Interface for read functions implemented in the derived class
+ */
 struct IFileReader
 {
-  
+  /// Constructor
   IFileReader() = default;
+  /// Deconstructor
   ~IFileReader() = default;
   
   // Definition of interface functions
   // Override in the subclass
+  /// Functions defined in the IFileReader must be implemented in the derived class.
   virtual bool read(const std::string& filename);
+  /// Functions defined in the IFileReader must be implemented in the derived class.
   virtual bool read(const std::string& filename, NARO::DataFrame* df,
                     std::string& sep, std::string& comment, int header);
 };

@@ -1,5 +1,5 @@
 //
-//  reader_tsv.hpp
+//  TSVReader.hpp
 //  networkz
 //
 //  Created by CAO Wei on 2020/07/30.
@@ -25,36 +25,63 @@ class TSVReader: public FileReaderBase
 {
 public:
 
+  /// Dataframe
   DataFrame* df = nullptr;
+  /// field separator for tsv format
   std::string sep = "\t";
+  /// the starting character to indicate comment lines
   std::string comment = "#";
+  /// the position of the header line after the comment lines
   int header = 0;
   
+  ///  Constructor
   TSVReader() = default;
+  /// Deconstructor
   ~TSVReader() = default;
 
-  auto getType() const -> std::string;
+  /// Convert the class type to a string
+  auto getType() const -> std::string override;
+  /**
+   * @brief print the class type
+   */
   void show();
-
-  // overwrite base function
-  //void read(const std::string& filename, bool success);
-  
-  //
+ 
+  /**
+   * @brief the template function of reader
+   *
+   * @param[in] filename the path of the input file
+   * @param[in] t argument defined by type T
+   * @tparam T the template  argument of function argument
+   */
   template<typename T>
   void read(const std::string& filename, T& t)
-  {std::cout << t << std::endl;}
+  {
+    /// print out the variable
+    std::cout << t << std::endl;
+  }
   
-  // recursive varadic function
+  /**
+   * @brief recursive varadic function
+   */
   template<typename First, typename... Ts>
   void read(const std::string& filename, First& first, Ts&... args) {
     std::cout << first << ", ";
     read(filename, args...);
   }
-  // specialization
+  /**
+   * @brief template specialization for read function
+   *
+   * @param[in] filename the path of the input file
+   * @param[out] df the DataFrame variable to store the Eigen matrix
+   * @param[in] sep the field separator
+   * @param[in] comment the starting character to indicate the comment line
+   * @param[in] header the starting number of the header line
+   *
+   */
   bool read(const std::string& filename, NARO::DataFrame* df,
-            std::string& sep, std::string& comment, int header);
+            std::string& sep, std::string& comment, int header) override;
   
-  // Configure options
+  /// Configure options (Not used currently)
   void config(NARO::DataFrame*, std::string&, std::string&, int);
 };
 } // End of namespace NARO

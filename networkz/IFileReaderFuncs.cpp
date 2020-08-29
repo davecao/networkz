@@ -1,5 +1,5 @@
 //
-//  IFileReaderFunc.cpp
+//  IFileReaderFuncs.cpp
 //  networkz
 //
 //  Created by 曹巍 on 2020/08/03.

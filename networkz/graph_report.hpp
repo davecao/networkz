@@ -14,13 +14,27 @@
 
 namespace NARO {
 
+/**
+ * @brief Generate a simple report for a given graph to a file.
+ */
 struct Report
 {
-  // Fields
+  /// Report title
   std::string title;
+  /// The created date for output
   std::string date;
+  /// Author name
   std::string author;
 
+  /**
+   * @brief Generate a simple report for a given graph to a file.
+   *
+   * @param[in] o_filename the path of the output filename
+   * @param[in] g the constructed graph
+   * @param[in] fmt the output format (Not implemented yet)
+   * @param[in] threshold the upper bound for the distance to create an edge between any two vertices
+   * @param[in] verbose bool, true to print more info
+   */
   bool write(const std::string& o_filename, Graph* g,
              const std::string& fmt, double threshold,
              bool verbose);

@@ -1,5 +1,5 @@
 //
-//  plugin_factory.hpp
+//  FileReaderFactory.hpp
 //  networkz
 //
 //  Created by CAO Wei on 2020/07/31.
