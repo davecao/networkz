@@ -41,6 +41,7 @@ set(SOURCE_FILES
   graph.cpp
   graph_report.cpp
   graph_util.cpp
+  graph_algo.cpp
   utility.cpp
   main.cpp
 )

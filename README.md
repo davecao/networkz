@@ -1,5 +1,9 @@
 #  Networkz
 
+- [ ] Minimum spanning tree algorithms, kruskal and prim
+- [ ] Minimum-cut algorithm
+- [ ] Add a configuration file support
+
 ## Prerequisites
 
 1. cmake (xcode project also provided)
