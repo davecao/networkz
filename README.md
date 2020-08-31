@@ -1,5 +1,5 @@
 #  Networkz
-
+- [x] Add Doxygen to cmake of generating API document.
 - [ ] Minimum spanning tree algorithms, kruskal and prim
 - [ ] Minimum-cut algorithm
 - [ ] Add a configuration file support
@@ -120,3 +120,7 @@ Graph options:
                            'corr' for pearson correlation coefficient.
   -n [ --title ] arg      The title of the graph used to label the png file.
                           'Default is Gene Expression Network'.
+
+## Example
+
+    ./networkz -i test/test.tsv -t 2.0 -c tpm -v -g ./test.dot -o test/test.log
