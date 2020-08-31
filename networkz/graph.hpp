@@ -153,7 +153,7 @@ namespace NARO {
  #else
  typedef boost::adjacency_list<
    boost::listS, ///< edge container type: list
-   boost::vecS,  ///< vertex container type: list
+   boost::vecS,  ///< vertex container type: vector
    boost::undirectedS, ///< Graph type: undirected graph
    gVertex, ///< bundled property for vertex
    gEdge,   ///< bundled property for edge
@@ -174,6 +174,17 @@ namespace NARO {
  typedef boost::vertex_bundle_type<Graph>::type VertexType;
  /// Iterator for looping over vertices
  typedef boost::graph_traits<Graph>::vertex_iterator VertexIter;
+ /// Iterator for looping over edges
+ typedef boost::graph_traits<Graph>::edge_iterator EdgeIter;
+ // abstract accessor for the clustering coefficients of vertices
+ /// clustering property
+ typedef boost::exterior_vertex_property<Graph, float> ClusteringProperty;
+ /// clustering container
+ typedef ClusteringProperty::container_type ClusteringContainer;
+ /// clustering map
+ typedef ClusteringProperty::map_type ClusteringMap;
+ /// coefficients
+ //typedef typename boost::property_traits<ClusteringMap>::value_type Coefficient;
  /// Container for testing the existence of a vertex in the graph
  typedef std::map<std::string, Vertex> NameVertexMap;
  

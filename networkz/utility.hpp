@@ -28,11 +28,27 @@ namespace NARO {
   typedef fs::error_code ErrorCode;
 }
 #else
+#  ifdef __has_include
+#    if __has_include(<filesystem>)
+#include <filesystem>
+namespace NARO {
+  namespace fs = std::filesystem;
+  typedef std::error_code ErrorCode;
+}
+#    elif __has_include(<experimental/filesystem>)
+#include <experimental/filesystem>
+namespace NARO {
+  namespace fs = std::experimental::filesystem;
+  typedef fs::error_code ErrorCode;
+}
+#    endif
+#  else
 #include <boost/filesystem.hpp>
 namespace NARO {
   namespace fs = boost::filesystem;
   typedef boost::system::error_code ErrorCode;
 }
+#  endif
 #endif
 
 #include <boost/version.hpp>

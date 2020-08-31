@@ -22,40 +22,47 @@ namespace VersionInfo{
 
 namespace CLIARG {
   // General options
-  bool verbose = false; // output detailed info if true.
-  bool o_graph = false; // output graphviz file if true.
+  bool verbose = false; ///< output detailed info if true.
   
-  std::string parser_name = "TSVReader"; // parser name "TSVReader"
-  std::string i_filename; // input file name
-  std::string o_filename = "describe_networkz.log"; // default file name for graphviz.
-  std::string inputfile_size; // store the size of input file.
-  std::vector<std::string> column_names; // the name of the column in the input file.
+  std::string config_file = "networkz.cfg"; ///< configuration file
+  std::string parser_name = "TSVReader"; ///< parser name "TSVReader"
+  std::string i_filename; ///< input file name
+  std::string o_filename = "describe_networkz.log"; ///< default file name for graphviz.
+  std::string inputfile_size; ///< store the size of input file.
+  std::vector<std::string> column_names; ///< the name of columns selected in the input file.
 
   // Graph options
-  std::string o_graph_name = "Gene Expression Network"; // title for graphviz
-  std::string o_graph_file = "";
+  std::string o_graph_name = "Gene Expression Network"; ///< title for graphviz
+  std::string o_graph_file = "";  ///< output graphviz file name
   // Distance type for graph construction, default is "city".
-  std::string distance_type = "city";
-
-  // Support distance type:
-  //    "city": city-block distance
-  //    "euc" : euclidean distance
-  //    "corr": pearson's correlation coefficient
+  std::string mst_algo_name = "kruskal"; ///< Name of minimum spanning tree
+  std::string distance_type = "city"; ///< distance method
+  /**
+   * Support distance type:
+   *  "city": city-block distance
+   *  "euc" : euclidean distance
+   *  "corr": pearson's correlation coefficient
+   */
   std::array<std::string, 3> d_type_supported{"city", "euc", "corr"};
-
-  double d_threshold = 0.01; // the threshold for distance cutoff.
+  std::array<std::string, 2> mst_type_supported{"kruskal", "prim"};
+  double d_threshold = 0.01; ///< the threshold for distance cutoff.
   
   // all the options
   po::options_description general("General options");
   po::options_description opt("Graph options");
-  
-  // Function: Initialize opts objects
+  /**
+   *  Command line options
+   *
+   *  Initialization function
+   */
   void init(){
     general.add_options()
     ("version,V", "Show the version number")
+    ("config", po::value<std::string>(&config_file),
+             "Specify the path of a configuration file to analyze the graph.(NOT FINISHED)")
     ("parser,p", po::value<std::string>(&parser_name),
               "File parser name. Default is 'TSVReader'.")
-    ("infile,i", po::value<std::string>(&i_filename),
+    ("infile,i", po::value<std::string>(&i_filename)->required(),
                "The input data file. Only the tsv format is supported now.")
     ("outfile,o", po::value<std::string>(&o_filename),
               "The output file of clusters in text format."
@@ -78,15 +85,22 @@ namespace CLIARG {
               "'city' for city-block distance.\n "
               "'euc' for euclidean distance.\n "
               "'corr' for pearson correlation coefficient.")
+    ("mst,m", po::value<std::string>(&mst_algo_name),
+              "Algorithm names of Minmum spanning tree(undirected graph):\n"
+              "'kruskal' for Kruskal's algorithm."
+              "'prim' for Prim's algorithm."
+              "Default is 'kruskal'")
     ("title,n", po::value<std::string>(&o_graph_name),
               "The title of the graph used to label the png file. "
               "Default is 'Gene Expression Network'.")
     ;
     general.add(opt);
   }
-  
-  // Function: Check the existance of the file
-  //
+  /**
+   * @brief Check the existance of the file
+   *
+   * @param[in] fname the path of a file
+   */
   bool FileExists(std::string fname) {
     struct stat FileInfo;
     int val;
@@ -138,11 +152,6 @@ namespace CLIARG {
     if ( vm.count("verbose") ){
       verbose = true;
     }
-
-    if ( vm.count("graph") ) {
-      o_graph = true;
-    }
-
     if ( vm.count("distance") ) {
       // Check it was support or not?
       auto found = std::find(d_type_supported.begin(),

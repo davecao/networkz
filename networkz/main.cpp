@@ -15,6 +15,7 @@
 #include "FileReaderFactory.hpp"
 #include "TSVReader.hpp"
 #include "graph_util.hpp"
+#include "graph_algo.hpp"
 
 int main(int argc, const char * argv[]) {
   // ---------------------------------------------------------------------------
@@ -37,6 +38,8 @@ int main(int argc, const char * argv[]) {
   double d_threshold = CLIARG::d_threshold;
   // method name for distance computation
   std::string distance_type = CLIARG::distance_type;
+  // method name for finding the MST
+  std::string mst_algo_name = CLIARG::mst_algo_name;
   
   // Options for file parser
   std::string sep = "\t";
@@ -143,6 +146,12 @@ int main(int argc, const char * argv[]) {
   } else {
     std::cout << " Completed." << std::endl;
   }
+  // ---------------------------------------------------------------------------
+  // Find the minimum spanning tree
+  //
+  //genes_graph.m_property->glabel += "-" + mst_algo_name;
+  //NARO::Algo::find_minimum_spanning_tree(
+  //                    genes_graph, mst_algo_name);
   // ---------------------------------------------------------------------------
   // Create a report
   //
