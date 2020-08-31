@@ -1,0 +1,70 @@
+\hypertarget{struct_n_a_r_o_1_1_index}{}\doxysection{N\+A\+RO\+::Index Struct Reference}
+\label{struct_n_a_r_o_1_1_index}\index{NARO::Index@{NARO::Index}}
+
+
+String labels for indexing.  
+
+
+
+
+{\ttfamily \#include $<$dataframe.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+size\+\_\+t \mbox{\hyperlink{struct_n_a_r_o_1_1_index_add1678b805f0ad307df66d19aab2cc11}{Get\+Index}} (std\+::string \&name) const
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{struct_n_a_r_o_1_1_index_a7aaaf48b0153c579e4055fc38b98bc04}{Get\+Index\+Names}} ()
+\begin{DoxyCompactList}\small\item\em obtain all string labels \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_n_a_r_o_1_1_index_a9894b6bc72aeba032508b5547bdb6ebd}\label{struct_n_a_r_o_1_1_index_a9894b6bc72aeba032508b5547bdb6ebd}} 
+std\+::map$<$ std\+::string, size\+\_\+t $>$ \mbox{\hyperlink{struct_n_a_r_o_1_1_index_a9894b6bc72aeba032508b5547bdb6ebd}{Names}}
+\begin{DoxyCompactList}\small\item\em A map of string to int. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_n_a_r_o_1_1_index_a3d00f943e96f77056cf4c2d669a11ba0}\label{struct_n_a_r_o_1_1_index_a3d00f943e96f77056cf4c2d669a11ba0}} 
+std\+::vector$<$ std\+::pair$<$ std\+::string, size\+\_\+t $>$ $>$ \mbox{\hyperlink{struct_n_a_r_o_1_1_index_a3d00f943e96f77056cf4c2d669a11ba0}{Ordered\+Names}}
+\begin{DoxyCompactList}\small\item\em A sorted sequence by string labels. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_n_a_r_o_1_1_index_a0826fc7855d6f370ef75201692c08aac}\label{struct_n_a_r_o_1_1_index_a0826fc7855d6f370ef75201692c08aac}} 
+bool \mbox{\hyperlink{struct_n_a_r_o_1_1_index_a0826fc7855d6f370ef75201692c08aac}{sorted}} = false
+\begin{DoxyCompactList}\small\item\em The string labels had been sorted or not. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+String labels for indexing. 
+
+A row or column string labels of a matrix 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{struct_n_a_r_o_1_1_index_add1678b805f0ad307df66d19aab2cc11}\label{struct_n_a_r_o_1_1_index_add1678b805f0ad307df66d19aab2cc11}} 
+\index{NARO::Index@{NARO::Index}!GetIndex@{GetIndex}}
+\index{GetIndex@{GetIndex}!NARO::Index@{NARO::Index}}
+\doxysubsubsection{\texorpdfstring{GetIndex()}{GetIndex()}}
+{\footnotesize\ttfamily size\+\_\+t N\+A\+R\+O\+::\+Index\+::\+Get\+Index (\begin{DoxyParamCaption}\item[{std\+::string \&}]{name }\end{DoxyParamCaption}) const}
+
+Convert the string labels to the numerical index
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em name} & get the numerical index for a string label of the column name \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_n_a_r_o_1_1_index_a7aaaf48b0153c579e4055fc38b98bc04}\label{struct_n_a_r_o_1_1_index_a7aaaf48b0153c579e4055fc38b98bc04}} 
+\index{NARO::Index@{NARO::Index}!GetIndexNames@{GetIndexNames}}
+\index{GetIndexNames@{GetIndexNames}!NARO::Index@{NARO::Index}}
+\doxysubsubsection{\texorpdfstring{GetIndexNames()}{GetIndexNames()}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::string $>$ N\+A\+R\+O\+::\+Index\+::\+Get\+Index\+Names (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+obtain all string labels 
+
+\begin{DoxyReturn}{Returns}
+a vector of string 
+\end{DoxyReturn}
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/\+Users/davecao/\+N\+A\+R\+O/projects/proj\+\_\+yokoi/silk\+\_\+moth/networkz/networkz/dataframe.\+hpp\item 
+/\+Users/davecao/\+N\+A\+R\+O/projects/proj\+\_\+yokoi/silk\+\_\+moth/networkz/networkz/dataframe.\+cpp\end{DoxyCompactItemize}

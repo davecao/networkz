@@ -1,0 +1,49 @@
+\hypertarget{class_n_a_r_o_1_1_file_reader_base}{}\doxysection{N\+A\+RO\+::File\+Reader\+Base Class Reference}
+\label{class_n_a_r_o_1_1_file_reader_base}\index{NARO::FileReaderBase@{NARO::FileReaderBase}}
+
+
+Base class for file readers.  
+
+
+
+
+{\ttfamily \#include $<$File\+Reader\+Base.\+hpp$>$}
+
+Inheritance diagram for N\+A\+RO\+::File\+Reader\+Base\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_n_a_r_o_1_1_file_reader_base}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_n_a_r_o_1_1_file_reader_base_a07c505158cb6767dc65420898e18f614}\label{class_n_a_r_o_1_1_file_reader_base_a07c505158cb6767dc65420898e18f614}} 
+\mbox{\hyperlink{class_n_a_r_o_1_1_file_reader_base_a07c505158cb6767dc65420898e18f614}{File\+Reader\+Base}} ()=default
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_n_a_r_o_1_1_file_reader_base_adb7f07b7dac87378e2732f66d2092c9b}\label{class_n_a_r_o_1_1_file_reader_base_adb7f07b7dac87378e2732f66d2092c9b}} 
+virtual \mbox{\hyperlink{class_n_a_r_o_1_1_file_reader_base_adb7f07b7dac87378e2732f66d2092c9b}{$\sim$\+File\+Reader\+Base}} ()=default
+\begin{DoxyCompactList}\small\item\em Destructor of base class must always be virtual. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_n_a_r_o_1_1_file_reader_base_a944d48f5946473358e0af6f7affd89c8}\label{class_n_a_r_o_1_1_file_reader_base_a944d48f5946473358e0af6f7affd89c8}} 
+virtual auto \mbox{\hyperlink{class_n_a_r_o_1_1_file_reader_base_a944d48f5946473358e0af6f7affd89c8}{get\+Type}} () const -\/$>$ std\+::string
+\begin{DoxyCompactList}\small\item\em Convert the class type to be a string. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_n_a_r_o_1_1_file_reader_base_ad53c149eb8d544d500ff3a2fc2050432}\label{class_n_a_r_o_1_1_file_reader_base_ad53c149eb8d544d500ff3a2fc2050432}} 
+void \mbox{\hyperlink{class_n_a_r_o_1_1_file_reader_base_ad53c149eb8d544d500ff3a2fc2050432}{show}} ()
+\begin{DoxyCompactList}\small\item\em Print the class type info. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_n_a_r_o_1_1_file_reader_base_a9898fd5d3ac014bae18b18ad58d37245}\label{class_n_a_r_o_1_1_file_reader_base_a9898fd5d3ac014bae18b18ad58d37245}} 
+virtual bool \mbox{\hyperlink{class_n_a_r_o_1_1_file_reader_base_a9898fd5d3ac014bae18b18ad58d37245}{read}} (const std\+::string \&filename)
+\begin{DoxyCompactList}\small\item\em Functions defined in the \mbox{\hyperlink{struct_n_a_r_o_1_1_i_file_reader}{I\+File\+Reader}} must be implemented in the derived class. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_n_a_r_o_1_1_file_reader_base_a192aea473468b0cf8e49a68fe2183c28}\label{class_n_a_r_o_1_1_file_reader_base_a192aea473468b0cf8e49a68fe2183c28}} 
+virtual bool \mbox{\hyperlink{class_n_a_r_o_1_1_file_reader_base_a192aea473468b0cf8e49a68fe2183c28}{read}} (const std\+::string \&filename, \mbox{\hyperlink{struct_n_a_r_o_1_1_data_frame}{N\+A\+R\+O\+::\+Data\+Frame}} $\ast$df, std\+::string \&sep, std\+::string \&comment, int header)
+\begin{DoxyCompactList}\small\item\em Functions defined in the \mbox{\hyperlink{struct_n_a_r_o_1_1_i_file_reader}{I\+File\+Reader}} must be implemented in the derived class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Base class for file readers. 
+
+The newly developed file reader must be derived from this base class. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/\+Users/davecao/\+N\+A\+R\+O/projects/proj\+\_\+yokoi/silk\+\_\+moth/networkz/networkz/File\+Reader\+Base.\+hpp\item 
+/\+Users/davecao/\+N\+A\+R\+O/projects/proj\+\_\+yokoi/silk\+\_\+moth/networkz/networkz/File\+Reader\+Base.\+cpp\end{DoxyCompactItemize}
