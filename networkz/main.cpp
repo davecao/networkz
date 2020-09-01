@@ -147,11 +147,12 @@ int main(int argc, const char * argv[]) {
     std::cout << " Completed." << std::endl;
   }
   // ---------------------------------------------------------------------------
-  // Find the minimum spanning tree
+  // Find the minimum spanning tree by prim (more edges)
+  //     or kruskal (more vertices)
   //
-  //genes_graph.m_property->glabel += "-" + mst_algo_name;
-  //NARO::Algo::find_minimum_spanning_tree(
-  //                    genes_graph, mst_algo_name);
+  genes_graph.m_property->glabel += "-" + mst_algo_name;
+  NARO::Algo::find_minimum_spanning_tree(
+                      genes_graph, mst_algo_name);
   // ---------------------------------------------------------------------------
   // Create a report
   //
