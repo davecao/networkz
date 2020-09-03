@@ -98,6 +98,7 @@ bool create_graph(Graph* g,
  * @returns bool, true for success; false for failure
  */
 bool write_to_graphviz(std::string& filename, Graph& g);
+
 } // Namespace NARO
 
 #endif /* graph_util_hpp */

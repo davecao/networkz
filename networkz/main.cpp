@@ -154,6 +154,9 @@ int main(int argc, const char * argv[]) {
   NARO::Algo::find_minimum_spanning_tree(
                       genes_graph, mst_algo_name);
   // ---------------------------------------------------------------------------
+  // Find the minimum cut by stoer_wagner_min_cut
+  NARO::Algo::stoer_wagner_min_cut(genes_graph, true);
+  // ---------------------------------------------------------------------------
   // Create a report
   //
   NARO::Report report{o_graph_name, get_local_time(), "Networkz"};

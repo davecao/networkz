@@ -29,7 +29,7 @@ namespace NARO::Algo {
  * @param[in] g A graph defined in `graph.hpp`
  * @returns a double value,
  */
-float global_clustering_coefficient(Graph& g);
+float global_clustering_coefficient(NARO::Graph& g);
 
 /**
  * @brief Calculate local clustering coefficient for a given graph
@@ -37,7 +37,7 @@ float global_clustering_coefficient(Graph& g);
  * @param[in] g A graph defined in `graph.hpp`
  * @returns A std::map contains local clustering coefficient for  each vertex. string label as the key.
  */
-std::map<std::string, float> local_clustering_coefficient(Graph& g);
+std::map<std::string, float> local_clustering_coefficient(NARO::Graph& g);
 
 /**
  * @brief Find minimum spanning tree
@@ -46,13 +46,13 @@ std::map<std::string, float> local_clustering_coefficient(Graph& g);
  * @param[in] method the algorithm name for finding MST
  * @returns None
  */
-void find_minimum_spanning_tree(Graph& g, std::string& method);
+void find_minimum_spanning_tree(NARO::Graph& g, std::string& method);
 /**
  * @brief A wrapper function for stoer wagner min_cut
  *
  * @param[in] g A graph defined in `graph.hpp`
  * @returns double, minmum cut weight
  */
-double stoer_wagner_min_cut(Graph& g);
+void stoer_wagner_min_cut(NARO::Graph& g, bool verbose=false);
 }
 #endif /* graph_algo_hpp */
