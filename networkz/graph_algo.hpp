@@ -53,6 +53,6 @@ void find_minimum_spanning_tree(NARO::Graph& g, std::string& method);
  * @param[in] g A graph defined in `graph.hpp`
  * @returns double, minmum cut weight
  */
-void stoer_wagner_min_cut(NARO::Graph& g, bool verbose=false);
+double stoer_wagner_min_cut(NARO::Graph& g, bool verbose=false);
 }
 #endif /* graph_algo_hpp */
