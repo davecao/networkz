@@ -22,6 +22,7 @@
 # +REVEAL_SLIDE_HEADER: reveal_global_header:t 
 # +REVEAL_SLIDE_FOOTER: 農研機構,NARO
 #+MACRO: color @@html:<font color="$1">$2</font>@@
+#+MACRO: font @@html:<font size=$1>$2</font>@@
 
 * グラフ（ネットワーク）
   
@@ -272,7 +273,7 @@ $$d = \sum_{i=1}^{k} |a_{i} - b_{i}|$$
 #+REVEAL_HTML: </div>
 
 
-* ネットワークの解析 (undirected graph)
+* ネットワークの統計 (undirected graph)
 #+OPTIONS: toc:nil
 #+TOC: headlines 1 local
 
@@ -419,6 +420,7 @@ ffmpeg -i isomorphism.mov -r 24 -vf scale=300:-1 isomorphism.gif
 - maximum spanning tree
 #+END_NOTES
 
+
 * ネットワークの可視化
 - Graphviz コマンドラインツール
 - Cytoscape
@@ -430,17 +432,288 @@ ffmpeg -i isomorphism.mov -r 24 -vf scale=300:-1 isomorphism.gif
 
 ** Cytoscape: (Java)
 
-[[./pics/cytoscape.png]]
+#+REVEAL_HTML: <img src="./pics/cytoscape.png" class="stretch">
 
 https://cytoscape.org/download.html
 
 ** Gephi
-
-[[./pics/gephi.png]]
+#+REVEAL_HTML: <img src="./pics/gephi.png" class="stretch">
 
 https://gephi.org
 
 
-* 遺伝子発現によるネットワーク構築
+* {{{font(10, 遺伝子共発現ネットワークの構築)}}} 
+
+#+REVEAL_HTML: <img src="./pics/Gene_co-expression_network_construction_steps.png" class="stretch" >
+from Wikipidia
+
+** Pearson相関係数（Pearson's correlation coefficient）
+  ここで、 遺伝子ペアの発現の類似性（$s_{ij}$）は、  
+
+1. 絶対値  
+
+  $$ s_{ij} = |corr(i, j)| $$
+
+2. 符号を維持するため  
+
+  $$ s_{ij} = \frac{1 + corr(i, j)}{2} $$
+
+** 遺伝子ペア(辺)の選択: threshold
+
+1. signum関数
+
+  $$a_{ij} = signum(s_{ij}, \tau) \equiv
+   \begin{cases}
+    1 \quad \text{if}\,\, s_{ij} \ge \tau \\
+    0 \quad \text{if}\,\, s_{ij} < \tau
+   \end{cases}$$
+
+2. sigmoid関数
+
+  $$a_{ij}=sigmoid(s_{ij}, \alpha, \tau_0)\equiv\frac{1}{1+e^{-\alpha(s_{ij}-\tau_0)}}$$
+
+3. Power関数
+
+  $$a_{ij}=power(s_{ij}, \beta)\equiv|s_{ij}|^{\beta}$$
+
+** 遺伝子ペア（辺）の選択: scale free criterion
+#+REVEAL_HTML: <div class="column" style="float:left; width:50%; font-size:30px">
+[[./pics/TOM_soft_thresholding.png]]
+
+赤：A exponentially truncated power law
+黒：冪乗則
+
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:50%; font-size:30px">
+Scale-free topology
+  $$ p(k) \sim k^{-\gamma} $$
+
+ - 線形モデル
+   $$ log_{10}(p(k)) \sim log_{10}(k) $$
+ - A exponentially truncated power law 
+   $$ p(k)\sim k^{-\gamma}exp(-\alpha k) $$ 
+#+REVEAL_HTML: </div>
+
+#+ATTR_HTML: :style font-size:20px;float:left
+Zhang, B., Horvath, S., 2005. A general framework for weighted gene co-expression network analysis. 
+Stat Appl Genet Mol Biol 4, Article17. doi:10.2202/1544-6115.1128
+
+**  Recommendation of scale free criterion
+#+begin_quote
+Only consider those parameter values that lead to a network satisfying scale- free topology at 
+least approximately, e.g. signed $R^2 > 0.80$. 
+#+end_quote
+
+#+ATTR_HTML: :style font-size:20px;float:left
+Zhang, B., Horvath, S., 2005. A general framework for weighted gene co-expression network analysis. 
+Stat Appl Genet Mol Biol 4, Article17. doi:10.2202/1544-6115.1128
+
+** 遺伝子（頂点）の連結度(Connectivity)
+- 点連結度
+  $$k_i = \sum_{j=1}^{n} a_{ij} $$
+- Topological Overlap Matrix(TOM)-based 
+  $$w_i = \sum_{j=1}^{n} w_{ij}, \text{where}\quad w_{ij} = \frac{l_{ij}+a_{ij}}{min\{k_i,k_j\}+1-a_{ij}} $$ 
+  $l_{ij}=\sum_{u}a_{iu}a_{uj}$, and $k_i=\sum_{u}a_{iu}$
+
+** TOMの例
+
+#+REVEAL_HTML: <div class="column" style="float:left; width:50%; font-size:30px">
+[[./pics/TOM_eg.png]]
+
+(＊)の数字は頂点のクラスタリング係数です。辺の数字はTOMの値です。
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:50%; font-size:30px">
+頂点Hと頂点Jの度数は $k_{H} = 3$ と $k_{J} = 3$ になり、
+頂点Hと頂点Jと同時に連結の頂点の数は1となります。
+
+\begin{eqnarray*}
+w(H,J) &=& \frac{l_{ij}+a_{ij}}{min\{k_i,k_j\}+1-a_{ij}} \\
+       &=&\frac{1+1}{3+1-1} \\
+       &=&\frac{2}{3}
+ \end{eqnarray*}
+#+REVEAL_HTML: </div>
+
+** Pros and Cons
+  - 単なるthreshold
+    - 簡単
+    - 実装しやすい
+    - loss of information
+    - sensitivity to the choice
+  - scale free criterion
+    - ネットワークはscale-free特性をほぼ満たすことが必要
+    - 選択に非敏感
+    - 計算量が大き
+
+
+* 遺伝子共発現ネットワークの解析
+
+** Scale free v.s. Modularity
+
+#+REVEAL_HTML: <img src="./pics/scale_free_vs_modularity.png" class="stretch" >
+
+
+** Modularityの仮説
+
+  1. ランダム仮説(Random Hypothesis)
+
+     ランダムネットワークは、コミュニティ構造を持たない。
+
+  2. Maximal Modularity Hypothesis  
+
+     特定のネットワークの最大のモジュール性Mを持つパーティションは、最適なコミュニティ構造がある。
+
+#+BEGIN_NOTES
+The partition with the maximum modularity M for a given network offers the optimal community structure
+#+END_NOTES
+
+#+REVEAL: split:t
+
+$$ M = \sum\limits_{c = 1}^{n_c } {\left[ {\frac{{L_c }}{L} - \left( {\frac{{k_c }}{{2L}}} \right)^2 } \right]} $$
+
+ここで、コミュニティ $C_c$ 内において、$L_c$ は辺の総数、$k_c$ は頂点の次数の総和、
+$L$ はネットワークの辺の数です。
+
+#+REVEAL: split:t
+[[./pics/modularity.jpg]]
+
+** Modularityに基づいてコミュニティの識別 
+#+begin_notes
+A greedy algorithm, which iteratively joins nodes if the move increases the new partition’s modularity。
+#+end_notes
+
+#+REVEAL_HTML: <img src="./pics/maximum_modularity.png" class="stretch" >
+from A.-L. Barabási, Network Science: Communities.
+
+** モジュール性の限界(Limits of Modularity)
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+[[./pics/modularity _limits.png]]
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+$$ \Delta M_{AB}  = \frac{{l_{AB} }}{L} - \frac{{k_A k_B }}{{2L^2 }} $$
+$k_A$ と $k_B$ は、それぞれ $A$ と $B$ の次数の総数である。
+$\frac{k_A k_B}{2L}<1, L_{AB}\ge 1 \Longrightarrow \Delta M_{AB} > 0$, $A$ と $B$ をマージする。
+
+$k_A \sim k_B = k\Longrightarrow k\le \sqrt{2L}$ 
+#+REVEAL_HTML: </div>
+
+#+ATTR_HTML: :style font-size:20px;float:left
+他の方法は:
+#+ATTR_HTML: :style font-size:20px;float:left
+1. "Fast Modularity" Community Structure Inference Algorithm 
+   http://cs.unm.edu/~aaron/research/fastmodularity.htm 
+2. Louvain method: Finding communities in large networks
+   http://cs.unm.edu/~aaron/research/fastmodularity.htm
+** 最小全域木(Minimum spanning tree)
+　最小全域木とは、各辺に重み（コスト）がある場合、最小の総和コストで構成される全域木を最小全域木という。
+
+#+REVEAL_HTML: <img src="./pics/Minimum_spanning_tree.png" class="stretch" >
+
+*** クラスカル法 (Kruskal's Algorithm) 
+   #+REVEAL_HTML: <video controls data-autoplay src="./movies/kruskal_ani.mov"></video>
+   #+CAPTION: Kruskal algorithm
+   #+REVEAL_HTML: <div style="font-size: 60%;">
+    See: https://courses.cs.washington.edu/courses/cse373/16wi/Hashing/visualization/Kruskal.html
+   #+REVEAL_HTML: </div>
+
+*** プリム法 (Prim's Algorithm)
+   #+REVEAL_HTML: <video controls data-autoplay src="./movies/prim_ani.mov"></video>
+   #+CAPTION: Prim's algorithm
+   #+REVEAL_HTML: <div style="font-size: 60%;">
+   See: https://courses.cs.washington.edu/courses/cse373/16wi/Hashing/visualization/Prim.html
+   #+REVEAL_HTML: </div>
+
+
+##+begin_notes
+ COMMENT ネットワークのモジュールの識別(Module detection)
+R - bootnet, which takes a variance-covariance matrix as the input only
+$$EBIC = -2L+Elog(N)+4\gamma Elog(P)$$
+L denotes the log-likelihood, N the sample size, E the number of nonzero edges, and P the number of nodes. 
+#+end_notes
+
+
+** Dynamical network marker
+
+** 遺伝子の機能の推定
+
+** Gene Set Enrichment Analysis and pathway analysis
+
+Gene Set Enrichment Analysis (GSEA, DAVID)  
+#+ATTR_HTML: :style font-size:20px;float:left
+Subramanian et al.Gene set enrichment analysis: A knowledge-based approach for interpreting genome-wide expression profiles, PNAS 102(43)15545-15550, 2005 
+
+Pathway analysis (KEGG, Reactome, Ingenuity)  
+#+ATTR_HTML: :style font-size:20px;float:left 
+1. Curtis, R.K., et al. (2005) Pathways to the analysis of microarray data. Trends in Biotechnology 23: 429-435. 
+2. Werner, T. (2008) Bioinformatics applications for pathway analysis of microarray data. Current Opinion in Biotechnology 19: 50-54.
+  
+#+begin_notes
+The Gene Ontology, containing standardised annotation of gene products, is commonly used for 
+this purpose. It works by comparing the frequency of individual annotations in the gene list
+(e.g differentially expressed genes) with a reference list (usually all genes on the microarray
+or in the genome). Enrichment of biological pathways supplied by KEGG, Ingenuity, Reactome or 
+WikiPathways can be performed in a similar way.  
+  
+A common approach to interpreting gene expression data is gene set enrichment analysis 
+based on the functional annotation of the differentially expressed genes (Figure 13). 
+This is useful for finding out if the differentially expressed genes are associated 
+with a certain biological process or molecular function.
+#+end_notes
+
+
+
+* 遺伝子共発現による遺伝子調節ネットワークの推定(これから)
+
+#+ATTR_REVEAL: :frag (none none none highlight-red) :frag_idx (- - - 1)
+- Boolean Model (有向グラフ、directed graph)
+- Bayesian Model (有向非巡回グラフ、Acyclic directed graph)
+- Differential equations (有向グラフ、directed graph)
+- Graphical Gaussuan Model (無向グラフ、undirected graph)
+  - Correlation Coeffcient
+  - Partial Correlation Coefficient
+
+** Boolean Model
+  
+*** Intro 
+   
+*** Recommened Papers
+
+   - Tatsuya Akutsu, Satoru Kuhara, Osamu Maruyama, and Satoru Miyano. 
+    Identification of gene regulatory networks by strategic gene disruptions and gene overexpressions. 
+    In Proceedings of the Ninth Annual ACM-SIAM Symposium on Discrete Algorithms, pages 695-702, 
+    San Francisco, California, 25-27 January 1998.
+
+   - Reveal, a general reverse engineering algorithm for inference of genetic network architectures. 
+     In Pacific Symposium on Biocomputing, pages 18-29, Maui, Hawaii, 1998. World Scientific Publishing Co.
+
+
+** Bayesian Model
+
+*** Intro  
+
+*** Recommended papers
+    Friedman N., Linial M., Nachman I., and Pe'er D.Using bayesian networks to analyze expression data. 
+    J. Computational Biology, 7(3):601-620, Nov 1998.
+
+
+** Differential equations
+ 
+*** Recommended papers
+    Chen T, He HL, Church GM. Modeling gene expression with differential equations. 
+    Pac Symp Biocomput. 1999;29-40.
+
+
+** Graphical Gaussian Model
+It is also said 'concentration graph' or 'covariance selection' model.  
+Suppose that a pair of genes, say Genes A and B, show a high correlation in their expression 
+profiles. There are three possible mechanisms to induce a high correlation in the expression 
+levels between them. 
+1. Direct interaction.
+2. Indirect interaction.
+3. A common gene, i.e., the expressions of Genes A and B are regulated by a common gene product.
+ 
+
+*** Recommended papers
+    Hiroyuki Toh,  Katsuhisa Horimoto
+    Bioinformatics, Volume 18, Issue 2, February 2002, Pages 287–297
 
 
