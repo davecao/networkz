@@ -2,8 +2,9 @@
 - [x] Add Doxygen to cmake of generating API document.
 - [ ] Minimum spanning tree algorithms, kruskal and prim
 - [ ] Minimum-cut algorithm
+- [ ] Graph partitioning (Add Metis support)
+- [ ] Dynamical network biomarker: index
 - [ ] Add a configuration file support
-
 ## Prerequisites
 
 1. cmake (xcode project also provided)
