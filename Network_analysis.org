@@ -1,7 +1,7 @@
 #+TITLE: ネットワーク(グラフ)の基礎
 #+AUTHOR: 曹　巍
 #+DATE: July 15, 2020
-#+OPTIONS: toc:nil reveal_global_footer:t
+#+OPTIONS: toc:nil reveal_global_footer:t tags:t todo:t
 #+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
 #+REVEAL_MATHJAX_URL: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js
 #+REVEAL_THEME: moon
@@ -551,7 +551,6 @@ w(H,J) &=& \frac{l_{ij}+a_{ij}}{min\{k_i,k_j\}+1-a_{ij}} \\
 
 #+REVEAL_HTML: <img src="./pics/scale_free_vs_modularity.png" class="stretch" >
 
-
 ** Modularityの仮説
 
   1. ランダム仮説(Random Hypothesis)
@@ -630,23 +629,68 @@ $$EBIC = -2L+Elog(N)+4\gamma Elog(P)$$
 L denotes the log-likelihood, N the sample size, E the number of nonzero edges, and P the number of nodes. 
 #+end_notes
 
+** Composite Index of Dynamical network biomarker(DNB)
 
-** Dynamical network marker
+1. 有力なグループを有意性(student-t検定)で決定する
 
-** 遺伝子の機能の推定
+2. Composite Indexを計算する
 
-** Gene Set Enrichment Analysis and pathway analysis
+$$ I \stackrel{\mathrm{def}}{=} \frac{SD_d\cdot PCC_d}{PCC_o} $$
 
-Gene Set Enrichment Analysis (GSEA, DAVID)  
-#+ATTR_HTML: :style font-size:20px;float:left
-Subramanian et al.Gene set enrichment analysis: A knowledge-based approach for interpreting genome-wide expression profiles, PNAS 102(43)15545-15550, 2005 
-
-Pathway analysis (KEGG, Reactome, Ingenuity)  
-#+ATTR_HTML: :style font-size:20px;float:left 
-1. Curtis, R.K., et al. (2005) Pathways to the analysis of microarray data. Trends in Biotechnology 23: 429-435. 
-2. Werner, T. (2008) Bioinformatics applications for pathway analysis of microarray data. Current Opinion in Biotechnology 19: 50-54.
-  
+ここで、$PCC_d$ は有力なグループなPearson相関係数の絶対値の平均値、$PCC_o$ は
+有力なグループと以外な分子なPearson相関係数の絶対値の平均値です。
 #+begin_notes
+$$ I \stackrel{\mathrm{def}}{=} \frac{SD_d\cdot PCC_d}{PCC_o} $$
+where $PCC_d$ is the average Pearson’s correlation coefficient of the dominant group in absolute
+value; $PCC_o$ is the average Pearson’s correlation coefficient of the dominant group with 
+other molecules in absolute value; $SD_d$ is the average standard deviation of the dominant group.
+#+end_notes
+
+#+REVEAL: split:t
+
+#+REVEAL_HTML: <img src="./pics/DNB_example.png" class="stretch" >
+
+
+#+begin_notes
+
+Gene GO Enrichment Analysis
+
+"Enrichment" - ランダムと比べということ
+
+To perform functional enrichment analysis, we need to have:
+
+- A set of genes of interest (e.g., differentially expressed genes): study set (n)
+- A set with all the genes to consider in the analysis: population set (N)
+(which must contain the study set)
+- GO annotations, associating the genes in the population set to GO terms
+- The GO ontology, with the description of GO terms and their relationships
+
+For each GO term, we need to count the frequency (k) of genes in the study set (n) that are 
+associated to the term, and the frequency (K) of genes in the population set (N) that are 
+associated to the same term. Then we test how likely would it be to obtain at least k genes 
+associated to the term if n genes would be randomly sampled from the population, given the 
+frequency K and size N of the population.
+
+The appropriate statistical test is the one-tailed variant of Fisher’s exact test, also known as 
+the hypergeometric test for over-representation. When the one-tailed version is applied, this 
+test will compute the probability of observing at least the sample frequency, given the population
+ frequency. The hypergeometric distribution measures precisely the probability of k successes 
+in n draws, without replacement, from a finite population of size N that contains exactly 
+K successful objects:
+
+$$ P(X=k) = \frac{C_{K}^{k} C_{N-n}^{K-k}}{C_{N}^{n}} $$
+
+Gene Set Enrichment Analysis and pathway analysis
+
+- Gene Set Enrichment Analysis (GSEA, DAVID)  
+  #+ATTR_HTML: :style font-size:20px;float:left
+  Subramanian et al.Gene set enrichment analysis: A knowledge-based approach for interpreting genome-wide expression profiles, PNAS 102(43)15545-15550, 2005 
+
+- Pathway analysis (KEGG, Reactome, Ingenuity)  
+  #+ATTR_HTML: :style font-size:20px;float:left 
+  Curtis, R.K., et al. (2005) Pathways to the analysis of microarray data. Trends in Biotechnology 23: 429-435. 
+  Werner, T. (2008) Bioinformatics applications for pathway analysis of microarray data. Current Opinion in Biotechnology 19: 50-54.
+  
 The Gene Ontology, containing standardised annotation of gene products, is commonly used for 
 this purpose. It works by comparing the frequency of individual annotations in the gene list
 (e.g differentially expressed genes) with a reference list (usually all genes on the microarray
@@ -657,8 +701,8 @@ A common approach to interpreting gene expression data is gene set enrichment an
 based on the functional annotation of the differentially expressed genes (Figure 13). 
 This is useful for finding out if the differentially expressed genes are associated 
 with a certain biological process or molecular function.
-#+end_notes
 
+#+end_notes
 
 
 * 遺伝子共発現による遺伝子調節ネットワークの推定(これから)
@@ -717,3 +761,51 @@ levels between them.
     Bioinformatics, Volume 18, Issue 2, February 2002, Pages 287–297
 
 
+* カイコの遺伝子共発現ネットワークの解析
+
+目的：カイコの遺伝子ネットワークによる有用物質産生関連候補遺伝子の同定
+
+** サンプルデータ
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+#+REVEAL_HTML: <img src="./pics/silk_sample_data.png" class="stretch" >
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+サンプルデータには、51,926遺伝子がある。TPM列を用いて、ネットワークを構築しました。
+#+REVEAL_HTML: </div>
+
+** 構築したネットワーク(fundamental analysis)
+
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+#+REVEAL_HTML: <div class="r-stack">
+#+REVEAL_HTML: <img class="fragment current-visible" data-fragment-index="0" src="./pics/sip_fig_black.png">
+#+REVEAL_HTML: <img class="fragment" data-fragment-index="1" src="./pics/sip_fig_black_closeview.png">
+#+REVEAL_HTML: <img class="fragment" data-fragment-index="2" src="./pics/sip_fig_black_closeview2.png">
+#+REVEAL_HTML: <img class="fragment" data-fragment-index="3" src="./pics/sip_fig_black_closeview3.png">
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: </div>
+
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+#+REVEAL_HTML: <div class="column" style="float:left; font-size:30px">
+サンプルデータには、51,926遺伝子がある。発現値が平均値より大き遺伝子を集め、グラフを構築した。
+city block距離による辺を定義し、ノードペアの距離において、下の25％データの値を域値にしました。
+
+1. ノードの数は2785
+2. edgesの数は129327
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: </div>
+
+** 研究方法
+
+現時点で、51,926遺伝子　x　20種類組織である。
+
+#+ATTR_HTML: :style font-size:30px
+- 共発現ネットワークの構築（Pearson相関）
+  - 組織別のVariance-Covarianceマトリックス
+  - 遺伝子ごとのVariance-Covarianceマトリックス
+- 最小全域木(Minimum spanning tree): Primアルゴリズム
+- グラフの分割（graph partitioning）
+- [$\star$] 各コミュニティにおいて、DNBの指標でランキング
+ $$ I \stackrel{\mathrm{def}}{=} \frac{SD_d\cdot PCC_d}{PCC_o} $$
+ 式の改良案を考えています。
+- 選択したコミュニティに対して注釈解析
+- [Option?]組織別のネットワークの比較
