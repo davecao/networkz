@@ -54,5 +54,14 @@ void find_minimum_spanning_tree(NARO::Graph& g, std::string& method);
  * @returns double, minmum cut weight
  */
 double stoer_wagner_min_cut(NARO::Graph& g, bool verbose=false);
+
+/**
+ * @brief Prize-Collecting Steiner Forest (PCSF)
+ *
+ * @param[in] g A graph defined in `graph.hpp`
+ * @param[in] num_clusters The number of clusters
+ * @param[out] sub A PCSF subtrees
+ */
+
 }
 #endif /* graph_algo_hpp */
