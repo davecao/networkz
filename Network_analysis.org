@@ -2,6 +2,7 @@
 #+AUTHOR: 曹　巍
 #+DATE: July 15, 2020
 #+OPTIONS: toc:nil reveal_global_footer:t tags:t todo:t
+#+LATEX_HEADER: \usepackage{tikz}
 #+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
 #+REVEAL_MATHJAX_URL: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js
 #+REVEAL_THEME: moon
@@ -705,7 +706,7 @@ with a certain biological process or molecular function.
 #+end_notes
 
 
-* 遺伝子共発現による遺伝子調節ネットワークの推定(これから)
+* 遺伝子調節ネットワークのモデル(これから)
 
 #+ATTR_REVEAL: :frag (none none none highlight-red) :frag_idx (- - - 1)
 - Boolean Model (有向グラフ、directed graph)
@@ -717,17 +718,28 @@ with a certain biological process or molecular function.
 
 ** Boolean Model
   
-*** Intro 
+*** モデルの例
+#+REVEAL_HTML: <div class="column" style="float:left; width:40%; font-size:30px">
+[[./pics/Boolean_model.png]]
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:60%; font-size:20px; margin-top:80px;">
+| 操作                                                | 関数                                                        |
+|-----------------------------------------------------+-------------------------------------------------------------|
+| $X_{t+1}=X_{t}\bigwedge Y_{t}$                      | $f_{1}(x_1, x2, x3) = x_1 \bigwedge x_2$                    |
+| $Y_{t+1}=X_{t}\bigvee Y_{t}$                        | $f_{1}(x_1, x2, x3) = x_1 \bigvee x_2$                      |
+| $Z_{t+1}=X_{t}\bigvee (\neg Y_{t} \bigwedge Z_{t})$ | $f_{1}(x_1, x2, x3) = x_1 \bigvee (\neg x_2 \bigwedge x_3)$ |
+#+REVEAL_HTML: </div>
    
 *** Recommened Papers
+   - Albert, R., Othmer, H. G. 
+     The topology of the regulatory interactions predicts the expression pattern of 
+     the segment polarity genes in Drosophila melanogaster. J. Theor. Biol., 2003, 223, 1-18
 
    - Tatsuya Akutsu, Satoru Kuhara, Osamu Maruyama, and Satoru Miyano. 
     Identification of gene regulatory networks by strategic gene disruptions and gene overexpressions. 
     In Proceedings of the Ninth Annual ACM-SIAM Symposium on Discrete Algorithms, pages 695-702, 
     San Francisco, California, 25-27 January 1998.
 
-   - Reveal, a general reverse engineering algorithm for inference of genetic network architectures. 
-     In Pacific Symposium on Biocomputing, pages 18-29, Maui, Hawaii, 1998. World Scientific Publishing Co.
 
 
 ** Bayesian Model
@@ -735,22 +747,31 @@ with a certain biological process or molecular function.
 *** Intro  
 
 *** Recommended papers
-    Friedman N., Linial M., Nachman I., and Pe'er D.Using bayesian networks to analyze expression data. 
-    J. Computational Biology, 7(3):601-620, Nov 1998.
+    #+ATTR_HTML: :style font-size:20px;float:left
+    - Friedman N., Linial M., Nachman I., and Pe'er D.Using bayesian networks to analyze expression data. 
+      J. Computational Biology, 7(3):601-620, Nov 1998.
+
+    #+ATTR_HTML: :style font-size:20px;float:left
+    - Imoto S. et al.  (2002) Estimation of genetic networks and functional structures between genes by 
+      using Bayesian networks and nonparametric regression. In: Pacific Symposium on Biocomputing, 
+      The Kauai Marriott Resort, Hawaii, Vol. 7, pp. 175–186.
 
 
 ** Differential equations
  
 *** Recommended papers
+    #+ATTR_HTML: :style font-size:20px;float:left
     Chen T, He HL, Church GM. Modeling gene expression with differential equations. 
     Pac Symp Biocomput. 1999;29-40.
 
 
 ** Graphical Gaussian Model
+
 It is also said 'concentration graph' or 'covariance selection' model.  
 Suppose that a pair of genes, say Genes A and B, show a high correlation in their expression 
 profiles. There are three possible mechanisms to induce a high correlation in the expression 
 levels between them. 
+
 1. Direct interaction.
 2. Indirect interaction.
 3. A common gene, i.e., the expressions of Genes A and B are regulated by a common gene product.
@@ -759,6 +780,43 @@ levels between them.
 *** Recommended papers
     Hiroyuki Toh,  Katsuhisa Horimoto
     Bioinformatics, Volume 18, Issue 2, February 2002, Pages 287–297
+
+
+* 遺伝子調節ネットワークの推定 (これから)
+ 
+** Limited to the feasible number of regulatory genes
+   #+ATTR_HTML: :style font-size:20px;float:left
+   - Reveal  
+     Liang S. et al.  (1998) 
+     Reveal, a general reverse engineering algorithm for inference of genetic network architectures. 
+     In Pacific Symposium on Biocomputing, pages 18-29, Maui, Hawaii, 1998. World Scientific Publishing Co.
+   - Best-Fit  
+     Lähdesmäki H. et al.  (2003)
+     On learning gene regulatory networks under the Boolean network model. Mach. Learn., 52, 147–167.
+   - Bayesian inference approach for a Boolean network  
+     Han S. et al.  (2014) 
+     A full bayesian approach for Boolean genetic network inference. PLoS One, 9, e115806.
+   - Genetic algorithm-based  
+     Shohag Barman, Yung-Keun Kwon, 
+     A Boolean network inference from time-series gene expression data using a genetic algorithm
+      Bioinformatics, Volume 34, Issue 17, 01 September 2018, Pages i927–i933
+   - ...
+
+** Mutual Information
+  #+ATTR_HTML: :style font-size:20px;float:left
+   - Relevance networks  
+     Butte A.J., Kohane I.S. (2000) 
+     Mutual information relevance networks: functional genomic clustering using pairwise entropy measurements. 
+     In Pacific Symposium on Biocomputing, The Sheraton Waikiki, Hawaii, Vol. 5, p. 26.
+   - Context likelihood of relatedness (CLR)  
+     Faith J.J. et al.  (2007) 
+     Large-scale mapping and validation of Escherichia coli transcriptional regulation from a compendium of 
+     expression profiles. PLoS Biol., 5, e8.
+   - Reconstruction of accurate cellular networks (ARACNE)   
+     Margolin A.A. et al.  (2006) 
+     Aracne: an algorithm for the reconstruction of gene regulatory networks 
+     in a mammalian cellular context. BMC Bioinformatics, 7, S7.
+   - ...
 
 
 * カイコの遺伝子共発現ネットワークの解析
