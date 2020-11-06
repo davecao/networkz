@@ -8,28 +8,51 @@
 
 #include "graph_util.hpp"
 // -----------------------------------------------------------------------------
+
+void mat2file(const Eigen::MatrixXd& mat, const std::string& filename)
+{
+  const static Eigen::IOFormat CSVFormat(Eigen::FullPrecision,
+                                         Eigen::DontAlignCols,
+                                         ", ",
+                                         "\n");
+  std::ofstream file(filename);
+  if (file.is_open()) {
+    file << mat.format(CSVFormat);
+    file.close();
+  }
+}
+// -----------------------------------------------------------------------------
 //
 //
-Eigen::MatrixXd NARO::CityBlock::operator()(const Eigen::MatrixXd& mat) {
+Eigen::MatrixXd NARO::CityBlock::operator()(const Eigen::MatrixXd& mat,
+                                            bool verbose=false) {
   int nrows = static_cast<int>(mat.rows());
   Eigen::MatrixXd d_mat(nrows, nrows);
   for (int rowIdx=0; rowIdx < nrows; rowIdx++) {
     d_mat.row(rowIdx) = (mat.rowwise() - mat.row(rowIdx)).matrix().rowwise().sum();
   }
-  std::cout << "Original matrix:\n";
-  std::cout << mat << std::endl;
-  std::cout << "City block distance matrix:\n";
-  std::cout << d_mat.cwiseAbs() << std::endl;
+//  std::cout << "Original matrix:\n";
+//  std::cout << mat << std::endl;
+//  std::cout << "City block distance matrix:\n";
+//  std::cout << d_mat.cwiseAbs() << std::endl;
+  if (verbose) {
+    mat2file(d_mat.cwiseAbs(), "networkz_cityblock_mat.csv");
+  }
   return d_mat.cwiseAbs();
 }
 
 // -----------------------------------------------------------------------------
 // Eigen uses Column Major definition of Matrix in general if not specified.
 //
-Eigen::MatrixXd NARO::Euclidean::operator()(const Eigen::MatrixXd& mat) {
+Eigen::MatrixXd NARO::Euclidean::operator()(const Eigen::MatrixXd& mat,
+                                            bool verbose=false)
+{
   auto d_mat = ((-2 * mat.transpose() * mat).colwise() +
                 mat.colwise().squaredNorm().transpose()).rowwise() +
                mat.colwise().squaredNorm();
+  if (verbose) {
+    mat2file(d_mat, "networkz_euclidean_mat.csv");
+  }
   return d_mat;
 }
 // -----------------------------------------------------------------------------
@@ -37,7 +60,8 @@ Eigen::MatrixXd NARO::Euclidean::operator()(const Eigen::MatrixXd& mat) {
 // Pearson's correlation coefficient for real numbers.
 //   mat - the observations are arranged as rows.
 //
-Eigen::MatrixXd NARO::Corrcoef::operator()(const Eigen::MatrixXd& mat) {
+Eigen::MatrixXd NARO::Corrcoef::operator()(const Eigen::MatrixXd& mat,
+                                           bool verbose=false) {
   double nrows = static_cast<double>(mat.rows());
   if (nrows == 1) {
     std::cerr << "Error: the input matrix at least contains two rows"
@@ -56,8 +80,10 @@ Eigen::MatrixXd NARO::Corrcoef::operator()(const Eigen::MatrixXd& mat) {
   // By array:
   Eigen::VectorXd diag = cov.diagonal();
   Eigen::VectorXd D = diag.array().rsqrt();
-  Eigen::MatrixXd cc = (cov.array().rowwise() * D.transpose().array()).colwise() * D.array();
-
+  Eigen::MatrixXd cc = 1 - (cov.array().rowwise() * D.transpose().array()).colwise() * D.array();
+  if (verbose) {
+    mat2file(cc, "networkz_corref_mat.csv");
+  }
 //  std::cout << "Raw matrix: arranged as rows\n";
 //  std::cout << mat << std::endl;
 //  std::cout << "Mean vector: \n";
@@ -106,7 +132,7 @@ bool NARO::create_graph(Graph* g, DataFrame* df,
   bool inserted;
   NARO::Vertex u, v;
   // Get data:
-  auto dist_mat = dist_functor(df->data);
+  auto dist_mat = dist_functor(df->data, true);
   size_t num_rows = dist_mat.rows();
   auto rownames = df->get_rowIndex_names();
   if(rownames.size() != num_rows) {

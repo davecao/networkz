@@ -3,25 +3,31 @@
 #+DATE: July 15, 2020
 #+OPTIONS: toc:nil reveal_global_footer:t tags:t todo:t
 #+LATEX_HEADER: \usepackage{tikz}
-#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+# +REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+REVEAL_ROOT:./reveal.js
 #+REVEAL_MATHJAX_URL: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js
-#+REVEAL_THEME: moon
-#+REVEAL_INIT_OPTIONS: width:1200, height:800,
-#+REVEAL_INIT_OPTIONS: margin: 0.04, minScale:0.2, maxScale:2.0, center:'false',
-#+REVEAL_INIT_OPTIONS: slideNumber:'c/t', 
-#+REVEAL_INIT_OPTIONS: menu: {side: 'left', titleSelector: 'h1, h2, h3, h4', markers: true, custom: false, themes: true, transitions: true, openButton: true, openSlideNumber: false, keyboard: true, sticky: false, autoOpen: true}
-#+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Introduction of network analysis.">
-#+REVEAL_POSTAMBLE: <p> Created by 曹巍. </p>
-#+REVEAL_PLUGINS: (highlight markdown notes)
-#+REVEAL_EXTRA_CSS: https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css
-#+REVEAL_TITLE_SLIDE: <h2>%t</h2>
+#+REVEAL_MATHJAX_URL: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js
+#+REVEAL_TITLE_SLIDE: <h1>%t</h1>
 #+REVEAL_TITLE_SLIDE: <h3>%a</h3>
 #+REVEAL_TITLE_SLIDE: <h3>%d</h3> 
-# +REVEAL_PREAMBLE: <div class="footer"><p>農研機構</p></div>
+#+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Introduction of network analysis.">
+#+REVEAL_PREAMBLE: <div class="footer"><p>農研機構　農業情報研究センター</p></div>
 # +REVEAL_HLEVEL: 
 # +REVEAL: split
 # +REVEAL_SLIDE_HEADER: reveal_global_header:t 
-# +REVEAL_SLIDE_FOOTER: 農研機構,NARO
+# +REVEAL_SLIDE_FOOTER: 農研機構
+#+REVEAL_THEME: white
+#+REVEAL_PLUGINS:(highlight markdown notes menu chalkboard)
+#+REVEAL_EXTRA_CSS:./css/fira-font.css
+#+REVEAL_EXTRA_CSS:./reveal.js/bower_components/reveal.js-menu/menu.css
+#+REVEAL_EXTRA_CSS:./reveal.js/bower_components/reveal.js-menu/font-awesome/css/all.css
+#+REVEAL_INIT_OPTIONS: margin: 0.04, minScale:0.2, maxScale:2.0, center:'false',
+#+REVEAL_INIT_OPTIONS: width:1200, height:800,
+# +REVEAL_INIT_OPTIONS: width:1920, height:1080,
+#+REVEAL_INIT_OPTIONS: controlsLayout: 'bottom-right',
+#+REVEAL_INIT_OPTIONS: slideNumber:'c/t', 
+#+REVEAL_INIT_OPTIONS: menu: {side: 'left', numbers:true, titleSelector: 'h1, h2, h3, h4', hideMissingTitles:true, markers: true, custom: false, themes: true, transitions: true, openButton: true, openSlideNumber:true, keyboard: true, sticky: false, autoOpen: true},
+#+REVEAL_INIT_OPTIONS: chalkboard: {boardmarkerWidth: 8, toggleChalkboardButton: { left: "80px" }, toggleNotesButton: { left: "130px"}}
 #+MACRO: color @@html:<font color="$1">$2</font>@@
 #+MACRO: font @@html:<font size=$1>$2</font>@@
 
@@ -708,7 +714,7 @@ with a certain biological process or molecular function.
 
 * 遺伝子調節ネットワークのモデル(これから)
 
-#+ATTR_REVEAL: :frag (none none none highlight-red) :frag_idx (- - - 1)
+# +ATTR_REVEAL: :frag (none none none highlight-red) :frag_idx (- - - 1)
 - Boolean Model (有向グラフ、directed graph)
 - Bayesian Model (有向非巡回グラフ、Acyclic directed graph)
 - Differential equations (有向グラフ、directed graph)
@@ -716,21 +722,131 @@ with a certain biological process or molecular function.
   - Correlation Coeffcient
   - Partial Correlation Coefficient
 
-** Boolean Model
-  
-*** モデルの例
+** Boolean Model (Stuart Kauffman, 1969)
+  - $G=(V,E)$ には、頂点（遺伝子）$x_i$ がOn或いはOff、すなわち１或いは０という２つ状態。
+  - n個頂点を持つネットワークの状態は、$V=\{x_1,\ldots,x_n\}$ で表す。
+  - t+1時刻に、$x_i$ の状態がt時刻に $V$ の中にある $k_i$ 個親調節遺伝子組の状態により決める。
+    $k_i$: 頂点 $x_i$ の連結といい、親調節遺伝子組の操作は、boolean algebraルールを実行する調節関数 $f_i$ で定義する。
+    $$x_{i}(t+1) = f_i(x_{i1}(t),\ldots,x_{ik}(t))$$
+
+** Boolean algebra law(一部)
+#+ATTR_HTML: :style font-size:30px
+| Boolean Operations | Logical form     | Polynomial form |
+|--------------------+------------------+-----------------|
+| AND ($\bigwedge$)  | $Z=X\bigwedge Y$ | $Z = XY$        |
+| OR($\bigvee$)      | $Z=X\bigvee Y$   | $Z = X + Y+XY$  |
+| NOT ($\neg$)       | $Z=\bar{X}$      | $Z = 1 + X$     |
+
+例：AND
+#+ATTR_HTML: :style font-size:30px
+| Logical form       | Polynomial form |
+|--------------------+-----------------|
+| $0 \wedge 0 = 0$   | $0\cdot 0=0$    |
+| $0 \wedge 1 = 0$   | $0\cdot 1=0$    |
+| $1 \wedge 0 = 0$   | $1\cdot 0=0$    |
+| $1 \wedge 1 = 1$   | $1\cdot 1=1$    |
+
+
+** Boolean Modelの例
 #+REVEAL_HTML: <div class="column" style="float:left; width:40%; font-size:30px">
 [[./pics/Boolean_model.png]]
 #+REVEAL_HTML: </div>
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%; font-size:20px; margin-top:80px;">
+
 | 操作                                                | 関数                                                        |
 |-----------------------------------------------------+-------------------------------------------------------------|
-| $X_{t+1}=X_{t}\bigwedge Y_{t}$                      | $f_{1}(x_1, x2, x3) = x_1 \bigwedge x_2$                    |
-| $Y_{t+1}=X_{t}\bigvee Y_{t}$                        | $f_{1}(x_1, x2, x3) = x_1 \bigvee x_2$                      |
-| $Z_{t+1}=X_{t}\bigvee (\neg Y_{t} \bigwedge Z_{t})$ | $f_{1}(x_1, x2, x3) = x_1 \bigvee (\neg x_2 \bigwedge x_3)$ |
+| $X_{t+1}=X_{t}\wedge Y_{t}$                         | $f_{1}(x_1, x2, x3) = x_1 \wedge x_2$                       |
+| $Y_{t+1}=X_{t}\vee Y_{t}$                           | $f_{1}(x_1, x2, x3) = x_1 \vee x_2$                         |
+| $Z_{t+1}=X_{t}\vee (\neg Y_{t} \wedge Z_{t})$       | $f_{1}(x_1, x2, x3) = x_2 \vee (\neg x_1 \wedge x_3)$       |
+
+t0 $\rightarrow$ (X,Y,Z) = 1, 0, 1 
+
+t1 $\rightarrow$ (X,Y,Z) = ($1\wedge 0$, $1\vee 0$, $0\vee(\neg 1 \wedge 1)$) = 0, 1, 0 
 #+REVEAL_HTML: </div>
-   
-*** Recommened Papers
+
+100遺伝子を持つネットワークの状態は $2^{100}$ になる。
+
+** Boolean Modelのattractor
+#+REVEAL_HTML: <div class="column" style="float:left; width:30%; font-size:30px">
+[[./pics/BN_attractor.png]]
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:70%; font-size:20px; margin-top:80px;">
+#+REVEAL_HTML: <div class="column" style="float:left; width:25%; font-size:20px;">
+#+ATTR_HTML: :style font-size:10px
+遺伝子1は、遺伝子３と遺伝子４によりコントロールする。
+
+| 3 4 | 1 |
+|-----+---|
+| 0 0 | 0 |
+| 0 1 | 0 |
+| 1 0 | 1 |
+| 1 1 | 1 |
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:25%; font-size:20px;">
+#+ATTR_HTML: :style font-size:10px
+遺伝子2は、遺伝子１と遺伝子４によりコントロールする。
+
+| 1 4 | 2 |
+|-----+---|
+| 0 0 | 1 |
+| 0 1 | 0 |
+| 1 0 | 0 |
+| 1 1 | 1 |
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:25%; font-size:20px;">
+#+ATTR_HTML: :style font-size:10px
+遺伝子3は、遺伝子1と遺伝子２によりコントロールする。
+
+| 1 2 |3  |
+|-----+---|
+| 0 0 | 1 |
+| 0 1 | 0 |
+| 1 0 | 1 |
+| 1 1 | 0 |
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:25%; font-size:20px;">
+#+ATTR_HTML: :style font-size:10px
+遺伝子４は、遺伝子２と遺伝子３によりコントロールする。
+
+| 2 3 |4  |
+|-----+---|
+| 0 0 | 0 |
+| 0 1 | 1 |
+| 1 0 | 1 |
+| 1 1 | 0 |
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: </div>
+
+#+REVEAL_HTML: <div class="column" style="float:left; font-size:20px;">
+ネットワークの状態が以下の16種類になる。
+\begin{array}{|c|c|c|} \hline
+0,0,0,0 & 1,0,0,0 & 1,1,0,0 & 1,1,1,0   \\ \hline
+1,1,1,1 & 0,1,0,0 & 1,0,1,0 & 1,1,0,1  \\ \hline
+        & 0,0,1,0 & 1,0,0,1 & 1,0,1,1  \\ \hline
+        & 0,0,0,1 & 0,1,0,1 & 0,1,1,1  \\ \hline
+        &         & 0,0,1,1 &          \\ \hline      
+        &         & 0,1,1,0 &          \\ \hline
+\end{array}
+#+REVEAL_HTML: </div>
+
+#+REVEAL: split:t
+#+REVEAL_HTML: <div class="column" style="float:left; width:30%; font-size:20px;">
+| 時刻 | 状態    |
+| t0   | 0,0,0,0 |
+| t1   | 0,1,1,0 |
+| t2   | 1,1,0,0 |
+| t3   | 0,0,0,1 |
+| t4   | 0,0,1,0 |
+| t5   | 1,1,1,1 |
+| t6   | 1,1,0,0 |
+| t7   | 0,0,0,1 |
+| t8   | 0,0,1,0 |
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:70%; font-size:20px;">
+[[./pics/BN_attractor_ex.png]]
+#+REVEAL_HTML: </div>
+** Recommened Papers
+   #+ATTR_HTML: :style font-size:30px
    - Albert, R., Othmer, H. G. 
      The topology of the regulatory interactions predicts the expression pattern of 
      the segment polarity genes in Drosophila melanogaster. J. Theor. Biol., 2003, 223, 1-18
@@ -747,20 +863,19 @@ with a certain biological process or molecular function.
 *** Intro  
 
 *** Recommended papers
-    #+ATTR_HTML: :style font-size:20px;float:left
+    #+ATTR_HTML: :style font-size:30px;float:left
     - Friedman N., Linial M., Nachman I., and Pe'er D.Using bayesian networks to analyze expression data. 
       J. Computational Biology, 7(3):601-620, Nov 1998.
 
-    #+ATTR_HTML: :style font-size:20px;float:left
+    #+ATTR_HTML: :style font-size:30px;float:left
     - Imoto S. et al.  (2002) Estimation of genetic networks and functional structures between genes by 
       using Bayesian networks and nonparametric regression. In: Pacific Symposium on Biocomputing, 
       The Kauai Marriott Resort, Hawaii, Vol. 7, pp. 175–186.
 
-
 ** Differential equations
  
 *** Recommended papers
-    #+ATTR_HTML: :style font-size:20px;float:left
+    #+ATTR_HTML: :style font-size:30px;float:left
     Chen T, He HL, Church GM. Modeling gene expression with differential equations. 
     Pac Symp Biocomput. 1999;29-40.
 
@@ -778,6 +893,7 @@ levels between them.
  
 
 *** Recommended papers
+    #+ATTR_HTML: :style font-size:30px
     Hiroyuki Toh,  Katsuhisa Horimoto
     Bioinformatics, Volume 18, Issue 2, February 2002, Pages 287–297
 

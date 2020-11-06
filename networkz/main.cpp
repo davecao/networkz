@@ -52,7 +52,10 @@ int main(int argc, const char * argv[]) {
   boost::timer::cpu_timer timer;
   // Prepare dataframe to store data.
   NARO::DataFrame *df = new NARO::DataFrame();
-
+  if (df == 0x0) {
+    std::cerr << "Insufficient memory" << std::endl;
+    std::exit(-1);
+  }
   // ---------------------------------------------------------------------------
   // Load the file parsers
   // ---------------------------------------------------------------------------
@@ -107,6 +110,10 @@ int main(int argc, const char * argv[]) {
   // 1.1 Select columns
   // ---------------------------------------------------------------------------
   NARO::DataFrame *dat = new NARO::DataFrame();
+  if (dat == 0x0) {
+    std::cerr << "Insufficient memory" << std::endl;
+    std::exit(-1);
+  }
   if (CLIARG::column_names.empty()) {
     dat = df;
   } else {
@@ -191,9 +198,14 @@ int main(int argc, const char * argv[]) {
   // Release Memory
   // ---------------------------------------------------------------------------
   genes_graph.clear();
-  delete df;
-  delete dat;
-  
+  // dat and df are the same object
+  if (dat == df) {
+    dat = nullptr;
+    delete df;
+  } else {
+    delete dat;
+    delete df;
+  }
   if (verbose) {
     timer.stop();
     seconds = std::chrono::nanoseconds(timer.elapsed().user);

@@ -31,7 +31,7 @@ struct CityBlock
    *          an observation..
    * @returns a Eign double matrix.
    */
-  Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat);
+  Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat, bool verbose);
 };
 
 /**
@@ -46,7 +46,7 @@ struct Euclidean
    *         an observation.
    * @return a Eign double matrix.
    */
-  Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat);
+  Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat, bool verbose);
 };
 
 /**
@@ -59,7 +59,7 @@ struct Corrcoef
    *         an observation.
    * @return a Eign double matrix.
    */
-  Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat);
+  Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat, bool verbose);
 };
 /**
  * @brief create_graph: create a graph from a given data

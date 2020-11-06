@@ -60,7 +60,7 @@ NARO::Algo::local_clustering_coefficient(NARO::Graph& g)
 // TODO: Remove edges for Graph<listS, VecS> may get wrong result.
 //
 void NARO::Algo::find_minimum_spanning_tree(NARO::Graph& g,
-                                            std::string& method)
+                                            const std::string& method)
 {
   if (method == "kruskal") {
     std::vector<NARO::Edge> sp_e_tree(boost::num_edges(g));
@@ -90,6 +90,30 @@ void NARO::Algo::find_minimum_spanning_tree(NARO::Graph& g,
   }
 }
 
+// -----------------------------------------------------------------------------
+// Prize-Collecting Steiner Forest (PCSF)
+// 
+void NARO::Algo::prize_collecting_steiner_forest(NARO::Graph& g,
+                                                 int num_clusters,
+                                                 NARO::Graph& sub)
+{
+  // Get the minimum spanning tree by prim algorithm
+  std::vector<NARO::Vertex> sp_v_tree(boost::num_vertices(g));
+  auto weightMap = boost::weight_map(boost::get(&NARO::gEdge::distance, g));
+  boost::prim_minimum_spanning_tree(g, &sp_v_tree[0], weightMap);
+  NARO::VertexIter v, vend;
+  for (boost::tie(v, vend) = boost::vertices(g); v != vend; ++v) {
+    auto it = std::find (sp_v_tree.begin(), sp_v_tree.end(), *v);
+    if (it == sp_v_tree.end()){
+      boost::clear_vertex(*v, g);
+    }
+  }
+  
+  weightMap = boost::weight_map(boost::get(&NARO::gEdge::distance, g));
+  // 1. Compute the distance matrix by the dijkstra algorithm
+  
+  //boost::dijkstra_shortest_paths
+}
 // -----------------------------------------------------------------------------
 // A wrapper of boost::stoer_wagner_min_cut
 void test_stoer_wagner_min_cut(NARO::Graph& gr, double* w);

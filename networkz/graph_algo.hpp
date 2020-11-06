@@ -18,6 +18,7 @@
 #include <boost/graph/prim_minimum_spanning_tree.hpp>
 #include <boost/graph/stoer_wagner_min_cut.hpp>
 #include <boost/graph/iteration_macros.hpp>
+#include <boost/graph/dijkstra_shortest_paths.hpp>
 
 #include "graph.hpp"
 
@@ -43,10 +44,10 @@ std::map<std::string, float> local_clustering_coefficient(NARO::Graph& g);
  * @brief Find minimum spanning tree
  *
  * @param[in] g A graph defined in `graph.hpp`
- * @param[in] method the algorithm name for finding MST
+ * @param[in] method the algorithm name for finding MST,  krustal or prim
  * @returns None
  */
-void find_minimum_spanning_tree(NARO::Graph& g, std::string& method);
+void find_minimum_spanning_tree(NARO::Graph& g, const std::string& method);
 /**
  * @brief A wrapper function for stoer wagner min_cut
  *
@@ -61,7 +62,12 @@ double stoer_wagner_min_cut(NARO::Graph& g, bool verbose=false);
  * @param[in] g A graph defined in `graph.hpp`
  * @param[in] num_clusters The number of clusters
  * @param[out] sub A PCSF subtrees
+ *
+ * Reference:
+ *  A divide and conquer matheuristic algorithm for the Prize-collecting Steiner Tree Problem.
+ *  Akhmedov M, Kwee I, and Montemanni R (2016). Computers and Operations Research, 70, 18-25.
  */
-
+void prize_collecting_steiner_forest(NARO::Graph& g, int num_clusters,
+                                     NARO::Graph& sub);
 }
 #endif /* graph_algo_hpp */

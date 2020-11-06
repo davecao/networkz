@@ -103,4 +103,13 @@ std::string repeat(std::string str, const std::size_t n);
 std::vector<std::string> readFileToLines(const std::string& file,
                                          const std::string& comment);
 
+/**
+ * @ brief Remove the line break safely
+ *
+ * @param[in] ifs a ifstream object
+ * @param[out] str a stripped string
+ * @returns an ifstream
+ */
+std::istream& safeGetLine(std::ifstream& is, std::string& str);
+
 #endif /* utility_h */

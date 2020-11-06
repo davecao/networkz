@@ -127,6 +127,16 @@ bool NARO::DataFrame::set_columnIndex_names(std::string& col_name, size_t i){
 // bilab::DataFrame::set_columnIndex_names()
 //
 bool NARO::DataFrame::set_columnIndex_names(std::vector<std::string>& col_name){
+  // Sort the column name
+  
+  auto sorted_colname = col_name;
+  std::sort(sorted_colname.begin(), sorted_colname.end());
+  auto duplicate = std::adjacent_find(sorted_colname.begin(),
+                                      sorted_colname.end());
+  if (duplicate != sorted_colname.end()) {
+    std::cout << "Found duplicate column name = " << *duplicate << "\n";
+    std::exit(-1);
+  }
   for(size_t i = 0; i != col_name.size(); i++){
     this->columnIndex->Names.insert(
       std::pair<std::string, size_t>(col_name[i], i));
@@ -260,8 +270,14 @@ bool NARO::DataFrame::select(std::vector<std::string>& c_names,
 void NARO::DataFrame::head(int n)
 {
   int nrows = static_cast<int>(this->num_rows);
+
   std::vector<std::string> col_names = this->get_columnIndex_names();
   std::vector<std::string> row_names = this->get_rowIndex_names();
+  if (this->num_rows != row_names.size()) {
+    std::cerr << "The number of rows is not consistent with that of row labels"
+    << std::endl;
+    std::exit(-1);
+  }
   // print header
   std::cout<< "\t" << join(col_names, "\t") << std::endl;
   int n_headers = (n > nrows) ? n : nrows;
