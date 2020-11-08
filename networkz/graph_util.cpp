@@ -80,9 +80,13 @@ Eigen::MatrixXd NARO::Corrcoef::operator()(const Eigen::MatrixXd& mat,
   // By array:
   Eigen::VectorXd diag = cov.diagonal();
   Eigen::VectorXd D = diag.array().rsqrt();
-  Eigen::MatrixXd cc = 1 - (cov.array().rowwise() * D.transpose().array()).colwise() * D.array();
+  Eigen::MatrixXd cc = ((cov.array().rowwise() * D.transpose().array())
+                       .colwise() * D.array()).abs();
+  Eigen::MatrixXd cc_dist = 1 - cc.array();
   if (verbose) {
+    mat2file(cov, "networkz_covariance_mat.csv");
     mat2file(cc, "networkz_corref_mat.csv");
+    mat2file(cc_dist, "networkz_corref_dist_mat.csv");
   }
 //  std::cout << "Raw matrix: arranged as rows\n";
 //  std::cout << mat << std::endl;
@@ -99,7 +103,7 @@ Eigen::MatrixXd NARO::Corrcoef::operator()(const Eigen::MatrixXd& mat,
 //  std::cout << "correlation coefficient matrix for mat:\n";
 //  std::cout << cc << std::endl;
 
-  return cc;
+  return cc_dist;
 }
 
 // -----------------------------------------------------------------------------
