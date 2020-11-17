@@ -128,7 +128,7 @@ bool create_graph_corr(NARO::Graph* g, NARO::DataFrame* df)
 // -----------------------------------------------------------------------------
 // The observations arranged as row variables.
 template<class DistType>
-bool NARO::create_graph(Graph* g, DataFrame* df,
+bool NARO::create_graph(NARO::Graph* g, DataFrame* df,
                         double dist_threshold, DistType dist_functor) {
   NARO::NameVertexMap name2vertex;
   NARO::NameVertexMap::iterator pos_u;
@@ -188,7 +188,7 @@ bool NARO::create_graph(Graph* g, DataFrame* df,
 // City block distance
 // -----------------------------------------------------------------------------
 template
-bool NARO::create_graph<NARO::CityBlock>(Graph *g, DataFrame *df,
+bool NARO::create_graph<NARO::CityBlock>(NARO::Graph *g, DataFrame *df,
                                          double dist_threshold,
                                          NARO::CityBlock dist_functor);
 // -----------------------------------------------------------------------------
@@ -196,7 +196,7 @@ bool NARO::create_graph<NARO::CityBlock>(Graph *g, DataFrame *df,
 // Euclidean distance
 // -----------------------------------------------------------------------------
 template
-bool NARO::create_graph<NARO::Euclidean>(Graph *g, DataFrame *df,
+bool NARO::create_graph<NARO::Euclidean>(NARO::Graph *g, DataFrame *df,
                                          double dist_threshold,
                                          NARO::Euclidean dist_functor);
 // -----------------------------------------------------------------------------
@@ -204,7 +204,7 @@ bool NARO::create_graph<NARO::Euclidean>(Graph *g, DataFrame *df,
 // Correlation coefficient
 // -----------------------------------------------------------------------------
 template
-bool NARO::create_graph<NARO::Corrcoef>(Graph *g, DataFrame *df,
+bool NARO::create_graph<NARO::Corrcoef>(NARO::Graph *g, DataFrame *df,
                                          double dist_threshold,
                                          NARO::Corrcoef dist_functor);
 
@@ -212,7 +212,7 @@ bool NARO::create_graph<NARO::Corrcoef>(Graph *g, DataFrame *df,
 // Function
 //
 // -----------------------------------------------------------------------------
-bool NARO::create_graph(Graph* g, DataFrame* df, double dist_threshold,
+bool NARO::create_graph(NARO::Graph* g, DataFrame* df, double dist_threshold,
                         std::string distance_type)
 {
   bool result = false;
@@ -233,7 +233,7 @@ bool NARO::create_graph(Graph* g, DataFrame* df, double dist_threshold,
 
 // -----------------------------------------------------------------------------
 //
-bool NARO::write_to_graphviz(std::string& filename, Graph& g)
+bool NARO::write_to_graphviz(std::string& filename, NARO::Graph& g)
 {
   // Write the graph to the output file
   NARO::fs::path path = filename;
@@ -260,5 +260,47 @@ bool NARO::write_to_graphviz(std::string& filename, Graph& g)
     [&] (auto& out) {out<< g.m_property->to_graphviz();}
   );
   graphfile.close();
+  return true;
+}
+
+// -----------------------------------------------------------------------------
+// Write the components to a txt
+//
+bool write_components(std::string& filename, NARO::Graph* g)
+{
+  // Write the graph to the output file
+  NARO::fs::path path = filename;
+  if (!NARO::fs::exists(path)){
+    if (!path.parent_path().empty()) {
+      try {
+        // Create directory
+        NARO::fs::create_directory(path.parent_path());
+      }
+      catch (NARO::fs::filesystem_error& err) {
+        std::cerr << err.what() << std::endl;
+      }
+    }
+  }
+  std::ofstream txtfile(filename);
+
+  auto n_vertices = boost::num_vertices(*g);
+  std::vector<int> component(n_vertices);
+  int num = boost::connected_components(*g, &component[0]);
+
+  std::vector< int >::size_type i;
+  for (i = 0; i != component.size(); ++i)
+    std::cout << "Vertex " << i << " is in component " << component[i]
+              << std::endl;
+  std::cout << std::endl;
+
+  NARO::VertexIter vi, vend;
+  for(boost::tie(vi, vend) = boost::vertices(*g); vi != vend; ++vi) {
+    auto vertex_name = (*g)[*vi].name;
+    auto degree = boost::degree(*vi, *g);
+    auto component_num = component[*vi];
+    txtfile << vertex_name << ":" << std::to_string(component_num) << ": "
+            << std::to_string(degree) << "  \n";
+  }
+
   return true;
 }

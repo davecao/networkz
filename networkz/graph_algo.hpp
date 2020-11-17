@@ -69,5 +69,17 @@ double stoer_wagner_min_cut(NARO::Graph& g, bool verbose=false);
  */
 void prize_collecting_steiner_forest(NARO::Graph& g, int num_clusters,
                                      NARO::Graph& sub);
+
+/**
+ * @brief Calculate Newman's (generalized) modularity of a connected network
+ *
+ * @param[in] g A undirected graph.
+ * @param[in] Q Newman's modularity.
+ *
+ * Reference:
+ *  M.E.J. Newman, "Modularity and community structure in networks",
+ *  Proc. Natl. Acad. Sci. USA 103, 8577-8582(2006)
+ */
+float modularity(NARO::Graph& g, float gamma);
 }
 #endif /* graph_algo_hpp */

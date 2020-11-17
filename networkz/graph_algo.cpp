@@ -92,7 +92,7 @@ void NARO::Algo::find_minimum_spanning_tree(NARO::Graph& g,
 
 // -----------------------------------------------------------------------------
 // Prize-Collecting Steiner Forest (PCSF)
-// 
+// Not Finished yet.
 void NARO::Algo::prize_collecting_steiner_forest(NARO::Graph& g,
                                                  int num_clusters,
                                                  NARO::Graph& sub)
@@ -116,7 +116,7 @@ void NARO::Algo::prize_collecting_steiner_forest(NARO::Graph& g,
 }
 // -----------------------------------------------------------------------------
 // A wrapper of boost::stoer_wagner_min_cut
-void test_stoer_wagner_min_cut(NARO::Graph& gr, double* w);
+//void test_stoer_wagner_min_cut(NARO::Graph& gr, double* w);
 
 double NARO::Algo::stoer_wagner_min_cut(NARO::Graph& g, bool verbose)
 {

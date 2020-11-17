@@ -70,7 +70,7 @@ struct Corrcoef
  *       between two nodes if their distance be lower than this value.
  * @param[in] distance_type the method name for distance computation. ['city', 'euc', 'corr'].
  */
-bool create_graph(Graph* g,
+bool create_graph(NARO::Graph* g,
                   DataFrame* df,
                   double dist_threshold,
                   std::string distance_type);
@@ -84,7 +84,7 @@ bool create_graph(Graph* g,
  * @param[in] dist_functor A template argument for selecting the method to calculate the distance.
  */
 template<class DistType>
-bool create_graph(Graph* g,
+bool create_graph(NARO::Graph* g,
                   DataFrame* df,
                   double dist_threshold,
                   DistType dist_functor);
@@ -97,8 +97,16 @@ bool create_graph(Graph* g,
  * @param[in] g A pointer of a Graph
  * @returns bool, true for success; false for failure
  */
-bool write_to_graphviz(std::string& filename, Graph& g);
+bool write_to_graphviz(std::string& filename, NARO::Graph& g);
 
+/**
+ * @brief A writer for output independent components in the network
+ *
+ * @param[in] filename the path of the output file
+ * @param[in] g A pointer of a Graph
+ * @returns bool, true for success; false for failure
+ */
+bool write_components(std::string& filename, NARO::Graph* g);
 } // Namespace NARO
 
 #endif /* graph_util_hpp */

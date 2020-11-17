@@ -49,6 +49,7 @@ void markdown_writer(std::ofstream& out, const std::string& message,
 // path.extension() -
 bool NARO::Report::write(const std::string& o_filename, Graph* g,
                          const std::string& fmt, double threshold,
+                         const std::string& distanceType,
                          bool verbose=false) {
   std::chrono::duration<double> seconds;
   boost::timer::cpu_timer timer;
@@ -86,6 +87,7 @@ bool NARO::Report::write(const std::string& o_filename, Graph* g,
     markdown_writer(ofile, "\n");
     
     markdown_writer(ofile, "Network info", 2);
+    markdown_writer(ofile, "Distance type: " + distanceType);
     markdown_writer(ofile, "Threshold for distance : " + std::to_string(
                                                             threshold));
     markdown_writer(ofile, "Nodes : " + std::to_string(n_vertices));

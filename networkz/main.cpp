@@ -162,12 +162,14 @@ int main(int argc, const char * argv[]) {
                       genes_graph, mst_algo_name);
   // ---------------------------------------------------------------------------
   // Find the minimum cut by stoer_wagner_min_cut
-  NARO::Algo::stoer_wagner_min_cut(genes_graph, true);
+  //NARO::Algo::stoer_wagner_min_cut(genes_graph, true);
   // ---------------------------------------------------------------------------
   // Create a report
   //
   NARO::Report report{o_graph_name, get_local_time(), "Networkz"};
-  if (!report.write(o_filename, &genes_graph, "md", d_threshold, verbose)){
+  if (!report.write(o_filename, &genes_graph, "md", d_threshold,
+                    distance_type,
+                    verbose)){
     std::cout << "Failed to write a log." <<std::endl;
     std::exit(-1);
   }
@@ -188,6 +190,7 @@ int main(int argc, const char * argv[]) {
       std::cout << " completed." << std::endl;
     }
   }
+  // write
   if (verbose) {
     std::cout << "Clean memory ... ";
     timer.start();
