@@ -84,6 +84,7 @@ bool NARO::Report::write(const std::string& o_filename, Graph* g,
     markdown_writer(ofile, "title : " + this->title);
     markdown_writer(ofile, "Author: " + this->author);
     markdown_writer(ofile, "Date  : " + this->date);
+    markdown_writer(ofile, "File  : " + this->i_file);
     markdown_writer(ofile, "\n");
     
     markdown_writer(ofile, "Network info", 2);
@@ -96,8 +97,8 @@ bool NARO::Report::write(const std::string& o_filename, Graph* g,
     markdown_writer(ofile, "\n");
     
     markdown_writer(ofile, "Vertex", 2);
-    markdown_writer(ofile, "[](Format - vertex name:component number:degree");
-    //auto vd = boost::vertices(*g);
+    markdown_writer(ofile, "# Format - vertex name:component number:degree");
+
     VertexIter vi, vend;
     for(boost::tie(vi, vend) = boost::vertices(*g); vi != vend; ++vi) {
       auto vertex_name = (*g)[*vi].name;
@@ -105,7 +106,7 @@ bool NARO::Report::write(const std::string& o_filename, Graph* g,
       auto component_num = component[*vi];
       markdown_writer(ofile,
                       vertex_name + ":" + std::to_string(component_num)
-                      + ": " + std::to_string(degree));
+                      + ":" + std::to_string(degree));
     }
 
   }else{

@@ -8,7 +8,8 @@
 
 #include "graph_algo.hpp"
 // -----------------------------------------------------------------------------
-void print(NARO::Graph& g) {
+void print(NARO::Graph& g)
+{
   NARO::VertexIter v, vend;
   for (boost::tie(v, vend) = vertices(g); v != vend; ++v) {
     std::cout<< g[*v].name << "("<< g[*v].weight <<")" << std::endl;
@@ -117,7 +118,6 @@ void NARO::Algo::prize_collecting_steiner_forest(NARO::Graph& g,
 // -----------------------------------------------------------------------------
 // A wrapper of boost::stoer_wagner_min_cut
 //void test_stoer_wagner_min_cut(NARO::Graph& gr, double* w);
-
 double NARO::Algo::stoer_wagner_min_cut(NARO::Graph& g, bool verbose)
 {
   //test_stoer_wagner_min_cut(g, &w);
@@ -146,6 +146,13 @@ double NARO::Algo::stoer_wagner_min_cut(NARO::Graph& g, bool verbose)
   return w;
 }
 
+// -----------------------------------------------------------------------------
+// Newman's modularity
+float NARO::Algo::community_detection(NARO::Graph& g, float gamma)
+{
+  
+  return 0.0;
+}
 // ----
 void test_stoer_wagner_min_cut(NARO::Graph& gr, double* w)
 {

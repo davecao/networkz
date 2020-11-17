@@ -25,7 +25,8 @@ struct Report
   std::string date;
   /// Author name
   std::string author;
-
+  /// Raw data file name
+  std::string i_file;
   /**
    * @brief Generate a simple report for a given graph to a file.
    *

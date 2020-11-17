@@ -80,6 +80,6 @@ void prize_collecting_steiner_forest(NARO::Graph& g, int num_clusters,
  *  M.E.J. Newman, "Modularity and community structure in networks",
  *  Proc. Natl. Acad. Sci. USA 103, 8577-8582(2006)
  */
-float modularity(NARO::Graph& g, float gamma);
+float community_detection(NARO::Graph& g, float gamma);
 }
 #endif /* graph_algo_hpp */

@@ -168,7 +168,7 @@ int main(int argc, const char * argv[]) {
   // ---------------------------------------------------------------------------
   // Create a report
   //
-  NARO::Report report{o_graph_name, get_local_time(), "Networkz"};
+  NARO::Report report{o_graph_name, get_local_time(), "Networkz", filename};
   if (!report.write(o_filename, &genes_graph, "md", d_threshold,
                     distance_type,
                     verbose)){
@@ -191,14 +191,6 @@ int main(int argc, const char * argv[]) {
     }else{
       std::cout << " completed." << std::endl;
     }
-  }
-  // write connected elements as a row
-  if (!NARO::write_components(comp_filename,
-                              filename,
-                              &genes_graph,
-                              get_local_time())){
-    std::cout << "Failed to write components "<< comp_filename <<std::endl;
-    std::exit(-1);
   }
   if (verbose) {
     std::cout << "Clean memory ... ";
