@@ -103,10 +103,15 @@ bool write_to_graphviz(std::string& filename, NARO::Graph& g);
  * @brief A writer for output independent components in the network
  *
  * @param[in] filename the path of the output file
+ * @param[in] inputfile the path of the input file
  * @param[in] g A pointer of a Graph
+ * @param[in] date The created date
  * @returns bool, true for success; false for failure
  */
-bool write_components(std::string& filename, NARO::Graph* g);
+bool write_components(const std::string& filename,
+                      std::string& inputfile,
+                      NARO::Graph* g,
+                      const std::string& date);
 } // Namespace NARO
 
 #endif /* graph_util_hpp */

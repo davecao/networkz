@@ -266,7 +266,10 @@ bool NARO::write_to_graphviz(std::string& filename, NARO::Graph& g)
 // -----------------------------------------------------------------------------
 // Write the components to a txt
 //
-bool write_components(std::string& filename, NARO::Graph* g)
+bool NARO::write_components(const std::string& filename,
+                            std::string& inputfile,
+                            NARO::Graph* g,
+                            const std::string& date)
 {
   // Write the graph to the output file
   NARO::fs::path path = filename;
@@ -288,18 +291,19 @@ bool write_components(std::string& filename, NARO::Graph* g)
   int num = boost::connected_components(*g, &component[0]);
 
   std::vector< int >::size_type i;
-  for (i = 0; i != component.size(); ++i)
-    std::cout << "Vertex " << i << " is in component " << component[i]
-              << std::endl;
-  std::cout << std::endl;
-
   NARO::VertexIter vi, vend;
-  for(boost::tie(vi, vend) = boost::vertices(*g); vi != vend; ++vi) {
-    auto vertex_name = (*g)[*vi].name;
-    auto degree = boost::degree(*vi, *g);
-    auto component_num = component[*vi];
-    txtfile << vertex_name << ":" << std::to_string(component_num) << ": "
-            << std::to_string(degree) << "  \n";
+  txtfile << "# File: "<< inputfile << " \n";
+  txtfile << "# Date: " << date << " \n";
+  txtfile << "# Total components: " << num << " \n";
+  for (i=0; i != component.size(); ++i) {
+    for(boost::tie(vi, vend) = boost::vertices(*g); vi != vend; ++vi) {
+      auto vertex_name = (*g)[*vi].name;
+      auto degree = boost::degree(*vi, *g);
+      auto component_num = component[*vi];
+      if (component_num == i)
+        txtfile << vertex_name << ":" << std::to_string(component_num) << ": "
+                << std::to_string(degree) << "  \n";
+    }
   }
 
   return true;

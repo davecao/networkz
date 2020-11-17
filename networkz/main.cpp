@@ -32,8 +32,10 @@ int main(int argc, const char * argv[]) {
   std::string graphviz_file = CLIARG::o_graph_file;
   // graph description file name.
   std::string o_filename = CLIARG::o_filename;
+  // graph component as text
+  std::string comp_filename = "networkz_components.txt";
   // graph title
-  std::string o_graph_name = CLIARG::o_graph_name;
+  const std::string o_graph_name = CLIARG::o_graph_name;
   // distance threshold to create an edge.
   double d_threshold = CLIARG::d_threshold;
   // method name for distance computation
@@ -190,7 +192,14 @@ int main(int argc, const char * argv[]) {
       std::cout << " completed." << std::endl;
     }
   }
-  // write
+  // write connected elements as a row
+  if (!NARO::write_components(comp_filename,
+                              filename,
+                              &genes_graph,
+                              get_local_time())){
+    std::cout << "Failed to write components "<< comp_filename <<std::endl;
+    std::exit(-1);
+  }
   if (verbose) {
     std::cout << "Clean memory ... ";
     timer.start();
