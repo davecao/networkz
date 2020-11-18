@@ -92,8 +92,8 @@ void NARO::Algo::find_minimum_spanning_tree(NARO::Graph& g,
 }
 
 // -----------------------------------------------------------------------------
-// Prize-Collecting Steiner Forest (PCSF)
-// Not Finished yet.
+// Prize-Collecting Steiner Forest (PCSF) Not Finished yet.
+//
 void NARO::Algo::prize_collecting_steiner_forest(NARO::Graph& g,
                                                  int num_clusters,
                                                  NARO::Graph& sub)
@@ -146,13 +146,6 @@ double NARO::Algo::stoer_wagner_min_cut(NARO::Graph& g, bool verbose)
   return w;
 }
 
-// -----------------------------------------------------------------------------
-// Newman's modularity
-float NARO::Algo::community_detection(NARO::Graph& g, float gamma)
-{
-  
-  return 0.0;
-}
 // ----
 void test_stoer_wagner_min_cut(NARO::Graph& gr, double* w)
 {
