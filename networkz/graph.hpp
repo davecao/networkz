@@ -121,7 +121,7 @@ namespace NARO {
    {}
    /// Constructor with a string label as title
    gGraph(const std::string& glabel)
-     : glabel(glabel)
+     : glabel(glabel), total_weights(-1)
    {}
    
  #if defined(PARALLEL_BGL)
@@ -135,8 +135,8 @@ namespace NARO {
     * To generate the current edge info in graphviz format
     */
    std::string to_graphviz();
-   
    std::string glabel; ///< Store the title for the graph
+   double total_weights; ///< Total weights of edges
  };
 
  #if defined(PARALLEL_BGL)
@@ -166,28 +166,40 @@ namespace NARO {
   * Graph-specific definitions
   *
   */
- /// Defined type for vertex
- typedef boost::graph_traits<Graph>::vertex_descriptor Vertex;
- /// Defined type for edge
- typedef boost::graph_traits<Graph>::edge_descriptor Edge;
- /// Get the type of vetex
- typedef boost::vertex_bundle_type<Graph>::type VertexType;
- /// Iterator for looping over vertices
- typedef boost::graph_traits<Graph>::vertex_iterator VertexIter;
- /// Iterator for looping over edges
- typedef boost::graph_traits<Graph>::edge_iterator EdgeIter;
- // abstract accessor for the clustering coefficients of vertices
- /// clustering property
- typedef boost::exterior_vertex_property<Graph, float> ClusteringProperty;
- /// clustering container
- typedef ClusteringProperty::container_type ClusteringContainer;
- /// clustering map
- typedef ClusteringProperty::map_type ClusteringMap;
- /// coefficients
- //typedef typename boost::property_traits<ClusteringMap>::value_type Coefficient;
- /// Container for testing the existence of a vertex in the graph
- typedef std::map<std::string, Vertex> NameVertexMap;
- 
+/// Defined type for vertex
+typedef boost::graph_traits<Graph>::vertex_descriptor Vertex;
+/// Defined type for edge
+typedef boost::graph_traits<Graph>::edge_descriptor Edge;
+/// Get the type of vetex
+typedef boost::vertex_bundle_type<Graph>::type VertexType;
+/// Iterator for looping over vertices
+typedef boost::graph_traits<Graph>::vertex_iterator VertexIter;
+/// Iterator for looping over edges
+typedef boost::graph_traits<Graph>::edge_iterator EdgeIter;
+
+// abstract accessor for the clustering coefficients of vertices
+/// clustering property
+typedef boost::exterior_vertex_property<Graph, float> ClusteringProperty;
+/// clustering container
+typedef ClusteringProperty::container_type ClusteringContainer;
+/// clustering map
+typedef ClusteringProperty::map_type ClusteringMap;
+/// coefficients
+//typedef typename boost::property_traits<ClusteringMap>::value_type Coefficient;
+/// Container for testing the existence of a vertex in the graph
+typedef std::map<std::string, Vertex> NameVertexMap;
+
+/**
+ * Graph-specific functions
+ *
+ */
+/// Total weights
+double get_total_weights(NARO::Graph& g, bool verbose);
+/// weighted degree of a node
+double get_node_weighted_degree(NARO::Graph& g, NARO::Edge& e, bool verbose);
+///  self loops
+double get_nb_selfloops(NARO::Graph& g, NARO::Vertex& v, bool verbose);
+
 } // End of namespace NARO
 
 

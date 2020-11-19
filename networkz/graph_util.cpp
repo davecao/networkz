@@ -128,12 +128,15 @@ bool create_graph_corr(NARO::Graph* g, NARO::DataFrame* df)
 // -----------------------------------------------------------------------------
 // The observations arranged as row variables.
 template<class DistType>
-bool NARO::create_graph(NARO::Graph* g, DataFrame* df,
-                        double dist_threshold, DistType dist_functor) {
+bool NARO::create_graph(NARO::Graph* g,
+                        DataFrame* df,
+                        double dist_threshold,
+                        DistType dist_functor) {
+  bool inserted;
+  double total_weights = 0.0L;
   NARO::NameVertexMap name2vertex;
   NARO::NameVertexMap::iterator pos_u;
   NARO::NameVertexMap::iterator pos_v;
-  bool inserted;
   NARO::Vertex u, v;
   // Get data:
   auto dist_mat = dist_functor(df->data, true);
@@ -178,9 +181,12 @@ bool NARO::create_graph(NARO::Graph* g, DataFrame* df,
       if (d < dist_threshold ) {
         // Create an edge conecting those two vertices
         boost::add_edge(u, v, NARO::gEdge{d}, *g);
+        // total sum of weights
+        total_weights += d;
       }
     }
   }
+  (*g)[boost::graph_bundle].total_weights = total_weights;
   return true;
 }
 // -----------------------------------------------------------------------------

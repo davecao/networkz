@@ -15,11 +15,14 @@
 #include "graph.hpp"
 
 namespace NARO::Algo::modularity {
+
 /**
  * @brief Calculate Newman's (generalized) modularity of a connected network
  *
  * @param[in] g A undirected graph.
  * @param[in] Q Newman's modularity.
+ *
+ * @TODO Not implemented yet
  *
  * Reference:
  *  M.E.J. Newman, "Modularity and community structure in networks",
@@ -27,20 +30,43 @@ namespace NARO::Algo::modularity {
  */
 float newman_comm(NARO::Graph& g, float gamma);
 
-/**
- * @brief Calculate the quality for a given graph (connected components)
- *
- * @param[in] g A weighted undirected graph
- * @param[out] quality quality of the graph ``g``
- */
-float quality(NARO::Graph& g);
+struct Modularity
+{
+  int node_size;
+  std::string name;
+  std::vector<int> n2c;
+  NARO::Graph* g_;
+  // used to compute the quality participation of each community
+  std::vector<long double> in, tot;
+  
+  Modularity(NARO::Graph& g, const std::string& n);
+  ~Modularity();
+  
+  inline void remove(int node, int comm, long double dnodecomm);
+  inline void insert(int node, int comm, long double dnodecomm);
+  inline long double gain(int node, int comm, long double dnodecomm,
+                          long double w_degree);
+  long double quality();
+};
 
-/**
- * @brief Louvain's community detection  for a weighted undirected graph (connected components)
- *
- * @param[in] g A weighted undirected graph
- * @return none
- */
-void louvain_comm(NARO::Graph& g);
+template<class QualityType>
+struct Louvain
+{
+  int number_pass;
+  int neigh_last;
+  long double eps_impr;
+  std::vector<long double> neigh_weight;
+  std::vector<int> neigh_pos;
+  
+  Louvain(NARO::Graph& g, int number_pass, long double eps_impr,
+          QualityType* q);
+  
+  void neigh_comm(int node);
+  void partition2graph();
+  void display_partition();
+  NARO::Graph partition2graph_binary();
+  bool one_level();
+};
+
 }
 #endif /* community_detection_hpp */
