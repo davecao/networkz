@@ -5,6 +5,7 @@
 //  Created by CAO Wei on 2020/08/21.
 //  Copyright © 2020 曹巍. All rights reserved.
 //
+#include <limits>  // std::numeric_limits<T>::max()
 
 #include "graph_util.hpp"
 // -----------------------------------------------------------------------------
@@ -133,11 +134,16 @@ bool NARO::create_graph(NARO::Graph* g,
                         double dist_threshold,
                         DistType dist_functor) {
   bool inserted;
+  
   double total_weights = 0.0L;
+  double max_weights = 0.0L;
+  double min_weights = std::numeric_limits<double>::max();
+  
   NARO::NameVertexMap name2vertex;
   NARO::NameVertexMap::iterator pos_u;
   NARO::NameVertexMap::iterator pos_v;
   NARO::Vertex u, v;
+  
   // Get data:
   auto dist_mat = dist_functor(df->data, true);
   size_t num_rows = dist_mat.rows();
@@ -179,14 +185,32 @@ bool NARO::create_graph(NARO::Graph* g,
       }
       double d = dist_mat(i, j);
       if (d < dist_threshold ) {
+        // total sum of weights
+        if (d < 0) {
+          std::cerr << "ERROR:The weights of the edge is negative"<<std::endl;
+          std::exit(-1);
+        }
         // Create an edge conecting those two vertices
         boost::add_edge(u, v, NARO::gEdge{d}, *g);
-        // total sum of weights
+        // Update the max and min weights
+        if (d > max_weights) {
+          max_weights = d;
+        }
+        if (d < min_weights) {
+          min_weights = d;
+        }
+        // Sum the weights
         total_weights += d;
       }
     }
   }
   (*g)[boost::graph_bundle].total_weights = total_weights;
+  (*g)[boost::graph_bundle].max_weights = max_weights;
+  (*g)[boost::graph_bundle].min_weights = min_weights;
+  (*g)[boost::graph_bundle].num_vertices =
+        static_cast<int>(boost::num_vertices(*g));
+  (*g)[boost::graph_bundle].num_edges =
+        static_cast<int>(boost::num_edges(*g));
   return true;
 }
 // -----------------------------------------------------------------------------

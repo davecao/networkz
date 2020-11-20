@@ -27,7 +27,14 @@ Modularity::Modularity(NARO::Graph& g, const std::string& n)
   in.resize(size);
   tot.resize(size);
   this->g_ = &g;
-  
+  bool verbose = false;
+  // initialization
+  for (int i=0 ; i<size ; i++) {
+    n2c[i] = i;
+    NARO::Vertex v = g[i];
+    in[i]  = NARO::get_nb_selfloops(g, v, verbose); //g.nb_selfloops(i);
+    tot[i] = NARO::get_node_weighted_degree(g, v, verbose); //g.weighted_degree(i);
+  }
 }
 // -----------------------------------------------------------------------------
 // struct Modularity: ~Modularity()
@@ -87,6 +94,7 @@ long double Modularity::quality()
   q /= m2;
   return q;
 }
+
 // -----------------------------------------------------------------------------
 // Louvain's modularity
 

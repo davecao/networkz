@@ -137,6 +137,10 @@ namespace NARO {
    std::string to_graphviz();
    std::string glabel; ///< Store the title for the graph
    double total_weights; ///< Total weights of edges
+   double max_weights; ///< maximum of weights
+   double min_weights; ///< minimum of weights
+   int num_vertices; ///< The number of vertices
+   int num_edges; ///< The number of edges
  };
 
  #if defined(PARALLEL_BGL)
@@ -193,11 +197,13 @@ typedef std::map<std::string, Vertex> NameVertexMap;
  * Graph-specific functions
  *
  */
+/// @TODO hub score and authority score: Kleinberg (1999, 200)
+std::tuple<double, double> get_hits_scores(NARO::Graph& g, NARO::Vertex& v);
 /// Total weights
 double get_total_weights(NARO::Graph& g, bool verbose);
 /// weighted degree of a node
-double get_node_weighted_degree(NARO::Graph& g, NARO::Edge& e, bool verbose);
-///  self loops
+double get_node_weighted_degree(NARO::Graph& g, NARO::Vertex& v, bool verbose);
+/// @TODO self loops
 double get_nb_selfloops(NARO::Graph& g, NARO::Vertex& v, bool verbose);
 
 } // End of namespace NARO

@@ -36,8 +36,10 @@ struct Modularity
   std::string name;
   std::vector<int> n2c;
   NARO::Graph* g_;
-  // used to compute the quality participation of each community
-  std::vector<long double> in, tot;
+  // Used to compute the quality participation of each community
+  // 1.
+  std::vector<long double> in;
+  std::vector<long double> tot;
   
   Modularity(NARO::Graph& g, const std::string& n);
   ~Modularity();

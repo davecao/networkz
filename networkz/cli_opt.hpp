@@ -164,7 +164,7 @@ namespace CLIARG {
         std::exit(-1);
       }
     }
-    // Check required arguments
+    // Check required arguments
     if ( vm.count("infile") ) {
       i_filename = vm["infile"].as<std::string>();
       if( !FileExists(i_filename) ) {
