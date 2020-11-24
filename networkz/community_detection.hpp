@@ -13,8 +13,9 @@
 #include <iomanip>
 
 #include "graph.hpp"
+#include "modularity.hpp"
 
-namespace NARO::Algo::modularity {
+namespace NARO::Algo::Community {
 
 /**
  * @brief Calculate Newman's (generalized) modularity of a connected network
@@ -28,47 +29,53 @@ namespace NARO::Algo::modularity {
  *  M.E.J. Newman, "Modularity and community structure in networks",
  *  Proc. Natl. Acad. Sci. USA 103, 8577-8582(2006)
  */
-float newman_comm(NARO::Graph& g, float gamma);
+//float newman_comm(NARO::Graph& g, float gamma);
 
-struct Modularity
-{
-  int node_size;
-  std::string name;
-  std::vector<int> n2c;
-  NARO::Graph* g_;
-  // Used to compute the quality participation of each community
-  // 1.
-  std::vector<long double> in;
-  std::vector<long double> tot;
-  
-  Modularity(NARO::Graph& g, const std::string& n);
-  ~Modularity();
-  
-  inline void remove(int node, int comm, long double dnodecomm);
-  inline void insert(int node, int comm, long double dnodecomm);
-  inline long double gain(int node, int comm, long double dnodecomm,
-                          long double w_degree);
-  long double quality();
-};
 
+/**
+ * @brief Louvain community detections for a network
+ *
+ * @param[in] g A undirected graph.
+ * @param[in] Q modularity.
+ *
+ * @TODO Not completed yet
+ *
+ * Reference:
+ *  Blondel, Vincent D; Guillaume, Jean-Loup; Lambiotte, Renaud; Lefebvre, Etienne (9 October 2008).
+ *  "Fast unfolding of communities in large networks".
+ *  Journal of Statistical Mechanics: Theory and Experiment. 2008 (10): P10008.
+ */
+// Primary template
 template<class QualityType>
 struct Louvain
 {
-  int number_pass;
-  int neigh_last;
+  int number_pass; ///< The number of pass
+  int neigh_last; ///< 
+  int display_level = -2;
+  int kmin = 1;
+  
+  long double precision = 0.000001L;
+  long double alpha = 0.5L;
+  long double sum_se = 0.0L;
+  long double sum_sq = 0.0L;
+  long double max_w = 1.0L;
   long double eps_impr;
+  
   std::vector<long double> neigh_weight;
   std::vector<int> neigh_pos;
   
-  Louvain(NARO::Graph& g, int number_pass, long double eps_impr,
-          QualityType* q);
+  QualityType* qual;
+  
+  Louvain(int number_pass, long double eps_impr, QualityType* q);
   
   void neigh_comm(int node);
   void partition2graph();
   void display_partition();
-  NARO::Graph partition2graph_binary();
+  NARO::Graph* partition2graph_binary();
   bool one_level();
+  void louvain();
 };
 
 }
+
 #endif /* community_detection_hpp */

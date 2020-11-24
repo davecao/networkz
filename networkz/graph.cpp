@@ -82,7 +82,7 @@ double NARO::get_total_weights(NARO::Graph& g, bool verbose=false){
 // bilab::gGraph::get_node_weighted_degree
 //
 double NARO::get_node_weighted_degree(NARO::Graph& g,
-                                      NARO::Vertex& v,
+                                      const NARO::Vertex& v,
                                       bool verbose=false)
 {
   double w_degree = 0.0L;
@@ -91,20 +91,24 @@ double NARO::get_node_weighted_degree(NARO::Graph& g,
     auto edge = boost::edge(v, neighbor, g).first;
     w_degree += g[edge].distance;
   }
-  //NARO::VertexIter i, end;
-  //for (boost::tie(i, end) = boost::vertices(g); i != end; ++i) {
-    // Vertex name
-  //  std::string v_name = g[*i].name;
-    //c = boost::get(cm, *i);
-    //cc.insert(std::make_pair(v_name, c));
-  //}
+
   return w_degree;
 }
 ///  self loops
 double NARO::get_nb_selfloops(NARO::Graph& g,
-                              NARO::Vertex& v,
+                              const NARO::Vertex& v,
                               bool verbose=false)
 {
   double re = 0.0L;
+  auto selfloop_edge = boost::edge(v, v, g);
+  if (selfloop_edge.second){
+    auto edge = selfloop_edge.first;
+    auto dist = g[edge].distance;
+    if (dist != -1 && dist >= 0){
+      return dist;
+    } else {
+      return 1.0L;
+    }
+  }
   return re;
 }

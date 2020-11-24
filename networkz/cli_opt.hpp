@@ -139,13 +139,12 @@ namespace CLIARG {
       //BOOST_CHECK_EQUAL(std::string(e.what()), "Unknown option");
     }
     
-    if( vm.count("help") ){
+    if ( vm.count("help") ){
       // print help info
       std::cout << general << std::endl;
       std::exit(0);
     }
-    
-    if( vm.count("version") ){
+    if ( vm.count("version") ){
       //print version info
       std::cout << VersionInfo::version << std::endl;
       exit(0);
@@ -164,7 +163,6 @@ namespace CLIARG {
         std::exit(-1);
       }
     }
-    // Check required arguments
     if ( vm.count("infile") ) {
       i_filename = vm["infile"].as<std::string>();
       if( !FileExists(i_filename) ) {

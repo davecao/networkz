@@ -70,4 +70,5 @@ double stoer_wagner_min_cut(NARO::Graph& g, bool verbose=false);
 void prize_collecting_steiner_forest(NARO::Graph& g, int num_clusters,
                                      NARO::Graph& sub);
 }
+
 #endif /* graph_algo_hpp */

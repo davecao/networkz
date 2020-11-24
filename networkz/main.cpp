@@ -11,11 +11,14 @@
 #include "cli_opt.hpp"
 #include "utility.hpp"
 #include "graph.hpp"
+#include "community_detection.hpp"
 #include "graph_report.hpp"
 #include "FileReaderFactory.hpp"
 #include "TSVReader.hpp"
 #include "graph_util.hpp"
 #include "graph_algo.hpp"
+
+
 
 int main(int argc, const char * argv[]) {
   // ---------------------------------------------------------------------------
@@ -48,6 +51,8 @@ int main(int argc, const char * argv[]) {
   std::string comment = "#";
   int header = 0;
   
+  // Precision
+  long double precision = 0.000001L;
   // For measuring elapsed time
   std::chrono::duration<double> seconds;
   // manually start timer
@@ -133,7 +138,7 @@ int main(int argc, const char * argv[]) {
     std::cout << " Completed." << std::endl;
   }
   // ---------------------------------------------------------------------------
-  // 2. Compute the cityblock distance between any two genes
+  // 2. Compute the distance between any two genes
   // ---------------------------------------------------------------------------
   // Instantiate a graph
   if (verbose) {
@@ -165,6 +170,14 @@ int main(int argc, const char * argv[]) {
   // ---------------------------------------------------------------------------
   // Find the minimum cut by stoer_wagner_min_cut
   //NARO::Algo::stoer_wagner_min_cut(genes_graph, true);
+  
+  // ---------------------------------------------------------------------------
+  // modularity::Modularity
+  int level = 0;
+  NARO::Algo::Community::Modularity quality(genes_graph, level);
+  NARO::Algo::Community::Louvain<NARO::Algo::Community::Modularity> louvain(-1, precision, &quality);
+  louvain.louvain();
+
   // ---------------------------------------------------------------------------
   // Create a report
   //

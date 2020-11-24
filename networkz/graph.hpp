@@ -78,6 +78,8 @@ namespace NARO {
    
    std::string name; ///< Vertice name
    double weight; ///< Verice weight
+   int community_id; ///< Community id
+   int component_id; ///< Component id
  };
  
 /**
@@ -121,7 +123,7 @@ namespace NARO {
    {}
    /// Constructor with a string label as title
    gGraph(const std::string& glabel)
-     : glabel(glabel), total_weights(-1)
+     : glabel(glabel), total_weights(-1), level(0)
    {}
    
  #if defined(PARALLEL_BGL)
@@ -141,6 +143,7 @@ namespace NARO {
    double min_weights; ///< minimum of weights
    int num_vertices; ///< The number of vertices
    int num_edges; ///< The number of edges
+   int level;
  };
 
  #if defined(PARALLEL_BGL)
@@ -202,9 +205,13 @@ std::tuple<double, double> get_hits_scores(NARO::Graph& g, NARO::Vertex& v);
 /// Total weights
 double get_total_weights(NARO::Graph& g, bool verbose);
 /// weighted degree of a node
-double get_node_weighted_degree(NARO::Graph& g, NARO::Vertex& v, bool verbose);
-/// @TODO self loops
-double get_nb_selfloops(NARO::Graph& g, NARO::Vertex& v, bool verbose);
+double get_node_weighted_degree(NARO::Graph& g,
+                                const NARO::Vertex& v,
+                                bool verbose);
+/// Get selfloop for the node
+double get_nb_selfloops(NARO::Graph& g,
+                        const NARO::Vertex& v,
+                        bool verbose);
 
 } // End of namespace NARO
 
