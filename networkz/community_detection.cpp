@@ -51,11 +51,23 @@ void Louvain<QualityType>::neigh_comm(int node)
   neigh_last = 0;
 
   auto neighbours = boost::adjacent_vertices(node, *qual->g_);
+  //auto degree = boost::degree(node, *qual->g_);
   neigh_pos[0] = qual->n2c[node];
   neigh_weight[neigh_pos[0]] = 0;
   neigh_last = 1;
   
-  
+  for (auto neighbor : boost::make_iterator_range(neighbours)) {
+    int neigh_comm = qual->n2c[neighbor];
+    auto edge = boost::edge(node, neighbor, *qual->g_).first;
+    long double neight_w = (*qual->g_)[edge].distance;
+    if (neighbor != node) {
+      if (neigh_weight[neigh_comm] == -1) {
+        neigh_weight[neigh_comm] = 0.0L;
+        neigh_pos[neigh_last++] = neigh_comm;
+      }
+      neigh_weight[neigh_comm] += neight_w;
+    }
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -63,7 +75,23 @@ void Louvain<QualityType>::neigh_comm(int node)
 template<class QualityType>
 void Louvain<QualityType>::partition2graph()
 {
-  
+  std::vector<int> renumber(qual->node_size, -1);
+  for (int node = 0; node < qual->node_size; node++) {
+    renumber[qual->n2c[node]]++;
+  }
+  int end = 0;
+  for (int i=0 ; i< qual->node_size ; i++){
+    if (renumber[i] != -1){
+      renumber[i]=end++;
+    }
+  }
+  for (int i=0 ; i< qual->node_size ; i++) {
+    auto neighbours = boost::adjacent_vertices(i, *qual->g_);
+    for (auto neighbor : boost::make_iterator_range(neighbours)) {
+      std::cout << renumber[qual->n2c[i]] << " "
+                << renumber[qual->n2c[neighbor]] << std::endl;
+    }
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -71,7 +99,18 @@ void Louvain<QualityType>::partition2graph()
 template<class QualityType>
 void Louvain<QualityType>::display_partition()
 {
-  
+  std::vector<int> renumber(qual->node_size, -1);
+  for (int node=0 ; node < qual->node_size ; node++) {
+    renumber[qual->n2c[node]]++;
+  }
+
+  int end=0;
+  for (int i=0 ; i < qual->node_size ; i++)
+    if (renumber[i]!=-1)
+      renumber[i] = end++;
+
+  for (int i=0 ; i < qual->node_size ; i++)
+    std::cout << i << " " << renumber[qual->n2c[i]] << std::endl;
 }
 
 // -----------------------------------------------------------------------------
@@ -81,6 +120,26 @@ template<class QualityType>
 NARO::Graph* Louvain<QualityType>::partition2graph_binary()
 {
   NARO::Graph* sub = nullptr;
+  // Renumber communities
+  std::vector<int> renumber(qual->node_size, -1);
+  for (int node=0 ; node < qual->node_size ; node++)
+    renumber[qual->n2c[node]]++;
+  
+  int last = 0;
+  for (int i=0 ; i < qual->node_size ; i++) {
+    if (renumber[i] != -1)
+      renumber[i] = last++;
+  }
+  // Compute communities
+  std::vector<std::vector<int> > comm_nodes(last);
+  std::vector<int> comm_weight(last, 0);
+  
+  for (int node = 0 ; node < (qual->node_size) ; node++) {
+    comm_nodes[renumber[qual->n2c[node]]].push_back(node);
+    
+    //comm_weight[renumber[qual->n2c[node]]] += (qual->g_).nodes_w[node];
+  }
+
   return sub;
 }
 
