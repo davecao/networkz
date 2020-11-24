@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['weight_133',['weight',['../struct_n_a_r_o_1_1g_vertex.html#a2a72b0f48a1167b0d5df9aa02d2c4b7b',1,'NARO::gVertex']]]
+  ['sep_153',['sep',['../class_n_a_r_o_1_1_t_s_v_reader.html#a08ebeaa5eb16ee4845e20832f9554045',1,'NARO::TSVReader']]],
+  ['sorted_154',['sorted',['../struct_n_a_r_o_1_1_index.html#a0826fc7855d6f370ef75201692c08aac',1,'NARO::Index']]]
 ];

@@ -44,6 +44,7 @@ set(SOURCE_FILES
   graph_algo.cpp
   utility.cpp
   community_detection.cpp
+  modularity.cpp
   main.cpp
 )
 

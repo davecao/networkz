@@ -104,7 +104,7 @@ long double Modularity::total_weights()
 
 // -----------------------------------------------------------------------------
 // struct Modularity: remove()
-inline void Modularity::remove(int node, int comm, long double dnodecomm)
+void Modularity::remove(int node, int comm, long double dnodecomm)
 {
   assert(node >= 0 && node < node_size);
   bool verbose = false;
@@ -118,7 +118,7 @@ inline void Modularity::remove(int node, int comm, long double dnodecomm)
 
 // -----------------------------------------------------------------------------
 // struct Modularity: insert()
-inline void Modularity::insert(int node, int comm, long double dnodecomm)
+void Modularity::insert(int node, int comm, long double dnodecomm)
 {
   assert(node >= 0 && node < node_size);
   bool verbose = false;
@@ -133,7 +133,7 @@ inline void Modularity::insert(int node, int comm, long double dnodecomm)
 
 // -----------------------------------------------------------------------------
 // struct Modularity: gain()
-inline long double Modularity::gain(int node, int comm, long double dnc,
+long double Modularity::gain(int node, int comm, long double dnc,
                  long double degc)
 {
   assert(node >= 0 && node < node_size);

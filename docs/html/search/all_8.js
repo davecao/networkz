@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['makeraw_31',['makeRaw',['../class_n_a_r_o_1_1_file_reader_factory.html#acb2c3375cfaacb2767aa9ea1283633ec',1,'NARO::FileReaderFactory']]],
-  ['makeunique_32',['makeUnique',['../class_n_a_r_o_1_1_file_reader_factory.html#a4f1f92cc632aa1c64d7ead4d48ad49c9',1,'NARO::FileReaderFactory']]]
+  ['louvain_34',['Louvain',['../struct_n_a_r_o_1_1_algo_1_1_community_1_1_louvain.html',1,'NARO::Algo::Community']]]
 ];

@@ -1,5 +1,11 @@
 var searchData=
 [
-  ['operator_28_29_37',['operator()',['../struct_n_a_r_o_1_1_data_frame.html#aee0ea08e195566f8baf6bd4738a3f748',1,'NARO::DataFrame::operator()()'],['../struct_n_a_r_o_1_1_city_block.html#ae905db0f2b1aa1331e92a07dd522fc51',1,'NARO::CityBlock::operator()()'],['../struct_n_a_r_o_1_1_euclidean.html#a3976120351f80a79aaef3151e789d65f',1,'NARO::Euclidean::operator()()'],['../struct_n_a_r_o_1_1_corrcoef.html#a83eefba7aca7c3052942305d54d14910',1,'NARO::Corrcoef::operator()()']]],
-  ['orderednames_38',['OrderedNames',['../struct_n_a_r_o_1_1_index.html#a3d00f943e96f77056cf4c2d669a11ba0',1,'NARO::Index']]]
+  ['n2c_40',['n2c',['../struct_n_a_r_o_1_1_algo_1_1_community_1_1_modularity.html#a2ca36a301f074842071cd495e1b22966',1,'NARO::Algo::Community::Modularity']]],
+  ['name_41',['name',['../struct_n_a_r_o_1_1g_vertex.html#a0fcf5bab4527a8b2dd7cddda4f9394d9',1,'NARO::gVertex']]],
+  ['names_42',['Names',['../struct_n_a_r_o_1_1_index.html#a9894b6bc72aeba032508b5547bdb6ebd',1,'NARO::Index']]],
+  ['num_5fcols_43',['num_cols',['../struct_n_a_r_o_1_1_data_frame.html#a2159d510f5f924b92b81bdc3525938f2',1,'NARO::DataFrame']]],
+  ['num_5fedges_44',['num_edges',['../struct_n_a_r_o_1_1g_graph.html#a231d46ec8192e74db6ca638805a815a5',1,'NARO::gGraph']]],
+  ['num_5frows_45',['num_rows',['../struct_n_a_r_o_1_1_data_frame.html#a17ca94da14ce576adfdfc8ea343c0f1b',1,'NARO::DataFrame']]],
+  ['num_5fvertices_46',['num_vertices',['../struct_n_a_r_o_1_1g_graph.html#a6af6d47ec8fdc4cb2fe370c4f160e33d',1,'NARO::gGraph']]],
+  ['number_5fpass_47',['number_pass',['../struct_n_a_r_o_1_1_algo_1_1_community_1_1_louvain.html#a27c956642661e02ad87db3062cbe70b1',1,'NARO::Algo::Community::Louvain']]]
 ];

@@ -12,7 +12,7 @@ Generate a simple report for a given graph to a file.
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-bool \mbox{\hyperlink{struct_n_a_r_o_1_1_report_a6082ef083a3c533961396388fa1a5b50}{write}} (const std\+::string \&o\+\_\+filename, Graph $\ast$g, const std\+::string \&fmt, double threshold, bool verbose)
+bool \mbox{\hyperlink{struct_n_a_r_o_1_1_report_a9fa2a3e352104f895bcb3c8f14deeb38}{write}} (const std\+::string \&o\+\_\+filename, Graph $\ast$g, const std\+::string \&fmt, double threshold, const std\+::string \&distance\+Type, bool verbose)
 \begin{DoxyCompactList}\small\item\em Generate a simple report for a given graph to a file. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
@@ -25,18 +25,21 @@ std\+::string \mbox{\hyperlink{struct_n_a_r_o_1_1_report_a8a9d208c895832ddb888a0
 \begin{DoxyCompactList}\small\item\em The created date for output. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{struct_n_a_r_o_1_1_report_a9f3a84ccf2aaa045198497da69da5efb}\label{struct_n_a_r_o_1_1_report_a9f3a84ccf2aaa045198497da69da5efb}} 
 std\+::string \mbox{\hyperlink{struct_n_a_r_o_1_1_report_a9f3a84ccf2aaa045198497da69da5efb}{author}}
-\begin{DoxyCompactList}\small\item\em Author name. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Author name. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_n_a_r_o_1_1_report_a36042a867a10db6c728ba0f1e8193fed}\label{struct_n_a_r_o_1_1_report_a36042a867a10db6c728ba0f1e8193fed}} 
+std\+::string \mbox{\hyperlink{struct_n_a_r_o_1_1_report_a36042a867a10db6c728ba0f1e8193fed}{i\+\_\+file}}
+\begin{DoxyCompactList}\small\item\em Raw data file name. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 Generate a simple report for a given graph to a file. 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{struct_n_a_r_o_1_1_report_a6082ef083a3c533961396388fa1a5b50}\label{struct_n_a_r_o_1_1_report_a6082ef083a3c533961396388fa1a5b50}} 
+\mbox{\Hypertarget{struct_n_a_r_o_1_1_report_a9fa2a3e352104f895bcb3c8f14deeb38}\label{struct_n_a_r_o_1_1_report_a9fa2a3e352104f895bcb3c8f14deeb38}} 
 \index{NARO::Report@{NARO::Report}!write@{write}}
 \index{write@{write}!NARO::Report@{NARO::Report}}
 \doxysubsubsection{\texorpdfstring{write()}{write()}}
-{\footnotesize\ttfamily bool N\+A\+R\+O\+::\+Report\+::write (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{o\+\_\+filename,  }\item[{Graph $\ast$}]{g,  }\item[{const std\+::string \&}]{fmt,  }\item[{double}]{threshold,  }\item[{bool}]{verbose = {\ttfamily false} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily bool N\+A\+R\+O\+::\+Report\+::write (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{o\+\_\+filename,  }\item[{Graph $\ast$}]{g,  }\item[{const std\+::string \&}]{fmt,  }\item[{double}]{threshold,  }\item[{const std\+::string \&}]{distance\+Type,  }\item[{bool}]{verbose = {\ttfamily false} }\end{DoxyParamCaption})}
 
 
 
@@ -52,6 +55,8 @@ Generate a simple report for a given graph to a file.
 \hline
 \mbox{\texttt{ in}}  & {\em threshold} & the upper bound for the distance to create an edge between any two vertices \\
 \hline
+\mbox{\texttt{ in}}  & {\em distance\+Type} & the name for distance caculation \\
+\hline
 \mbox{\texttt{ in}}  & {\em verbose} & bool, true to print more info \\
 \hline
 \end{DoxyParams}
@@ -59,5 +64,5 @@ Generate a simple report for a given graph to a file.
 
 The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-/\+Users/davecao/\+Documents/\+N\+A\+R\+O/projects/proj\+\_\+yokoi/silk\+\_\+moth/networkz/networkz/graph\+\_\+report.\+hpp\item 
-/\+Users/davecao/\+Documents/\+N\+A\+R\+O/projects/proj\+\_\+yokoi/silk\+\_\+moth/networkz/networkz/graph\+\_\+report.\+cpp\end{DoxyCompactItemize}
+/\+Users/davecao/\+N\+A\+R\+O/projects/proj\+\_\+yokoi/silk\+\_\+moth/networkz/networkz/graph\+\_\+report.\+hpp\item 
+/\+Users/davecao/\+N\+A\+R\+O/projects/proj\+\_\+yokoi/silk\+\_\+moth/networkz/networkz/graph\+\_\+report.\+cpp\end{DoxyCompactItemize}

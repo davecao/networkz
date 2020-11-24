@@ -34,9 +34,9 @@ struct Modularity
   Modularity(NARO::Graph& g, int level);
   ~Modularity();
 
-  inline void remove(int node, int comm, long double dnodecomm);
-  inline void insert(int node, int comm, long double dnodecomm);
-  inline long double gain(int node, int comm, long double dnodecomm,
+  void remove(int node, int comm, long double dnodecomm);
+  void insert(int node, int comm, long double dnodecomm);
+  long double gain(int node, int comm, long double dnodecomm,
                           long double w_degree);
   // Quality computation
   long double quality();
@@ -48,7 +48,6 @@ struct Modularity
   long double total_weights();
 
 };
-
 
 } // End of NARO::Algo::Community
 #endif /* modularity_hpp */

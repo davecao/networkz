@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['orderednames_128',['OrderedNames',['../struct_n_a_r_o_1_1_index.html#a3d00f943e96f77056cf4c2d669a11ba0',1,'NARO::Index']]]
+  ['max_5fweights_141',['max_weights',['../struct_n_a_r_o_1_1g_graph.html#ad011168d2dd92c73ded7776747510582',1,'NARO::gGraph']]],
+  ['min_5fweights_142',['min_weights',['../struct_n_a_r_o_1_1g_graph.html#a0118e914f1ab143fd719c9ba882bc8ba',1,'NARO::gGraph']]]
 ];

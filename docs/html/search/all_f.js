@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['_7edataframe_58',['~DataFrame',['../struct_n_a_r_o_1_1_data_frame.html#acbf60cd61866a74f8852f8e7567813e9',1,'NARO::DataFrame']]],
-  ['_7efilereaderbase_59',['~FileReaderBase',['../class_n_a_r_o_1_1_file_reader_base.html#adb7f07b7dac87378e2732f66d2092c9b',1,'NARO::FileReaderBase']]],
-  ['_7efilereaderfactory_60',['~FileReaderFactory',['../class_n_a_r_o_1_1_file_reader_factory.html#ab82c781d71382203d76ad93ad998fbff',1,'NARO::FileReaderFactory']]],
-  ['_7eifilereader_61',['~IFileReader',['../struct_n_a_r_o_1_1_i_file_reader.html#a0282fca17e04eb4a57ef36b6cca0d790',1,'NARO::IFileReader']]],
-  ['_7etsvreader_62',['~TSVReader',['../class_n_a_r_o_1_1_t_s_v_reader.html#af1b3e80b77bb697d80cf0d4583bd2a13',1,'NARO::TSVReader']]]
+  ['weight_68',['weight',['../struct_n_a_r_o_1_1g_vertex.html#a2a72b0f48a1167b0d5df9aa02d2c4b7b',1,'NARO::gVertex']]],
+  ['write_69',['write',['../struct_n_a_r_o_1_1_report.html#a9fa2a3e352104f895bcb3c8f14deeb38',1,'NARO::Report']]]
 ];
