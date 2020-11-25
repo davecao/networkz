@@ -112,3 +112,37 @@ double NARO::get_nb_selfloops(NARO::Graph& g,
   }
   return re;
 }
+// -----------------------------------------------------------------------------
+// bilab::get_filtered_map()
+//
+NARO::Filtered NARO::get_filtered_map(NARO::Graph& g, int cId, bool verbose)
+{
+  NARO::filter_communityId predicate{&g, cId};
+  NARO::Filtered fg(g, predicate, predicate);
+  if (verbose) {
+    boost::write_graphviz(std::cout, fg,
+                          boost::make_label_writer(
+                          boost::get(&NARO::gVertex::name, fg)));
+  }
+  return fg;
+}
+
+// -----------------------------------------------------------------------------
+// bilab::get_community_byId()
+NARO::by_community_idx_t
+NARO::get_community_byId (NARO::Graph& g, int cId, bool verbose)
+
+{ // 1. define vertexMap
+  NARO::by_community_idx_t commId_idx;
+  auto reindex = [&] {
+    commId_idx.clear();
+    for (auto vd : boost::make_iterator_range(boost::vertices(g))) {
+      if (g[vd].communityId == cId)
+        commId_idx.insert(g[vd]);
+    }
+  };
+  reindex();
+  if (verbose)
+    std::cout << "Index: " << commId_idx.size() << " elements\n";
+  return commId_idx;
+}

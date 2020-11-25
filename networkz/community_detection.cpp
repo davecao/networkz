@@ -251,17 +251,20 @@ void Louvain<QualityType>::louvain()
     }
     improvement = this->one_level();
     new_qual = this->qual->quality();
-    
-    //if (++level==display_level)
-    //  (c.qual)->g.display();
-    //if (display_level==-1)
-    //  c.display_partition();
+    // increase the level
+    level++;
+    // update the community ids for all nodes
     NARO::Graph* gsub;
     gsub = this->partition2graph_binary();
     nb_calls++;
+    // recursive
     
-    
-    
+    if (verbose) {
+      std::cout <<"  quality increased from " << quality << " to "
+                << new_qual << std::endl;
+    }
+    quality = new_qual;
+
   } while (improvement);
 }
 // Specialization

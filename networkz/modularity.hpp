@@ -25,7 +25,12 @@ struct Modularity
   int edge_size;
 
   NARO::Graph* g_;
-  
+
+  // Store graph connected components
+  //std::vector<NARO::VertexIndex> rank;
+  //std::vector<NARO::Vertex> parent;
+  //boost::disjoint_sets<NARO::Rank, NARO::Parent> ds;
+  //NARO::Components* components;
   // Used to compute the quality participation of each community
   std::vector<int> n2c; ///< store nodes's community ids
   std::vector<long double> in;
@@ -41,7 +46,7 @@ struct Modularity
   // Quality computation
   long double quality();
 
-  // Graph operations
+  // Graph operations with community ids
   int num_nodes();
   int num_edges();
   long double weighted_degree(int node);

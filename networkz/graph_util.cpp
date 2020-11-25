@@ -204,6 +204,8 @@ bool NARO::create_graph(NARO::Graph* g,
       }
     }
   }
+  
+  // Add the graph properties
   (*g)[boost::graph_bundle].total_weights = total_weights;
   (*g)[boost::graph_bundle].max_weights = max_weights;
   (*g)[boost::graph_bundle].min_weights = min_weights;
@@ -211,6 +213,18 @@ bool NARO::create_graph(NARO::Graph* g,
         static_cast<int>(boost::num_vertices(*g));
   (*g)[boost::graph_bundle].num_edges =
         static_cast<int>(boost::num_edges(*g));
+ 
+  // Assign component id
+  int n_vertices = static_cast<int>(boost::num_vertices(*g));
+  std::vector<int> component(n_vertices);
+  int num = boost::connected_components(*g, &component[0]);
+  int comm_id = 0;
+  NARO::VertexIter vi, vend;
+  for(boost::tie(vi, vend) = boost::vertices(*g); vi != vend; ++vi) {
+    (*g)[*vi].communityId = comm_id;
+    (*g)[*vi].componentId = component[*vi];
+    comm_id++;
+  }
   return true;
 }
 // -----------------------------------------------------------------------------

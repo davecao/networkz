@@ -43,10 +43,17 @@
 #include <boost/graph/kruskal_min_spanning_tree.hpp>
 #include <boost/graph/prim_minimum_spanning_tree.hpp>
 #include <boost/graph/connected_components.hpp>
+#include <boost/graph/incremental_components.hpp>
+#include <boost/pending/disjoint_sets.hpp>
+#include <boost/graph/filtered_graph.hpp>
+#include <boost/intrusive/set_hook.hpp>
+#include <boost/intrusive/set.hpp>
 
 #endif
 
 #include "utility.hpp"
+
+namespace bi = boost::intrusive;
 
 namespace NARO {
 /**
@@ -55,7 +62,10 @@ namespace NARO {
  *  The boost bundled properties.
  * @see [boost bundled properties](https://www.boost.org/doc/libs/1_72_0/libs/graph/doc/bundles.html).
  */
- struct gVertex {
+ struct gVertex
+  : bi::set_base_hook<bi::link_mode<bi::auto_unlink>,
+                      bi::constant_time_size<false>>
+ {
    /// Constructor
    gVertex()
    {}
@@ -63,7 +73,15 @@ namespace NARO {
    gVertex(std::string& name, double weight = -1)
      : name(name), weight(weight)
    {}
-
+  
+   struct by_commId
+   {
+     using type = int;
+     int const& operator()(gVertex const& vd) const
+     {
+       return vd.communityId;
+     }
+   };
  #if defined(PARALLEL_BGL)
    // Serialization support for parallel processing
    template<typename Archiver>
@@ -78,8 +96,8 @@ namespace NARO {
    
    std::string name; ///< Vertice name
    double weight; ///< Verice weight
-   int community_id; ///< Community id
-   int component_id; ///< Component id
+   int communityId; ///< Community id
+   int componentId; ///< Component id
  };
  
 /**
@@ -166,7 +184,6 @@ namespace NARO {
    gEdge,   ///< bundled property for edge
    gGraph   ///< bundled property for graph
  > Graph;
-
  #endif
 
  /**
@@ -175,12 +192,25 @@ namespace NARO {
   */
 /// Defined type for vertex
 typedef boost::graph_traits<Graph>::vertex_descriptor Vertex;
-/// Defined type for edge
-typedef boost::graph_traits<Graph>::edge_descriptor Edge;
 /// Get the type of vetex
 typedef boost::vertex_bundle_type<Graph>::type VertexType;
 /// Iterator for looping over vertices
 typedef boost::graph_traits<Graph>::vertex_iterator VertexIter;
+/// Vertex index
+typedef boost::graph_traits<Graph>::vertices_size_type VertexIndex;
+
+typedef VertexIndex* Rank;
+typedef Vertex* Parent;
+/**
+ * @brief Connected components:
+ *
+ * Using vecS for the graph type, we're effectively using identity_property_map for a vertex index map.
+ * Using listS instead, the index map would need to be explicitly passed to the component_index constructor.
+ */
+typedef boost::component_index<VertexIndex> Components;
+
+/// Defined type for edge
+typedef boost::graph_traits<Graph>::edge_descriptor Edge;
 /// Iterator for looping over edges
 typedef boost::graph_traits<Graph>::edge_iterator EdgeIter;
 
@@ -197,9 +227,52 @@ typedef ClusteringProperty::map_type ClusteringMap;
 typedef std::map<std::string, Vertex> NameVertexMap;
 
 /**
+ * @brief filtered graph
+ *
+ *  It is a predicate function object.
+ * Note: The fields of a vertex, communityId, must be assigned first.
+ */
+struct filter_communityId
+{
+  filter_communityId()
+    : g_pt(nullptr), comm_id(0)
+  {}
+  
+  filter_communityId(NARO::Graph* g, int cId)
+  {
+    g_pt = g;
+    comm_id = cId;
+  }
+  
+  bool operator()(NARO::Edge e) const {
+    // all edge
+    return true;
+  }
+  
+  bool operator()(NARO::Vertex v) const {
+    return (*g_pt)[v].communityId == comm_id;
+  }
+
+  NARO::Graph* g_pt;
+  int comm_id;
+};
+
+using Filtered = boost::filtered_graph<Graph,
+                                      filter_communityId,
+                                      filter_communityId>;
+
+using by_community_idx_t = bi::set<gVertex,
+                                   bi::constant_time_size<false>,
+                                   bi::key_of_value<gVertex::by_commId> >;
+/**
  * Graph-specific functions
  *
  */
+Filtered get_filtered_map(NARO::Graph& g, int cId, bool verbose);
+
+by_community_idx_t 
+get_community_byId (NARO::Graph& g, int cId, bool verbose);
+
 /// @TODO hub score and authority score: Kleinberg (1999, 200)
 std::tuple<double, double> get_hits_scores(NARO::Graph& g, NARO::Vertex& v);
 /// Total weights
@@ -208,10 +281,13 @@ double get_total_weights(NARO::Graph& g, bool verbose);
 double get_node_weighted_degree(NARO::Graph& g,
                                 const NARO::Vertex& v,
                                 bool verbose);
-/// Get selfloop for the node
+/**
+ * @brief Get selfloop for the node
+ */
 double get_nb_selfloops(NARO::Graph& g,
                         const NARO::Vertex& v,
                         bool verbose);
+
 
 } // End of namespace NARO
 
