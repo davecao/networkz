@@ -73,10 +73,12 @@ namespace NARO {
    gVertex(std::string& name, double weight = -1)
      : name(name), weight(weight)
    {}
-  
+    
+   friend bool operator==(const gVertex& lhs, const gVertex& rhs);
+ 
    struct by_commId
    {
-     using type = int;
+     using type = gVertex;
      int const& operator()(gVertex const& vd) const
      {
        return vd.communityId;
@@ -270,7 +272,7 @@ using by_community_idx_t = bi::set<gVertex,
  */
 Filtered get_filtered_map(NARO::Graph& g, int cId, bool verbose);
 
-by_community_idx_t 
+by_community_idx_t
 get_community_byId (NARO::Graph& g, int cId, bool verbose);
 
 /// @TODO hub score and authority score: Kleinberg (1999, 200)
@@ -288,6 +290,7 @@ double get_nb_selfloops(NARO::Graph& g,
                         const NARO::Vertex& v,
                         bool verbose);
 
+long double get_community_degree(NARO::Graph& g, int cId);
 
 } // End of namespace NARO
 

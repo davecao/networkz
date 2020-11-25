@@ -9,6 +9,14 @@
 #include "graph.hpp"
 
 // -----------------------------------------------------------------------------
+// bilab::gVertex::operator==()
+//
+bool NARO::operator==(const NARO::gVertex& lhs, const NARO::gVertex& rhs)
+{
+  return lhs.name == rhs.name;
+}
+
+// -----------------------------------------------------------------------------
 // bilab::gVertex::to_graphviz()
 //
 std::string NARO::gVertex::to_graphviz() {
@@ -146,3 +154,34 @@ NARO::get_community_byId (NARO::Graph& g, int cId, bool verbose)
     std::cout << "Index: " << commId_idx.size() << " elements\n";
   return commId_idx;
 }
+
+// -----------------------------------------------------------------------------
+// bilab::get_community_degree()
+//
+long double NARO::get_community_degree(NARO::Graph& g, int cId)
+{
+  long double degree = 0.0L;
+  long double d = 0.0L;
+  // get subgraph by their community ids
+  NARO::Filtered fg = NARO::get_filtered_map(g, cId, false);
+  auto es = boost::edges(fg);
+  for (auto eit = es.first; eit != es.second; ++eit) {
+    degree += fg[*eit].distance;
+  }
+
+  NARO::by_community_idx_t community_members;
+  community_members = NARO::get_community_byId(g, cId, false);
+  for (auto& vertex1 : community_members) {
+    for(auto& vertex2: community_members) {
+      if (vertex1 == vertex2) {
+        continue;
+      }else{
+        auto edge = boost::edge(vertex1, vertex2, g);
+        
+      }
+    }
+  }
+  return degree;
+}
+
+
