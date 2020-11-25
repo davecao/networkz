@@ -179,6 +179,7 @@ bool NARO::create_graph(NARO::Graph* g,
       // if the distance between them be less than the dist_threshold
       if (inserted) {
         v = boost::add_vertex(NARO::gVertex{n2, d_n2}, *g);
+        //(*g)[boost::graph_bundle].name2v.insert(n2, v);
         pos_v->second = v;
       } else {
         v = pos_v->second;

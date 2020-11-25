@@ -137,6 +137,7 @@ NARO::Filtered NARO::get_filtered_map(NARO::Graph& g, int cId, bool verbose)
 
 // -----------------------------------------------------------------------------
 // bilab::get_community_byId()
+//
 NARO::by_community_idx_t
 NARO::get_community_byId (NARO::Graph& g, int cId, bool verbose)
 
@@ -156,6 +157,24 @@ NARO::get_community_byId (NARO::Graph& g, int cId, bool verbose)
 }
 
 // -----------------------------------------------------------------------------
+// bilab::get_community_byMap()
+//
+NARO::NameVertexMap NARO::get_community_byMap(NARO::Graph& g, int cId)
+{
+  NARO::NameVertexMap name2vertex;
+  if (cId == -1) {
+    for (auto vd : boost::make_iterator_range(boost::vertices(g))) {
+      name2vertex.insert(std::make_pair(g[vd].name, vd));
+    }
+  } else {
+    for (auto vd : boost::make_iterator_range(boost::vertices(g))) {
+      if (g[vd].communityId == cId)
+        name2vertex.insert(std::make_pair(g[vd].name, vd));
+    }
+  }
+  return name2vertex;
+}
+// -----------------------------------------------------------------------------
 // bilab::get_community_degree()
 //
 long double NARO::get_community_degree(NARO::Graph& g, int cId)
@@ -168,6 +187,7 @@ long double NARO::get_community_degree(NARO::Graph& g, int cId)
   for (auto eit = es.first; eit != es.second; ++eit) {
     degree += fg[*eit].distance;
   }
+  NARO::NameVertexMap name2vertex = get_community_byMap(g, cId);
 
   NARO::by_community_idx_t community_members;
   community_members = NARO::get_community_byId(g, cId, false);
@@ -176,11 +196,16 @@ long double NARO::get_community_degree(NARO::Graph& g, int cId)
       if (vertex1 == vertex2) {
         continue;
       }else{
-        auto edge = boost::edge(vertex1, vertex2, g);
-        
+        NARO::Vertex v1 = name2vertex[vertex1.name];
+        NARO::Vertex v2 = name2vertex[vertex2.name];
+        auto edge = boost::edge(v1, v2, g);
+        if (edge.second) {
+          d += g[edge.first].distance;
+        }
       }
     }
   }
+  std::cout << "" << d << std::endl;
   return degree;
 }
 

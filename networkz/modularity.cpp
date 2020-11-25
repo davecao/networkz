@@ -91,6 +91,7 @@ Modularity::Modularity(NARO::Graph& g, int level)
     tot[comm_id] = NARO::get_node_weighted_degree(g, *vi, verbose);
     comm_id++;
   }
+  long double w_d = NARO::get_community_degree(g, 0);
   // Test components
   //test_conn_compnent(g);
   //

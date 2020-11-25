@@ -56,6 +56,7 @@
 namespace bi = boost::intrusive;
 
 namespace NARO {
+
 /**
  * @brief The vertice descriptor
  *
@@ -78,8 +79,8 @@ namespace NARO {
  
    struct by_commId
    {
-     using type = gVertex;
-     int const& operator()(gVertex const& vd) const
+     using type = long double;
+     type operator()(gVertex const& vd) const
      {
        return vd.communityId;
      }
@@ -157,6 +158,7 @@ namespace NARO {
     * To generate the current edge info in graphviz format
     */
    std::string to_graphviz();
+//   std::map<std::string, Vertex> name2v;
    std::string glabel; ///< Store the title for the graph
    double total_weights; ///< Total weights of edges
    double max_weights; ///< maximum of weights
@@ -188,10 +190,10 @@ namespace NARO {
  > Graph;
  #endif
 
- /**
-  * Graph-specific definitions
-  *
-  */
+/**
+ * Graph-specific definitions
+ *
+ */
 /// Defined type for vertex
 typedef boost::graph_traits<Graph>::vertex_descriptor Vertex;
 /// Get the type of vetex
@@ -203,6 +205,7 @@ typedef boost::graph_traits<Graph>::vertices_size_type VertexIndex;
 
 typedef VertexIndex* Rank;
 typedef Vertex* Parent;
+
 /**
  * @brief Connected components:
  *
@@ -266,10 +269,13 @@ using Filtered = boost::filtered_graph<Graph,
 using by_community_idx_t = bi::set<gVertex,
                                    bi::constant_time_size<false>,
                                    bi::key_of_value<gVertex::by_commId> >;
+
 /**
  * Graph-specific functions
  *
  */
+NameVertexMap get_community_byMap(NARO::Graph& g, int cId);
+
 Filtered get_filtered_map(NARO::Graph& g, int cId, bool verbose);
 
 by_community_idx_t
