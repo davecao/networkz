@@ -13,6 +13,7 @@
 #include <iomanip>
 
 #include "graph.hpp"
+#include "csr_graph.hpp"
 #include "modularity.hpp"
 
 namespace NARO::Algo::Community {
@@ -75,7 +76,7 @@ struct Louvain
   void neigh_comm(int node);
   void partition2graph();
   void display_partition();
-  QualityType::CSRgraph partition2graph_binary();
+  CSRgraph partition2graph_binary();
   bool one_level();
   void louvain();
 };

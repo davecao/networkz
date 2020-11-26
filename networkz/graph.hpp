@@ -12,7 +12,7 @@
 #include <Eigen/Core>
 #include <vector>
 #include <map>
-
+#include <assert.h>
 
 #if defined(PARALLEL_BGL)
 // Parallel BGL

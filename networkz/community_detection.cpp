@@ -12,7 +12,6 @@
 
 namespace NARO::Algo::Community
 {
-
 // -----------------------------------------------------------------------------
 // Newman's modularity
 //float newman_comm(NARO::Graph& g, float gamma)
@@ -147,9 +146,9 @@ void Louvain<QualityType>::display_partition()
 // Louvain::partition2graph_binary()
 //
 template<class QualityType>
-typename QualityType::CSRgraph Louvain<QualityType>::partition2graph_binary()
+CSRgraph Louvain<QualityType>::partition2graph_binary()
 {
-  NARO::Graph* sub = nullptr;
+  CSRgraph* sub = nullptr;
   // Renumber communities
   std::vector<int> renumber(qual->node_size, -1);
   for (int node=0 ; node < qual->node_size ; node++)
@@ -170,7 +169,7 @@ typename QualityType::CSRgraph Louvain<QualityType>::partition2graph_binary()
     //comm_weight[renumber[qual->n2c[node]]] += (qual->g_).nodes_w[node];
   }
 
-  return sub;
+  return *sub;
 }
 
 // -----------------------------------------------------------------------------
@@ -285,6 +284,7 @@ void Louvain<QualityType>::louvain()
     level++;
     // update the community ids for all nodes
     g = this->partition2graph_binary();
+    
     nb_calls++;
     // recursive
     
