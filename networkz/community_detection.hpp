@@ -49,6 +49,10 @@ namespace NARO::Algo::Community {
 template<class QualityType>
 struct Louvain
 {
+  typedef std::vector<int>::iterator v_int_iter;
+  typedef std::vector<long double>::iterator v_long_double_iter;
+  typedef std::pair<v_int_iter, v_long_double_iter> Neighbors;
+  
   int number_pass; ///< The number of pass
   int neigh_last; ///< 
   int display_level = -2;
@@ -71,7 +75,7 @@ struct Louvain
   void neigh_comm(int node);
   void partition2graph();
   void display_partition();
-  NARO::Graph* partition2graph_binary();
+  QualityType::CSRgraph partition2graph_binary();
   bool one_level();
   void louvain();
 };

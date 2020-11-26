@@ -50,12 +50,29 @@ void Louvain<QualityType>::neigh_comm(int node)
     neigh_weight[neigh_pos[i]]=-1;
   neigh_last = 0;
 
-  auto neighbours = boost::adjacent_vertices(node, *qual->g_);
+  //auto neighbours = boost::adjacent_vertices(node, *qual->g_);
   //auto degree = boost::degree(node, *qual->g_);
+  Neighbors p = (qual->g).neighbors(node);
+  int deg = (qual->g).nb_neighbors(node);
+  
   neigh_pos[0] = qual->n2c[node];
   neigh_weight[neigh_pos[0]] = 0;
   neigh_last = 1;
   
+  for (int i=0 ; i<deg ; i++) {
+    int neigh  = *(p.first+i);
+    int neigh_comm = qual->n2c[neigh];
+    long double neigh_w = ((qual->g).weights.size()==0)?1.0L:*(p.second+i);
+    
+    if (neigh!=node) {
+      if (neigh_weight[neigh_comm]==-1) {
+        neigh_weight[neigh_comm] = 0.0L;
+        neigh_pos[neigh_last++] = neigh_comm;
+      }
+      neigh_weight[neigh_comm] += neigh_w;
+    }
+  }
+  /*
   for (auto neighbor : boost::make_iterator_range(neighbours)) {
     int neigh_comm = qual->n2c[neighbor];
     auto edge = boost::edge(node, neighbor, *qual->g_).first;
@@ -68,6 +85,7 @@ void Louvain<QualityType>::neigh_comm(int node)
       neigh_weight[neigh_comm] += neight_w;
     }
   }
+   */
 }
 
 // -----------------------------------------------------------------------------
@@ -86,12 +104,24 @@ void Louvain<QualityType>::partition2graph()
     }
   }
   for (int i=0 ; i< qual->node_size ; i++) {
+    Neighbors p = (qual->g).neighbors(i);
+
+    int deg = (qual->g).nb_neighbors(i);
+    for (int j=0 ; j<deg ; j++) {
+      int neigh = *(p.first+j);
+      std::cout << renumber[qual->n2c[i]] << " "
+                << renumber[qual->n2c[neigh]] << std::endl;
+    }
+  }
+  /*
+  for (int i=0 ; i< qual->node_size ; i++) {
     auto neighbours = boost::adjacent_vertices(i, *qual->g_);
     for (auto neighbor : boost::make_iterator_range(neighbours)) {
       std::cout << renumber[qual->n2c[i]] << " "
                 << renumber[qual->n2c[neighbor]] << std::endl;
     }
   }
+   */
 }
 
 // -----------------------------------------------------------------------------
@@ -117,7 +147,7 @@ void Louvain<QualityType>::display_partition()
 // Louvain::partition2graph_binary()
 //
 template<class QualityType>
-NARO::Graph* Louvain<QualityType>::partition2graph_binary()
+typename QualityType::CSRgraph Louvain<QualityType>::partition2graph_binary()
 {
   NARO::Graph* sub = nullptr;
   // Renumber communities
@@ -126,7 +156,7 @@ NARO::Graph* Louvain<QualityType>::partition2graph_binary()
     renumber[qual->n2c[node]]++;
   
   int last = 0;
-  for (int i=0 ; i < qual->node_size ; i++) {
+  for (int i=0; i < qual->node_size; i++) {
     if (renumber[i] != -1)
       renumber[i] = last++;
   }
@@ -236,7 +266,7 @@ void Louvain<QualityType>::louvain()
   bool verbose = false;
   long double quality = qual->quality();
   long double new_qual;
-  
+
   unsigned short nb_calls = 0;
   int level = 0;
   
@@ -254,8 +284,7 @@ void Louvain<QualityType>::louvain()
     // increase the level
     level++;
     // update the community ids for all nodes
-    NARO::Graph* gsub;
-    gsub = this->partition2graph_binary();
+    g = this->partition2graph_binary();
     nb_calls++;
     // recursive
     

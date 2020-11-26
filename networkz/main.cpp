@@ -173,9 +173,9 @@ int main(int argc, const char * argv[]) {
   
   // ---------------------------------------------------------------------------
   // modularity::Modularity
-  int level = 0;
-  NARO::Algo::Community::Modularity quality(genes_graph, level);
-  NARO::Algo::Community::Louvain<NARO::Algo::Community::Modularity> louvain(-1, precision, &quality);
+  NARO::Algo::Community::Modularity quality(genes_graph);
+  NARO::Algo::Community::Louvain<NARO::Algo::Community::Modularity>
+      louvain(-1, precision, &quality);
   louvain.louvain();
 
   // ---------------------------------------------------------------------------
