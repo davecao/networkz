@@ -353,3 +353,76 @@ bool NARO::write_components(const std::string& filename,
 
   return true;
 }
+
+// -----------------------------------------------------------------------------
+//
+//
+void NARO::convert(NARO::Graph& g, NARO::Algo::Community::CSRgraph& csr_g,
+                   std::vector<int>* n2c,
+                   std::vector<std::string>* lookup_table)
+{
+  int node_size = static_cast<int>(boost::num_vertices(g));
+  csr_g.nb_nodes = node_size;
+  csr_g.sum_nodes_w = node_size;
+  csr_g.degrees.resize(node_size);
+  csr_g.nodes_w.assign(node_size, 1);
+  
+  std::vector<std::vector<std::pair<int, long double>>> links;
+  std::map<std::string, unsigned int> str2node;
+
+  // Add nodes' degrees
+  NARO::VertexIter vi, vend;
+  int node_id = 0;
+  for(boost::tie(vi, vend) = boost::vertices(g); vi != vend; ++vi) {
+    (*n2c)[node_id] = node_id;
+    (*lookup_table)[node_id] = g[(*vi)].name;
+    str2node[g[(*vi)].name] = node_id;
+    csr_g.degrees[node_id] = boost::degree(*vi, g);
+    node_id++;
+  }
+  // cumulative degree sequence
+  // cum_degree[0]=degree(0); cum_degree[1]=degree(0)+degree(1), etc.
+  for (int i=1; i<csr_g.degrees.size(); i++) {
+    csr_g.degrees[i] += csr_g.degrees[i-1];
+  }
+  // Read links: for each link (each link is counted twice)
+  csr_g.nb_links = csr_g.degrees[csr_g.nb_nodes-1];
+  csr_g.links.resize(csr_g.nb_links);
+  csr_g.weights.resize(csr_g.nb_links);
+  
+  // Iterate over the edges
+  auto es = boost::edges(g);
+  int nId_src = 0;
+  int nId_dest = 0;
+
+  for (auto eit = es.first; eit != es.second; ++eit) {
+    auto weight = g[*eit].distance;
+    NARO::Vertex src = boost::source(*eit, g);
+    NARO::Vertex dest = boost::target(*eit, g);
+    
+    nId_src = str2node[g[src].name];
+    nId_dest = str2node[g[dest].name];
+    if (links.size() <= std::max(nId_src, nId_dest) + 1){
+      links.resize(std::max(nId_src, nId_dest) + 1);
+    }
+    links[nId_src].push_back(std::make_pair(nId_dest, weight));
+    if (src != dest) {
+      links[nId_dest].push_back(std::make_pair(nId_src, weight));
+    }
+    //csr_g.nb_links += 1ULL;
+  }
+
+  int s = static_cast<int>(links.size());
+  for (int i=0; i<s; i++) {
+    for (unsigned int j=0; j<links[i].size(); j++) {
+      int dest = links[i][j].first;
+      long double weight = links[i][j].second;
+      csr_g.links.push_back(dest);
+      csr_g.weights.push_back(weight);
+      //csr_g.nb_links += 1ULL;
+    }
+  }
+  // Compute total weight
+  //for (int i=0 ; i<csr_g.nb_nodes ; i++)
+  //    csr_g.total_weight += csr_g.weighted_degree(i);
+}

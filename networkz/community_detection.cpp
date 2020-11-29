@@ -51,8 +51,8 @@ void Louvain<QualityType>::neigh_comm(int node)
 
   //auto neighbours = boost::adjacent_vertices(node, *qual->g_);
   //auto degree = boost::degree(node, *qual->g_);
-  Neighbors p = (qual->g).neighbors(node);
-  int deg = (qual->g).nb_neighbors(node);
+  Neighbors p = (qual->g)->neighbors(node);
+  int deg = (qual->g)->nb_neighbors(node);
   
   neigh_pos[0] = qual->n2c[node];
   neigh_weight[neigh_pos[0]] = 0;
@@ -61,7 +61,7 @@ void Louvain<QualityType>::neigh_comm(int node)
   for (int i=0 ; i<deg ; i++) {
     int neigh  = *(p.first+i);
     int neigh_comm = qual->n2c[neigh];
-    long double neigh_w = ((qual->g).weights.size()==0)?1.0L:*(p.second+i);
+    long double neigh_w = ((qual->g)->weights.size()==0)?1.0L:*(p.second+i);
     
     if (neigh!=node) {
       if (neigh_weight[neigh_comm]==-1) {
@@ -103,9 +103,9 @@ void Louvain<QualityType>::partition2graph()
     }
   }
   for (int i=0 ; i< qual->node_size ; i++) {
-    Neighbors p = (qual->g).neighbors(i);
+    Neighbors p = (qual->g)->neighbors(i);
 
-    int deg = (qual->g).nb_neighbors(i);
+    int deg = (qual->g)->nb_neighbors(i);
     for (int j=0 ; j<deg ; j++) {
       int neigh = *(p.first+j);
       std::cout << renumber[qual->n2c[i]] << " "
@@ -148,7 +148,6 @@ void Louvain<QualityType>::display_partition()
 template<class QualityType>
 CSRgraph Louvain<QualityType>::partition2graph_binary()
 {
-  CSRgraph* sub = nullptr;
   // Renumber communities
   std::vector<int> renumber(qual->node_size, -1);
   for (int node=0 ; node < qual->node_size ; node++)
@@ -165,11 +164,48 @@ CSRgraph Louvain<QualityType>::partition2graph_binary()
   
   for (int node = 0 ; node < (qual->node_size) ; node++) {
     comm_nodes[renumber[qual->n2c[node]]].push_back(node);
-    
-    //comm_weight[renumber[qual->n2c[node]]] += (qual->g_).nodes_w[node];
+    comm_weight[renumber[qual->n2c[node]]] += (qual->g)->nodes_w[node];
   }
+  CSRgraph g;
+  int nbc = comm_nodes.size();
+  
+  g.nb_nodes = comm_nodes.size();
+  g.degrees.resize(nbc);
+  g.nodes_w.resize(nbc);
+  
+  for (int comm=0 ; comm<nbc ; comm++) {
+    std::map<int,long double> m;
+    std::map<int,long double>::iterator it;
 
-  return *sub;
+    int size_c = comm_nodes[comm].size();
+    
+    g.assign_weight(comm, comm_weight[comm]);
+    
+    for (int node=0; node<size_c; node++) {
+      std::pair<std::vector<int>::iterator, std::vector<long double>::iterator> p = (qual->g)->neighbors(comm_nodes[comm][node]);
+      int deg = (qual->g)->nb_neighbors(comm_nodes[comm][node]);
+      for (int i=0; i<deg; i++) {
+        int neigh = *(p.first + i);
+        int neigh_comm = renumber[qual->n2c[neigh]];
+        long double neigh_weight = ((qual->g)->weights.size()==0) ? 1.0L : *(p.second+i);
+        
+        it = m.find(neigh_comm);
+        if (it == m.end())
+          m.insert(std::make_pair(neigh_comm, neigh_weight));
+        else
+          it->second += neigh_weight;
+      }
+    }
+    g.degrees[comm] = (comm==0)?m.size() : g.degrees[comm-1] + m.size();
+    g.nb_links += m.size();
+    
+    for (it = m.begin(); it != m.end(); it++) {
+      g.total_weight += it->second;
+      g.links.push_back(it->first);
+      g.weights.push_back(it->second);
+    }
+  }
+  return g;
 }
 
 // -----------------------------------------------------------------------------
@@ -268,6 +304,7 @@ void Louvain<QualityType>::louvain()
 
   unsigned short nb_calls = 0;
   int level = 0;
+  CSRgraph g;
   
   do {
     if (verbose) {
@@ -280,8 +317,10 @@ void Louvain<QualityType>::louvain()
     }
     improvement = this->one_level();
     new_qual = this->qual->quality();
+
     // increase the level
     level++;
+
     // update the community ids for all nodes
     g = this->partition2graph_binary();
     

@@ -194,7 +194,7 @@ namespace NARO {
  * Graph-specific definitions
  *
  */
-/// Defined type for vertex
+/// Define  vertex
 typedef boost::graph_traits<Graph>::vertex_descriptor Vertex;
 /// Get the type of vetex
 typedef boost::vertex_bundle_type<Graph>::type VertexType;

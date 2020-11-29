@@ -173,9 +173,18 @@ int main(int argc, const char * argv[]) {
   
   // ---------------------------------------------------------------------------
   // modularity::Modularity
-  NARO::Algo::Community::Modularity quality(genes_graph);
+  int node_size = static_cast<int>(boost::num_vertices(genes_graph));
+  std::vector<int> n2c(node_size); // Store community ids with indices of nodes
+  std::vector<std::string> lookup_table(node_size); // Store gene names with indice of nodes
+  //    1. Convert the graph to csr_graph
+  NARO::Algo::Community::CSRgraph csr_g;
+  NARO::convert(genes_graph, csr_g, &n2c, &lookup_table);
+  //    2. Initialize the quality function
+  NARO::Algo::Community::Modularity quality(csr_g);
+  //    3. Initilaize the louvain
   NARO::Algo::Community::Louvain<NARO::Algo::Community::Modularity>
       louvain(-1, precision, &quality);
+  //    4. Execute louvain
   louvain.louvain();
 
   // ---------------------------------------------------------------------------

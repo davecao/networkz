@@ -26,7 +26,7 @@ struct Modularity
   int edge_size;
 
   //NARO::Graph* g_;
-  CSRgraph& g;
+  CSRgraph* g;
 
   // Store graph connected components
   //std::vector<NARO::VertexIndex> rank;
@@ -39,7 +39,7 @@ struct Modularity
   std::vector<long double> tot;
   //std::vector<std::string> lookup_table;
 
-  Modularity(NARO::Graph& gr);
+  //Modularity(NARO::Graph& gr);
   Modularity(CSRgraph& gr);
   ~Modularity();
 

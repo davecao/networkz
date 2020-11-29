@@ -16,6 +16,7 @@
 
 #include "dataframe.hpp"
 #include "graph.hpp"
+#include "csr_graph.hpp"
 
 namespace NARO {
 
@@ -112,6 +113,11 @@ bool write_components(const std::string& filename,
                       std::string& inputfile,
                       NARO::Graph* g,
                       const std::string& date);
+
+void convert(NARO::Graph& g, Algo::Community::CSRgraph& csr_g,
+             std::vector<int>* n2c,
+             std::vector<std::string>* lookup_table);
+
 } // Namespace NARO
 
 #endif /* graph_util_hpp */

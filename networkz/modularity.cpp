@@ -31,64 +31,28 @@ void test_conn_compnent(NARO::Graph& g)
   }
 }
 
-
-CSRgraph convert(NARO::Graph& g,
-                 std::vector<int>* n2c,
-                 std::vector<std::string>* lookup_table)
-{
-  CSRgraph csr_g;
-  int node_size = static_cast<int>(boost::num_vertices(g));
-  csr_g.nb_nodes = node_size;
-  csr_g.sum_nodes_w = node_size;
-  csr_g.degrees.resize(node_size);
-  csr_g.nodes_w.assign(node_size, 1);
-  std::vector<std::vector<std::pair<int, long double>>> links;
-  // Add nodes' degrees
-  NARO::VertexIter vi, vend;
-  int node_id = 0;
-  for(boost::tie(vi, vend) = boost::vertices(g); vi != vend; ++vi) {
-    (*n2c)[node_id] = node_id;
-    (*lookup_table)[node_id] = g[(*vi)].name;
-    csr_g.degrees[node_id] = boost::degree(*vi, g);
-    
-    node_id++;
-  }
-  // cum_degree[0]=degree(0); cum_degree[1]=degree(0)+degree(1), etc.
-  for (int i=1; i<csr_g.degrees.size(); i++) {
-    csr_g.degrees[i] += csr_g.degrees[i-1];
-  }
-  // Read links: for each link (each link is counted twice)
-  csr_g.nb_links = csr_g.degrees[csr_g.nb_nodes-1];
-  csr_g.links.resize(csr_g.nb_links);
-  csr_g.weights.resize(csr_g.nb_links);
-  return csr_g;
-}
-
-
 /** ================================================================================
  *  struct Modularity
  *
  *  ================================================================================
  */
-Modularity::Modularity(NARO::Graph& gr)
-{
-  g = convert(gr);
-}
+
 // -----------------------------------------------------------------------------
 // struct Modularity::Modularity()
 Modularity::Modularity(CSRgraph& gr)
 {
-  node_size = gr.nb_nodes;
+  g = &gr;
+  node_size = g->nb_nodes;
   n2c.resize(node_size);
   in.resize(node_size);
   tot.resize(node_size);
   //lookup_table.resize(node_size);
 
   // initialization
-  for (int i=0 ; i<size ; i++) {
+  for (int i=0 ; i<node_size ; i++) {
     n2c[i] = i;
-    in[i]  = g.nb_selfloops(i);
-    tot[i] = g.weighted_degree(i);
+    in[i]  = g->nb_selfloops(i);
+    tot[i] = g->weighted_degree(i);
   }
   
   // Map vertices to string map
@@ -173,7 +137,8 @@ Modularity::~Modularity()
   tot.clear();
   //lookup_table.clear();
   // explicitly call deconstructor
-  g.~CSRgraph();
+  g->~CSRgraph();
+  g = nullptr;
   //rank.clear();
   //parent.clear();
 
@@ -186,14 +151,14 @@ Modularity::~Modularity()
 // struct Modularity::num_nodes()
 int Modularity::num_nodes()
 {
-  return g.nb_nodes;
+  return g->nb_nodes;
 }
 
 // -----------------------------------------------------------------------------
 // struct Modularity::num_edges()
 int Modularity::num_edges()
 {
-  return static_cast<int>(g.nb_links);
+  return static_cast<int>(g->nb_links);
 }
 
 // -----------------------------------------------------------------------------
@@ -208,7 +173,7 @@ long double Modularity::weighted_degree(int node)
   //  w_degree += (*this->g_)[edge].distance;
   //}
   //return w_degree;
-  return g.weighted_degree(node);
+  return g->weighted_degree(node);
 }
 
 // -----------------------------------------------------------------------------
@@ -226,7 +191,7 @@ long double Modularity::total_weights()
   //  }
   //}
   //return tot_w;
-  return g.total_weight;
+  return g->total_weight;
 }
 
 // -----------------------------------------------------------------------------
@@ -235,8 +200,8 @@ void Modularity::remove(int node, int comm, long double dnodecomm)
 {
   assert(node >= 0 && node < node_size);
 
-  in[comm]  -= 2.0L * dnodecomm + g.nb_selfloops(node);
-  tot[comm] -= g.weighted_degree(node);
+  in[comm]  -= 2.0L * dnodecomm + g->nb_selfloops(node);
+  tot[comm] -= g->weighted_degree(node);
 
   n2c[node] = -1;
 }
@@ -247,8 +212,8 @@ void Modularity::insert(int node, int comm, long double dnodecomm)
 {
   assert(node >= 0 && node < node_size);
 
-  in[comm]  += 2.0L * dnodecomm + g.nb_selfloops(node);
-  tot[comm] += g.weighted_degree(node);
+  in[comm]  += 2.0L * dnodecomm + g->nb_selfloops(node);
+  tot[comm] += g->weighted_degree(node);
     
   n2c[node] = comm;
 }
@@ -261,7 +226,7 @@ long double Modularity::gain(int node, int comm, long double dnc,
   assert(node >= 0 && node < node_size);
     
   long double totc = tot[comm];
-  long double m2 = g.total_weight;
+  long double m2 = g->total_weight;
     
   return (dnc - totc * degc / m2);
 }
@@ -271,7 +236,7 @@ long double Modularity::gain(int node, int comm, long double dnc,
 long double Modularity::quality()
 {
   long double q  = 0.0L;
-  long double m2 = g.total_weight;
+  long double m2 = g->total_weight;
 
   for (int i=0; i<this->node_size; i++) {
     if (tot[i] > 0.0L)
