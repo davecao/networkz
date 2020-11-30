@@ -24,6 +24,7 @@ struct Modularity
 
   int node_size;
   int edge_size;
+  
 
   //NARO::Graph* g_;
   CSRgraph* g;

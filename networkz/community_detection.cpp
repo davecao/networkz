@@ -333,6 +333,7 @@ void Louvain<QualityType>::louvain()
     nb_calls++;
     // recursive
     c = Louvain<QualityType>(-1, precision, qual);
+    
     if (verbose) {
       std::cout <<"  quality increased from " << quality << " to "
                 << new_qual << std::endl;

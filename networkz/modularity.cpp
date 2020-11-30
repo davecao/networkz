@@ -55,6 +55,7 @@ Modularity::Modularity(CSRgraph& gr)
     tot[i] = g->weighted_degree(i);
   }
   
+  
   // Map vertices to string map
   //for (auto vd : boost::make_iterator_range(boost::vertices(gr))) {
   //  name2vertex.insert(std::make_pair(gr[vd].name, vd));
