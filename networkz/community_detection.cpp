@@ -167,9 +167,9 @@ CSRgraph Louvain<QualityType>::partition2graph_binary()
     comm_weight[renumber[qual->n2c[node]]] += (qual->g)->nodes_w[node];
   }
   CSRgraph g;
-  int nbc = comm_nodes.size();
+  int nbc = static_cast<int>(comm_nodes.size());
   
-  g.nb_nodes = comm_nodes.size();
+  g.nb_nodes = static_cast<int>(comm_nodes.size());
   g.degrees.resize(nbc);
   g.nodes_w.resize(nbc);
   
@@ -177,7 +177,7 @@ CSRgraph Louvain<QualityType>::partition2graph_binary()
     std::map<int,long double> m;
     std::map<int,long double>::iterator it;
 
-    int size_c = comm_nodes[comm].size();
+    int size_c = static_cast<int>(comm_nodes[comm].size());
     
     g.assign_weight(comm, comm_weight[comm]);
     
@@ -298,35 +298,41 @@ template<class QualityType>
 void Louvain<QualityType>::louvain()
 {
   bool improvement = true;
-  bool verbose = false;
+  bool verbose = true;
   long double quality = qual->quality();
   long double new_qual;
-
+  int display_level = -2;
   unsigned short nb_calls = 0;
   int level = 0;
   CSRgraph g;
-  
+  auto c = *this;
+
   do {
     if (verbose) {
       std::cout << "level " << level << ":\n";
-      //display_time("  start computation");
       std::cout << "  network size: "
-        << qual->num_nodes() << " nodes, "
-        << qual->num_edges() << " links, "
-        << qual->total_weights() << " weight" << std::endl;
+        << (c.qual)->g->nb_nodes << " nodes, "
+        << (c.qual)->g->nb_links << " links, "
+        << (c.qual)->g->total_weight << " weight" << std::endl;
     }
-    improvement = this->one_level();
-    new_qual = this->qual->quality();
+    improvement = c.one_level();
+    new_qual = (c.qual)->quality();
 
     // increase the level
-    level++;
-
+    if (++level==display_level)
+      (c.qual)->g->display();
+    if (display_level==-1)
+      c.display_partition();
     // update the community ids for all nodes
-    g = this->partition2graph_binary();
-    
+    // @TODO Slowing process because of returning a copy of the object
+    g = c.partition2graph_binary();
+    if (nb_calls > 0) {
+      delete qual;
+      qual = new NARO::Algo::Community::Modularity(g);
+    }
     nb_calls++;
     // recursive
-    
+    c = Louvain<QualityType>(-1, precision, qual);
     if (verbose) {
       std::cout <<"  quality increased from " << quality << " to "
                 << new_qual << std::endl;

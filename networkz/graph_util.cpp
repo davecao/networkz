@@ -387,8 +387,8 @@ void NARO::convert(NARO::Graph& g, NARO::Algo::Community::CSRgraph& csr_g,
   }
   // Read links: for each link (each link is counted twice)
   csr_g.nb_links = csr_g.degrees[csr_g.nb_nodes-1];
-  csr_g.links.resize(csr_g.nb_links);
-  csr_g.weights.resize(csr_g.nb_links);
+  //csr_g.links.resize(csr_g.nb_links);
+  //csr_g.weights.resize(csr_g.nb_links);
   
   // Iterate over the edges
   auto es = boost::edges(g);
