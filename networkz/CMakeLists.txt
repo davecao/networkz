@@ -42,9 +42,10 @@ set(SOURCE_FILES
   graph_report.cpp
   graph_util.cpp
   graph_algo.cpp
-  utility.cpp
-  community_detection.cpp
+  csr_graph.cpp
   modularity.cpp
+  community_detection.cpp
+  utility.cpp
   main.cpp
 )
 

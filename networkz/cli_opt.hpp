@@ -106,11 +106,6 @@ namespace CLIARG {
     struct stat FileInfo;
     int val;
     val = stat(fname.c_str(), &FileInfo);
-    //if(FileInfo.st_size >1000000){
-      //inputfile_size = byteConverter_s(FileInfo.st_size);
-      //std::cout<<fname<<" is so large ("<<inputfile_size<<")"
-      //         <<". Take a while to analysis..."<<std::endl;
-    //}
     return (val == 0) ? true : false;
   }
 
@@ -126,17 +121,14 @@ namespace CLIARG {
       po::store(parse_command_line(argc, argv, general),vm);
       po::notify(vm);
     }catch(po::ambiguous_option& e){
-      //std::cout<<"Program is terminated for the following reason(s):\n\n";
       std::cout<<e.get_option_name()<<" is an ambiguous option name.\n";
       std::cout << general << std::endl;
       exit(0);
-      //BOOST_CHECK_EQUAL(std::string(e.what()), "Unknown option");
     }catch(po::unknown_option& e){
       std::cout<<e.get_option_name()<<" is an unknown option name.\n";
       std::cout << general << std::endl;
       exit(0);
-      //BOOST_CHECK_EQUAL(e.get_option_name(), "option name");
-      //BOOST_CHECK_EQUAL(std::string(e.what()), "Unknown option");
+
     }
     
     if ( vm.count("help") ){

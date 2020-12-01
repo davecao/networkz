@@ -12,14 +12,6 @@
 
 namespace NARO::Algo::Community
 {
-// -----------------------------------------------------------------------------
-// Newman's modularity
-//float newman_comm(NARO::Graph& g, float gamma)
-//{
-//  return 0.0;
-//}
-
-
 
 // -----------------------------------------------------------------------------
 // Louvain's Constructor
@@ -49,8 +41,6 @@ void Louvain<QualityType>::neigh_comm(int node)
     neigh_weight[neigh_pos[i]]=-1;
   neigh_last = 0;
 
-  //auto neighbours = boost::adjacent_vertices(node, *qual->g_);
-  //auto degree = boost::degree(node, *qual->g_);
   Neighbors p = (qual->g)->neighbors(node);
   int deg = (qual->g)->nb_neighbors(node);
   
@@ -71,20 +61,6 @@ void Louvain<QualityType>::neigh_comm(int node)
       neigh_weight[neigh_comm] += neigh_w;
     }
   }
-  /*
-  for (auto neighbor : boost::make_iterator_range(neighbours)) {
-    int neigh_comm = qual->n2c[neighbor];
-    auto edge = boost::edge(node, neighbor, *qual->g_).first;
-    long double neight_w = (*qual->g_)[edge].distance;
-    if (neighbor != node) {
-      if (neigh_weight[neigh_comm] == -1) {
-        neigh_weight[neigh_comm] = 0.0L;
-        neigh_pos[neigh_last++] = neigh_comm;
-      }
-      neigh_weight[neigh_comm] += neight_w;
-    }
-  }
-   */
 }
 
 // -----------------------------------------------------------------------------
@@ -112,15 +88,6 @@ void Louvain<QualityType>::partition2graph()
                 << renumber[qual->n2c[neigh]] << std::endl;
     }
   }
-  /*
-  for (int i=0 ; i< qual->node_size ; i++) {
-    auto neighbours = boost::adjacent_vertices(i, *qual->g_);
-    for (auto neighbor : boost::make_iterator_range(neighbours)) {
-      std::cout << renumber[qual->n2c[i]] << " "
-                << renumber[qual->n2c[neighbor]] << std::endl;
-    }
-  }
-   */
 }
 
 // -----------------------------------------------------------------------------
@@ -188,7 +155,7 @@ CSRgraph Louvain<QualityType>::partition2graph_binary()
     g.assign_weight(comm, comm_weight[comm]);
     
     for (int node=0; node<size_c; node++) {
-      //std::pair<std::vector<int>::iterator, std::vector<long double>::iterator> p = (qual->g)->neighbors(comm_nodes[comm][node]);
+
       Neighbors p = (qual->g)->neighbors(comm_nodes[comm][node]);
       int deg = (qual->g)->nb_neighbors(comm_nodes[comm][node]);
       for (int i=0; i<deg; i++) {
@@ -237,26 +204,6 @@ bool Louvain<QualityType>::one_level()
     random_order[i] = random_order[rand_pos];
     random_order[rand_pos] = tmp;
   }
-  // Random 1
-  //std::for_each(random_order.begin(),
-  //              random_order.end(),
-  //              [i=0] (int& x) mutable {x = i++;});
-  // Random 2
-  //std::generate(random_order.begin(),
-  //              random_order.end(),
-  //              [n=0] () mutable { return n++;});
-  // Random 3
-  // Initial a node sequence, 0 ... n
-  //std::iota(random_order.begin(), random_order.end(), 0);
-
-  // Shuffle the nodes with a random engine
-  //std::random_device seed_gen;
-  //std::mt19937_64 engine(seed_gen());
-  //std::shuffle(random_order.begin(), random_order.end(), engine);
-  
-  //int n_vertices = static_cast<int>(boost::num_vertices(*qual->g_));
-  //std::vector<int> component(n_vertices);
-  //int num = boost::connected_components(*qual->g_, &component[0]);
 
   do {
     curr_quality = new_quality;
@@ -299,10 +246,6 @@ bool Louvain<QualityType>::one_level()
     new_quality = qual->quality();
     if (nb_moves > 0)
       improvement = true;
-    //NARO::VertexIter v, vend;
-    //for (boost::tie(v, vend) = boost::vertices(*qual->g_); v != vend; ++v) {
-      //std::cout<< g[*v].name << "("<< g[*v].weight <<")" << std::endl;
-    //}
   } while (nb_moves > 0 && new_quality - curr_quality > eps_impr);
 
   return improvement;
@@ -338,13 +281,6 @@ std::tuple<double, int> Louvain<QualityType>::louvain(std::vector<int>& n2c)
     improvement = c.one_level();
     new_qual = (c.qual)->quality();
 
-    // increase the level
-    //if (++level==display_level) {
-    //  (c.qual)->g->display();
-    //}
-    //if (display_level==-1) {
-    //  c.display_partition();
-    //}
     auto node2comm = c.display_partition();
     levels.push_back(node2comm);
     level++;

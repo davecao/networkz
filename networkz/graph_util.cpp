@@ -377,9 +377,6 @@ void NARO::convert(NARO::Graph& g,
   NARO::VertexIter vi, vend;
   int node_id = 0;
   for(boost::tie(vi, vend) = boost::vertices(g); vi != vend; ++vi) {
-    //(*n2c)[node_id] = node_id;
-    //(*lookup_table)[node_id] = g[(*vi)].name;
-    //(*n2str_table)[node_id] = g[(*vi)].name;
     (*str2node)[g[(*vi)].name] = node_id;
     csr_g.degrees[node_id] = boost::degree(*vi, g);
     node_id++;
@@ -391,8 +388,6 @@ void NARO::convert(NARO::Graph& g,
   }
   // Read links: for each link (each link is counted twice)
   csr_g.nb_links = csr_g.degrees[csr_g.nb_nodes-1];
-  //csr_g.links.resize(csr_g.nb_links);
-  //csr_g.weights.resize(csr_g.nb_links);
   
   // Iterate over the edges
   auto es = boost::edges(g);
@@ -413,7 +408,6 @@ void NARO::convert(NARO::Graph& g,
     if (src != dest) {
       links[nId_dest].push_back(std::make_pair(nId_src, weight));
     }
-    //csr_g.nb_links += 1ULL;
   }
 
   int s = static_cast<int>(links.size());
@@ -423,7 +417,6 @@ void NARO::convert(NARO::Graph& g,
       long double weight = links[i][j].second;
       csr_g.links.push_back(dest);
       csr_g.weights.push_back(weight);
-      //csr_g.nb_links += 1ULL;
     }
   }
   // Compute total weight

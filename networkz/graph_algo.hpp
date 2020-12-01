@@ -56,19 +56,6 @@ void find_minimum_spanning_tree(NARO::Graph& g, const std::string& method);
  */
 double stoer_wagner_min_cut(NARO::Graph& g, bool verbose=false);
 
-/**
- * @brief Prize-Collecting Steiner Forest (PCSF)
- *
- * @param[in] g A graph defined in `graph.hpp`
- * @param[in] num_clusters The number of clusters
- * @param[out] sub A PCSF subtrees
- *
- * Reference:
- *  A divide and conquer matheuristic algorithm for the Prize-collecting Steiner Tree Problem.
- *  Akhmedov M, Kwee I, and Montemanni R (2016). Computers and Operations Research, 70, 18-25.
- */
-void prize_collecting_steiner_forest(NARO::Graph& g, int num_clusters,
-                                     NARO::Graph& sub);
 }
 
 #endif /* graph_algo_hpp */

@@ -167,15 +167,9 @@ int main(int argc, const char * argv[]) {
   genes_graph.m_property->glabel += "-" + mst_algo_name;
   NARO::Algo::find_minimum_spanning_tree(
                       genes_graph, mst_algo_name);
-  // ---------------------------------------------------------------------------
-  // Find the minimum cut by stoer_wagner_min_cut
-  //NARO::Algo::stoer_wagner_min_cut(genes_graph, true);
   
   // ---------------------------------------------------------------------------
   // modularity::Modularity
-  //int node_size = static_cast<int>(boost::num_vertices(genes_graph));
-  // Store gene names with indice of nodes
-  //std::vector<std::string> lookup_table(node_size);
   std::map<std::string, unsigned int> n2str_table;
   //    1. Convert the graph to csr_graph
   NARO::Algo::Community::CSRgraph csr_g;

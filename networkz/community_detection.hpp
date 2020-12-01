@@ -19,21 +19,6 @@
 namespace NARO::Algo::Community {
 
 /**
- * @brief Calculate Newman's (generalized) modularity of a connected network
- *
- * @param[in] g A undirected graph.
- * @param[in] Q Newman's modularity.
- *
- * @TODO Not implemented yet
- *
- * Reference:
- *  M.E.J. Newman, "Modularity and community structure in networks",
- *  Proc. Natl. Acad. Sci. USA 103, 8577-8582(2006)
- */
-//float newman_comm(NARO::Graph& g, float gamma);
-
-
-/**
  * @brief Louvain community detections for a network
  *
  * @param[in] g A undirected graph.
