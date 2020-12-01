@@ -115,8 +115,8 @@ bool write_components(const std::string& filename,
                       const std::string& date);
 
 void convert(NARO::Graph& g, Algo::Community::CSRgraph& csr_g,
-             std::vector<int>* n2c,
-             std::vector<std::string>* lookup_table);
+             //std::vector<int>* n2c,
+             std::map<std::string, unsigned int>* str2node);
 
 } // Namespace NARO
 

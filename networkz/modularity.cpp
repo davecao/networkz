@@ -138,7 +138,7 @@ Modularity::~Modularity()
   tot.clear();
   //lookup_table.clear();
   // explicitly call deconstructor
-  g->~CSRgraph();
+  //g->~CSRgraph();
   g = nullptr;
   //rank.clear();
   //parent.clear();
@@ -150,17 +150,17 @@ Modularity::~Modularity()
 
 // -----------------------------------------------------------------------------
 // struct Modularity::num_nodes()
-int Modularity::num_nodes()
-{
-  return g->nb_nodes;
-}
+//int Modularity::num_nodes()
+//{
+//  return g->nb_nodes;
+//}
 
 // -----------------------------------------------------------------------------
 // struct Modularity::num_edges()
-int Modularity::num_edges()
-{
-  return static_cast<int>(g->nb_links);
-}
+//int Modularity::num_edges()
+//{
+//  return static_cast<int>(g->nb_links);
+//}
 
 // -----------------------------------------------------------------------------
 // Modularity::weighted_degree(int node)

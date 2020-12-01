@@ -75,10 +75,10 @@ struct Louvain
   
   void neigh_comm(int node);
   void partition2graph();
-  void display_partition();
+  std::vector<int> display_partition();
   CSRgraph partition2graph_binary();
   bool one_level();
-  void louvain();
+  std::tuple<double, int> louvain(std::vector<int>& n2c);
 };
 
 }

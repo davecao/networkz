@@ -173,20 +173,38 @@ int main(int argc, const char * argv[]) {
   
   // ---------------------------------------------------------------------------
   // modularity::Modularity
-  int node_size = static_cast<int>(boost::num_vertices(genes_graph));
-  std::vector<int> n2c(node_size); // Store community ids with indices of nodes
-  std::vector<std::string> lookup_table(node_size); // Store gene names with indice of nodes
+  //int node_size = static_cast<int>(boost::num_vertices(genes_graph));
+  // Store gene names with indice of nodes
+  //std::vector<std::string> lookup_table(node_size);
+  std::map<std::string, unsigned int> n2str_table;
   //    1. Convert the graph to csr_graph
   NARO::Algo::Community::CSRgraph csr_g;
-  NARO::convert(genes_graph, csr_g, &n2c, &lookup_table);
+  NARO::convert(genes_graph, csr_g, &n2str_table);
   //    2. Initialize the quality function
   NARO::Algo::Community::Modularity quality(csr_g);
   //    3. Initilaize the louvain
   NARO::Algo::Community::Louvain<NARO::Algo::Community::Modularity>
       louvain(-1, precision, &quality);
   //    4. Execute louvain
-  louvain.louvain();
+  //       Store community ids with indices of nodes
+  std::vector<int> n2c;
+  double final_quality = -100;
+  int num_levels = -1;
 
+  std::tie(final_quality, num_levels) = louvain.louvain(n2c);
+  std::cout << "Best quality: " << final_quality << std::endl;
+  genes_graph[boost::graph_bundle].level = num_levels;
+  genes_graph[boost::graph_bundle].quality = final_quality;
+  genes_graph[boost::graph_bundle].quality_name = quality.name;
+  //    5. Assign community id
+  NARO::VertexIter vi, vend;
+  for(boost::tie(vi, vend) = boost::vertices(genes_graph); vi != vend; ++vi) {
+    auto vertex_name = genes_graph[*vi].name;
+    auto node = n2str_table[vertex_name];
+    auto communityId = n2c[node];
+    genes_graph[*vi].communityId = communityId;
+  }
+  
   // ---------------------------------------------------------------------------
   // Create a report
   //

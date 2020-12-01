@@ -126,20 +126,26 @@ void Louvain<QualityType>::partition2graph()
 // -----------------------------------------------------------------------------
 // Louvain::display_partition()
 template<class QualityType>
-void Louvain<QualityType>::display_partition()
+std::vector<int> Louvain<QualityType>::display_partition()
 {
   std::vector<int> renumber(qual->node_size, -1);
-  for (int node=0 ; node < qual->node_size ; node++) {
+  std::vector<int> node2community(qual->node_size, -1);
+  for (int node = 0; node < qual->node_size; node++) {
     renumber[qual->n2c[node]]++;
   }
 
   int end=0;
-  for (int i=0 ; i < qual->node_size ; i++)
-    if (renumber[i]!=-1)
+  for (int i = 0; i < qual->node_size; i++){
+    if (renumber[i] != -1){
       renumber[i] = end++;
+    }
+  }
 
-  for (int i=0 ; i < qual->node_size ; i++)
+  for (int i = 0; i < qual->node_size; i++) {
+    node2community[i] = renumber[qual->n2c[i]];
     std::cout << i << " " << renumber[qual->n2c[i]] << std::endl;
+  }
+  return node2community;
 }
 
 // -----------------------------------------------------------------------------
@@ -182,7 +188,8 @@ CSRgraph Louvain<QualityType>::partition2graph_binary()
     g.assign_weight(comm, comm_weight[comm]);
     
     for (int node=0; node<size_c; node++) {
-      std::pair<std::vector<int>::iterator, std::vector<long double>::iterator> p = (qual->g)->neighbors(comm_nodes[comm][node]);
+      //std::pair<std::vector<int>::iterator, std::vector<long double>::iterator> p = (qual->g)->neighbors(comm_nodes[comm][node]);
+      Neighbors p = (qual->g)->neighbors(comm_nodes[comm][node]);
       int deg = (qual->g)->nb_neighbors(comm_nodes[comm][node]);
       for (int i=0; i<deg; i++) {
         int neigh = *(p.first + i);
@@ -221,20 +228,31 @@ bool Louvain<QualityType>::one_level()
   long double curr_quality = new_quality;
   
   std::vector<int> random_order(qual->node_size);
+  for (int i=0; i < qual->node_size; i++){
+    random_order[i]=i;
+  }
+  for (int i=0 ; i < qual->node_size-1; i++) {
+    int rand_pos = rand()%(qual->node_size-i)+i;
+    int tmp = random_order[i];
+    random_order[i] = random_order[rand_pos];
+    random_order[rand_pos] = tmp;
+  }
+  // Random 1
   //std::for_each(random_order.begin(),
   //              random_order.end(),
   //              [i=0] (int& x) mutable {x = i++;});
-  //
+  // Random 2
   //std::generate(random_order.begin(),
   //              random_order.end(),
   //              [n=0] () mutable { return n++;});
+  // Random 3
   // Initial a node sequence, 0 ... n
-  std::iota(random_order.begin(), random_order.end(), 0);
+  //std::iota(random_order.begin(), random_order.end(), 0);
 
   // Shuffle the nodes with a random engine
-  std::random_device seed_gen;
-  std::mt19937_64 engine(seed_gen());
-  std::shuffle(random_order.begin(), random_order.end(), engine);
+  //std::random_device seed_gen;
+  //std::mt19937_64 engine(seed_gen());
+  //std::shuffle(random_order.begin(), random_order.end(), engine);
   
   //int n_vertices = static_cast<int>(boost::num_vertices(*qual->g_));
   //std::vector<int> component(n_vertices);
@@ -295,15 +313,17 @@ bool Louvain<QualityType>::one_level()
 //    Run the louvain algorithm.
 //
 template<class QualityType>
-void Louvain<QualityType>::louvain()
+std::tuple<double, int> Louvain<QualityType>::louvain(std::vector<int>& n2c)
 {
   bool improvement = true;
   bool verbose = true;
   long double quality = qual->quality();
   long double new_qual;
-  int display_level = -2;
-  unsigned short nb_calls = 0;
+  //int display_level = -2;
+  unsigned short nb_calls = 1;
   int level = 0;
+  std::vector<std::vector<int>> levels;
+
   CSRgraph g;
   auto c = *this;
 
@@ -319,18 +339,25 @@ void Louvain<QualityType>::louvain()
     new_qual = (c.qual)->quality();
 
     // increase the level
-    if (++level==display_level)
-      (c.qual)->g->display();
-    if (display_level==-1)
-      c.display_partition();
+    //if (++level==display_level) {
+    //  (c.qual)->g->display();
+    //}
+    //if (display_level==-1) {
+    //  c.display_partition();
+    //}
+    auto node2comm = c.display_partition();
+    levels.push_back(node2comm);
+    level++;
     // update the community ids for all nodes
     // @TODO Slowing process because of returning a copy of the object
     g = c.partition2graph_binary();
     if (nb_calls > 0) {
-      delete qual;
+      //delete qual;
+      qual = nullptr;
       qual = new NARO::Algo::Community::Modularity(g);
     }
     nb_calls++;
+
     // recursive
     c = Louvain<QualityType>(-1, precision, qual);
     
@@ -341,6 +368,21 @@ void Louvain<QualityType>::louvain()
     quality = new_qual;
 
   } while (improvement);
+  
+  // Assign community to all nodes
+  int display_level = static_cast<int>(levels.size()) - 1;
+  n2c.resize(levels[0].size());
+
+  for (unsigned int i=0 ; i<levels[0].size() ; i++){
+    n2c[i] = i;
+  }
+      
+  for (int l=0 ; l < display_level ; l++) {
+    for (unsigned int node=0 ; node<levels[0].size() ; node++) {
+      n2c[node] = levels[l][n2c[node]];
+    }
+  }
+  return std::forward_as_tuple(quality, static_cast<int>(levels.size()));
 }
 // Specialization
 template struct Louvain<Modularity>;

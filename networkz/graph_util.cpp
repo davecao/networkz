@@ -357,9 +357,12 @@ bool NARO::write_components(const std::string& filename,
 // -----------------------------------------------------------------------------
 //
 //
-void NARO::convert(NARO::Graph& g, NARO::Algo::Community::CSRgraph& csr_g,
-                   std::vector<int>* n2c,
-                   std::vector<std::string>* lookup_table)
+void NARO::convert(NARO::Graph& g,
+                   NARO::Algo::Community::CSRgraph& csr_g,
+                   //std::vector<int>* n2c,
+                   //std::vector<std::string>* lookup_table)
+                   //std::map<unsigned int, std::string>* n2str_table)
+                   std::map<std::string, unsigned int>* str2node)
 {
   int node_size = static_cast<int>(boost::num_vertices(g));
   csr_g.nb_nodes = node_size;
@@ -368,15 +371,16 @@ void NARO::convert(NARO::Graph& g, NARO::Algo::Community::CSRgraph& csr_g,
   csr_g.nodes_w.assign(node_size, 1);
   
   std::vector<std::vector<std::pair<int, long double>>> links;
-  std::map<std::string, unsigned int> str2node;
+  //std::map<std::string, unsigned int> str2node;
 
   // Add nodes' degrees
   NARO::VertexIter vi, vend;
   int node_id = 0;
   for(boost::tie(vi, vend) = boost::vertices(g); vi != vend; ++vi) {
-    (*n2c)[node_id] = node_id;
-    (*lookup_table)[node_id] = g[(*vi)].name;
-    str2node[g[(*vi)].name] = node_id;
+    //(*n2c)[node_id] = node_id;
+    //(*lookup_table)[node_id] = g[(*vi)].name;
+    //(*n2str_table)[node_id] = g[(*vi)].name;
+    (*str2node)[g[(*vi)].name] = node_id;
     csr_g.degrees[node_id] = boost::degree(*vi, g);
     node_id++;
   }
@@ -400,8 +404,8 @@ void NARO::convert(NARO::Graph& g, NARO::Algo::Community::CSRgraph& csr_g,
     NARO::Vertex src = boost::source(*eit, g);
     NARO::Vertex dest = boost::target(*eit, g);
     
-    nId_src = str2node[g[src].name];
-    nId_dest = str2node[g[dest].name];
+    nId_src = (*str2node)[g[src].name];
+    nId_dest = (*str2node)[g[dest].name];
     if (links.size() <= std::max(nId_src, nId_dest) + 1){
       links.resize(std::max(nId_src, nId_dest) + 1);
     }
@@ -423,6 +427,6 @@ void NARO::convert(NARO::Graph& g, NARO::Algo::Community::CSRgraph& csr_g,
     }
   }
   // Compute total weight
-  //for (int i=0 ; i<csr_g.nb_nodes ; i++)
-  //    csr_g.total_weight += csr_g.weighted_degree(i);
+  for (int i=0 ; i<csr_g.nb_nodes ; i++)
+    csr_g.total_weight += csr_g.weighted_degree(i);
 }

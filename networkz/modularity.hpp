@@ -23,8 +23,7 @@ struct Modularity
   std::string name = "Newman-Girvan Modularity";
 
   int node_size;
-  int edge_size;
-  
+  //int edge_size;
 
   //NARO::Graph* g_;
   CSRgraph* g;
@@ -52,8 +51,8 @@ struct Modularity
   long double quality();
 
   // Graph operations with community ids
-  int num_nodes();
-  int num_edges();
+  //int num_nodes();
+  //int num_edges();
   long double weighted_degree(int node);
   long double total_weights();
 
