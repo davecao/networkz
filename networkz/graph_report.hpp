@@ -25,7 +25,8 @@ struct Report
   std::string date;
   /// Author name
   std::string author;
-
+  /// Raw data file name
+  std::string i_file;
   /**
    * @brief Generate a simple report for a given graph to a file.
    *
@@ -33,10 +34,12 @@ struct Report
    * @param[in] g the constructed graph
    * @param[in] fmt the output format (Not implemented yet)
    * @param[in] threshold the upper bound for the distance to create an edge between any two vertices
+   * @param[in] distanceType the name for distance caculation
    * @param[in] verbose bool, true to print more info
    */
   bool write(const std::string& o_filename, Graph* g,
              const std::string& fmt, double threshold,
+             const std::string& distanceType,
              bool verbose);
 
 };

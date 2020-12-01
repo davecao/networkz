@@ -1,27 +1,35 @@
 #+TITLE: ネットワーク(グラフ)の基礎
 #+AUTHOR: 曹　巍
 #+DATE: July 15, 2020
-#+OPTIONS: toc:nil reveal_global_footer:t
-#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+OPTIONS: toc:nil reveal_global_footer:t tags:t todo:t
+#+LATEX_HEADER: \usepackage{tikz}
+# +REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+REVEAL_ROOT:./reveal.js
 #+REVEAL_MATHJAX_URL: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js
-#+REVEAL_THEME: moon
-#+REVEAL_INIT_OPTIONS: width:1200, height:800,
-#+REVEAL_INIT_OPTIONS: margin: 0.04, minScale:0.2, maxScale:2.0, center:'false',
-#+REVEAL_INIT_OPTIONS: slideNumber:'c/t', 
-#+REVEAL_INIT_OPTIONS: menu: {side: 'left', titleSelector: 'h1, h2, h3, h4', markers: true, custom: false, themes: true, transitions: true, openButton: true, openSlideNumber: false, keyboard: true, sticky: false, autoOpen: true}
-#+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Introduction of network analysis.">
-#+REVEAL_POSTAMBLE: <p> Created by 曹巍. </p>
-#+REVEAL_PLUGINS: (highlight markdown notes)
-#+REVEAL_EXTRA_CSS: https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css
-#+REVEAL_TITLE_SLIDE: <h2>%t</h2>
+#+REVEAL_MATHJAX_URL: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js
+#+REVEAL_TITLE_SLIDE: <h1>%t</h1>
 #+REVEAL_TITLE_SLIDE: <h3>%a</h3>
 #+REVEAL_TITLE_SLIDE: <h3>%d</h3> 
-# +REVEAL_PREAMBLE: <div class="footer"><p>農研機構</p></div>
+#+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Introduction of network analysis.">
+#+REVEAL_PREAMBLE: <div class="footer"><p>農研機構　農業情報研究センター</p></div>
 # +REVEAL_HLEVEL: 
 # +REVEAL: split
 # +REVEAL_SLIDE_HEADER: reveal_global_header:t 
-# +REVEAL_SLIDE_FOOTER: 農研機構,NARO
+# +REVEAL_SLIDE_FOOTER: 農研機構
+#+REVEAL_THEME: white
+#+REVEAL_PLUGINS:(highlight markdown notes menu chalkboard)
+#+REVEAL_EXTRA_CSS:./css/fira-font.css
+#+REVEAL_EXTRA_CSS:./reveal.js/bower_components/reveal.js-menu/menu.css
+#+REVEAL_EXTRA_CSS:./reveal.js/bower_components/reveal.js-menu/font-awesome/css/all.css
+#+REVEAL_INIT_OPTIONS: margin: 0.04, minScale:0.2, maxScale:2.0, center:'false',
+#+REVEAL_INIT_OPTIONS: width:1200, height:800,
+# +REVEAL_INIT_OPTIONS: width:1920, height:1080,
+#+REVEAL_INIT_OPTIONS: controlsLayout: 'bottom-right',
+#+REVEAL_INIT_OPTIONS: slideNumber:'c/t', 
+#+REVEAL_INIT_OPTIONS: menu: {side: 'left', numbers:true, titleSelector: 'h1, h2, h3, h4', hideMissingTitles:true, markers: true, custom: false, themes: true, transitions: true, openButton: true, openSlideNumber:true, keyboard: true, sticky: false, autoOpen: true},
+#+REVEAL_INIT_OPTIONS: chalkboard: {boardmarkerWidth: 8, toggleChalkboardButton: { left: "80px" }, toggleNotesButton: { left: "130px"}}
 #+MACRO: color @@html:<font color="$1">$2</font>@@
+#+MACRO: font @@html:<font size=$1>$2</font>@@
 
 * グラフ（ネットワーク）
   
@@ -272,7 +280,7 @@ $$d = \sum_{i=1}^{k} |a_{i} - b_{i}|$$
 #+REVEAL_HTML: </div>
 
 
-* ネットワークの解析 (undirected graph)
+* ネットワークの統計 (undirected graph)
 #+OPTIONS: toc:nil
 #+TOC: headlines 1 local
 
@@ -419,6 +427,7 @@ ffmpeg -i isomorphism.mov -r 24 -vf scale=300:-1 isomorphism.gif
 - maximum spanning tree
 #+END_NOTES
 
+
 * ネットワークの可視化
 - Graphviz コマンドラインツール
 - Cytoscape
@@ -430,17 +439,549 @@ ffmpeg -i isomorphism.mov -r 24 -vf scale=300:-1 isomorphism.gif
 
 ** Cytoscape: (Java)
 
-[[./pics/cytoscape.png]]
+#+REVEAL_HTML: <img src="./pics/cytoscape.png" class="stretch">
 
 https://cytoscape.org/download.html
 
 ** Gephi
-
-[[./pics/gephi.png]]
+#+REVEAL_HTML: <img src="./pics/gephi.png" class="stretch">
 
 https://gephi.org
 
 
-* 遺伝子発現によるネットワーク構築
+* {{{font(10, 遺伝子共発現ネットワークの構築)}}} 
+
+#+REVEAL_HTML: <img src="./pics/Gene_co-expression_network_construction_steps.png" class="stretch" >
+from Wikipidia
+
+** Pearson相関係数（Pearson's correlation coefficient）
+  ここで、 遺伝子ペアの発現の類似性（$s_{ij}$）は、  
+
+1. 絶対値  
+
+  $$ s_{ij} = |corr(i, j)| $$
+
+2. 符号を維持するため  
+
+  $$ s_{ij} = \frac{1 + corr(i, j)}{2} $$
+
+** 遺伝子ペア(辺)の選択: threshold
+
+1. signum関数
+
+  $$a_{ij} = signum(s_{ij}, \tau) \equiv
+   \begin{cases}
+    1 \quad \text{if}\,\, s_{ij} \ge \tau \\
+    0 \quad \text{if}\,\, s_{ij} < \tau
+   \end{cases}$$
+
+2. sigmoid関数
+
+  $$a_{ij}=sigmoid(s_{ij}, \alpha, \tau_0)\equiv\frac{1}{1+e^{-\alpha(s_{ij}-\tau_0)}}$$
+
+3. Power関数
+
+  $$a_{ij}=power(s_{ij}, \beta)\equiv|s_{ij}|^{\beta}$$
+
+** 遺伝子ペア（辺）の選択: scale free criterion
+#+REVEAL_HTML: <div class="column" style="float:left; width:50%; font-size:30px">
+[[./pics/TOM_soft_thresholding.png]]
+
+赤：A exponentially truncated power law
+黒：冪乗則
+
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:50%; font-size:30px">
+Scale-free topology
+  $$ p(k) \sim k^{-\gamma} $$
+
+ - 線形モデル
+   $$ log_{10}(p(k)) \sim log_{10}(k) $$
+ - A exponentially truncated power law 
+   $$ p(k)\sim k^{-\gamma}exp(-\alpha k) $$ 
+#+REVEAL_HTML: </div>
+
+#+ATTR_HTML: :style font-size:20px;float:left
+Zhang, B., Horvath, S., 2005. A general framework for weighted gene co-expression network analysis. 
+Stat Appl Genet Mol Biol 4, Article17. doi:10.2202/1544-6115.1128
+
+**  Recommendation of scale free criterion
+#+begin_quote
+Only consider those parameter values that lead to a network satisfying scale- free topology at 
+least approximately, e.g. signed $R^2 > 0.80$. 
+#+end_quote
+
+#+ATTR_HTML: :style font-size:20px;float:left
+Zhang, B., Horvath, S., 2005. A general framework for weighted gene co-expression network analysis. 
+Stat Appl Genet Mol Biol 4, Article17. doi:10.2202/1544-6115.1128
+
+** 遺伝子（頂点）の連結度(Connectivity)
+- 点連結度
+  $$k_i = \sum_{j=1}^{n} a_{ij} $$
+- Topological Overlap Matrix(TOM)-based 
+  $$w_i = \sum_{j=1}^{n} w_{ij}, \text{where}\quad w_{ij} = \frac{l_{ij}+a_{ij}}{min\{k_i,k_j\}+1-a_{ij}} $$ 
+  $l_{ij}=\sum_{u}a_{iu}a_{uj}$, and $k_i=\sum_{u}a_{iu}$
+
+** TOMの例
+
+#+REVEAL_HTML: <div class="column" style="float:left; width:50%; font-size:30px">
+[[./pics/TOM_eg.png]]
+
+(＊)の数字は頂点のクラスタリング係数です。辺の数字はTOMの値です。
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:50%; font-size:30px">
+頂点Hと頂点Jの度数は $k_{H} = 3$ と $k_{J} = 3$ になり、
+頂点Hと頂点Jと同時に連結の頂点の数は1となります。
+
+\begin{eqnarray*}
+w(H,J) &=& \frac{l_{ij}+a_{ij}}{min\{k_i,k_j\}+1-a_{ij}} \\
+       &=&\frac{1+1}{3+1-1} \\
+       &=&\frac{2}{3}
+ \end{eqnarray*}
+#+REVEAL_HTML: </div>
+
+** Pros and Cons
+  - 単なるthreshold
+    - 簡単
+    - 実装しやすい
+    - loss of information
+    - sensitivity to the choice
+  - scale free criterion
+    - ネットワークはscale-free特性をほぼ満たすことが必要
+    - 選択に非敏感
+    - 計算量が大き
 
 
+* 遺伝子共発現ネットワークの解析
+
+** Scale free v.s. Modularity
+
+#+REVEAL_HTML: <img src="./pics/scale_free_vs_modularity.png" class="stretch" >
+
+** Modularityの仮説
+
+  1. ランダム仮説(Random Hypothesis)
+
+     ランダムネットワークは、コミュニティ構造を持たない。
+
+  2. Maximal Modularity Hypothesis  
+
+     特定のネットワークの最大のモジュール性Mを持つパーティションは、最適なコミュニティ構造がある。
+
+#+BEGIN_NOTES
+The partition with the maximum modularity M for a given network offers the optimal community structure
+#+END_NOTES
+
+#+REVEAL: split:t
+
+$$ M = \sum\limits_{c = 1}^{n_c } {\left[ {\frac{{L_c }}{L} - \left( {\frac{{k_c }}{{2L}}} \right)^2 } \right]} $$
+
+ここで、コミュニティ $C_c$ 内において、$L_c$ は辺の総数、$k_c$ は頂点の次数の総和、
+$L$ はネットワークの辺の数です。
+
+#+REVEAL: split:t
+[[./pics/modularity.jpg]]
+
+** Modularityに基づいてコミュニティの識別 
+#+begin_notes
+A greedy algorithm, which iteratively joins nodes if the move increases the new partition’s modularity。
+#+end_notes
+
+#+REVEAL_HTML: <img src="./pics/maximum_modularity.png" class="stretch" >
+from A.-L. Barabási, Network Science: Communities.
+
+** モジュール性の限界(Limits of Modularity)
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+[[./pics/modularity _limits.png]]
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+$$ \Delta M_{AB}  = \frac{{l_{AB} }}{L} - \frac{{k_A k_B }}{{2L^2 }} $$
+$k_A$ と $k_B$ は、それぞれ $A$ と $B$ の次数の総数である。
+$\frac{k_A k_B}{2L}<1, L_{AB}\ge 1 \Longrightarrow \Delta M_{AB} > 0$, $A$ と $B$ をマージする。
+
+$k_A \sim k_B = k\Longrightarrow k\le \sqrt{2L}$ 
+#+REVEAL_HTML: </div>
+
+#+ATTR_HTML: :style font-size:20px;float:left
+他の方法は:
+#+ATTR_HTML: :style font-size:20px;float:left
+1. "Fast Modularity" Community Structure Inference Algorithm 
+   http://cs.unm.edu/~aaron/research/fastmodularity.htm 
+2. Louvain method: Finding communities in large networks
+   http://cs.unm.edu/~aaron/research/fastmodularity.htm
+** 最小全域木(Minimum spanning tree)
+　最小全域木とは、各辺に重み（コスト）がある場合、最小の総和コストで構成される全域木を最小全域木という。
+
+#+REVEAL_HTML: <img src="./pics/Minimum_spanning_tree.png" class="stretch" >
+
+*** クラスカル法 (Kruskal's Algorithm) 
+   #+REVEAL_HTML: <video controls data-autoplay src="./movies/kruskal_ani.mov"></video>
+   #+CAPTION: Kruskal algorithm
+   #+REVEAL_HTML: <div style="font-size: 60%;">
+    See: https://courses.cs.washington.edu/courses/cse373/16wi/Hashing/visualization/Kruskal.html
+   #+REVEAL_HTML: </div>
+
+*** プリム法 (Prim's Algorithm)
+   #+REVEAL_HTML: <video controls data-autoplay src="./movies/prim_ani.mov"></video>
+   #+CAPTION: Prim's algorithm
+   #+REVEAL_HTML: <div style="font-size: 60%;">
+   See: https://courses.cs.washington.edu/courses/cse373/16wi/Hashing/visualization/Prim.html
+   #+REVEAL_HTML: </div>
+
+
+##+begin_notes
+ COMMENT ネットワークのモジュールの識別(Module detection)
+R - bootnet, which takes a variance-covariance matrix as the input only
+$$EBIC = -2L+Elog(N)+4\gamma Elog(P)$$
+L denotes the log-likelihood, N the sample size, E the number of nonzero edges, and P the number of nodes. 
+#+end_notes
+
+** Composite Index of Dynamical network biomarker(DNB)
+
+1. 有力なグループを有意性(student-t検定)で決定する
+
+2. Composite Indexを計算する
+
+$$ I \stackrel{\mathrm{def}}{=} \frac{SD_d\cdot PCC_d}{PCC_o} $$
+
+ここで、$PCC_d$ は有力なグループなPearson相関係数の絶対値の平均値、$PCC_o$ は
+有力なグループと以外な分子なPearson相関係数の絶対値の平均値です。
+#+begin_notes
+$$ I \stackrel{\mathrm{def}}{=} \frac{SD_d\cdot PCC_d}{PCC_o} $$
+where $PCC_d$ is the average Pearson’s correlation coefficient of the dominant group in absolute
+value; $PCC_o$ is the average Pearson’s correlation coefficient of the dominant group with 
+other molecules in absolute value; $SD_d$ is the average standard deviation of the dominant group.
+#+end_notes
+
+#+REVEAL: split:t
+
+#+REVEAL_HTML: <img src="./pics/DNB_example.png" class="stretch" >
+
+
+#+begin_notes
+
+Gene GO Enrichment Analysis
+
+"Enrichment" - ランダムと比べということ
+
+To perform functional enrichment analysis, we need to have:
+
+- A set of genes of interest (e.g., differentially expressed genes): study set (n)
+- A set with all the genes to consider in the analysis: population set (N)
+(which must contain the study set)
+- GO annotations, associating the genes in the population set to GO terms
+- The GO ontology, with the description of GO terms and their relationships
+
+For each GO term, we need to count the frequency (k) of genes in the study set (n) that are 
+associated to the term, and the frequency (K) of genes in the population set (N) that are 
+associated to the same term. Then we test how likely would it be to obtain at least k genes 
+associated to the term if n genes would be randomly sampled from the population, given the 
+frequency K and size N of the population.
+
+The appropriate statistical test is the one-tailed variant of Fisher’s exact test, also known as 
+the hypergeometric test for over-representation. When the one-tailed version is applied, this 
+test will compute the probability of observing at least the sample frequency, given the population
+ frequency. The hypergeometric distribution measures precisely the probability of k successes 
+in n draws, without replacement, from a finite population of size N that contains exactly 
+K successful objects:
+
+$$ P(X=k) = \frac{C_{K}^{k} C_{N-n}^{K-k}}{C_{N}^{n}} $$
+
+Gene Set Enrichment Analysis and pathway analysis
+
+- Gene Set Enrichment Analysis (GSEA, DAVID)  
+  #+ATTR_HTML: :style font-size:20px;float:left
+  Subramanian et al.Gene set enrichment analysis: A knowledge-based approach for interpreting genome-wide expression profiles, PNAS 102(43)15545-15550, 2005 
+
+- Pathway analysis (KEGG, Reactome, Ingenuity)  
+  #+ATTR_HTML: :style font-size:20px;float:left 
+  Curtis, R.K., et al. (2005) Pathways to the analysis of microarray data. Trends in Biotechnology 23: 429-435. 
+  Werner, T. (2008) Bioinformatics applications for pathway analysis of microarray data. Current Opinion in Biotechnology 19: 50-54.
+  
+The Gene Ontology, containing standardised annotation of gene products, is commonly used for 
+this purpose. It works by comparing the frequency of individual annotations in the gene list
+(e.g differentially expressed genes) with a reference list (usually all genes on the microarray
+or in the genome). Enrichment of biological pathways supplied by KEGG, Ingenuity, Reactome or 
+WikiPathways can be performed in a similar way.  
+  
+A common approach to interpreting gene expression data is gene set enrichment analysis 
+based on the functional annotation of the differentially expressed genes (Figure 13). 
+This is useful for finding out if the differentially expressed genes are associated 
+with a certain biological process or molecular function.
+
+#+end_notes
+
+
+* 遺伝子調節ネットワークのモデル(これから)
+
+# +ATTR_REVEAL: :frag (none none none highlight-red) :frag_idx (- - - 1)
+- Boolean Model (有向グラフ、directed graph)
+- Bayesian Model (有向非巡回グラフ、Acyclic directed graph)
+- Differential equations (有向グラフ、directed graph)
+- Graphical Gaussuan Model (無向グラフ、undirected graph)
+  - Correlation Coeffcient
+  - Partial Correlation Coefficient
+
+** Boolean Model (Stuart Kauffman, 1969)
+  - $G=(V,E)$ には、頂点（遺伝子）$x_i$ がOn或いはOff、すなわち１或いは０という２つ状態。
+  - n個頂点を持つネットワークの状態は、$V=\{x_1,\ldots,x_n\}$ で表す。
+  - t+1時刻に、$x_i$ の状態がt時刻に $V$ の中にある $k_i$ 個親調節遺伝子組の状態により決める。
+    $k_i$: 頂点 $x_i$ の連結といい、親調節遺伝子組の操作は、boolean algebraルールを実行する調節関数 $f_i$ で定義する。
+    $$x_{i}(t+1) = f_i(x_{i1}(t),\ldots,x_{ik}(t))$$
+
+** Boolean algebra law(一部)
+#+ATTR_HTML: :style font-size:30px
+| Boolean Operations | Logical form     | Polynomial form |
+|--------------------+------------------+-----------------|
+| AND ($\bigwedge$)  | $Z=X\bigwedge Y$ | $Z = XY$        |
+| OR($\bigvee$)      | $Z=X\bigvee Y$   | $Z = X + Y+XY$  |
+| NOT ($\neg$)       | $Z=\bar{X}$      | $Z = 1 + X$     |
+
+例：AND
+#+ATTR_HTML: :style font-size:30px
+| Logical form       | Polynomial form |
+|--------------------+-----------------|
+| $0 \wedge 0 = 0$   | $0\cdot 0=0$    |
+| $0 \wedge 1 = 0$   | $0\cdot 1=0$    |
+| $1 \wedge 0 = 0$   | $1\cdot 0=0$    |
+| $1 \wedge 1 = 1$   | $1\cdot 1=1$    |
+
+
+** Boolean Modelの例
+#+REVEAL_HTML: <div class="column" style="float:left; width:40%; font-size:30px">
+[[./pics/Boolean_model.png]]
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:60%; font-size:20px; margin-top:80px;">
+
+| 操作                                                | 関数                                                        |
+|-----------------------------------------------------+-------------------------------------------------------------|
+| $X_{t+1}=X_{t}\wedge Y_{t}$                         | $f_{1}(x_1, x2, x3) = x_1 \wedge x_2$                       |
+| $Y_{t+1}=X_{t}\vee Y_{t}$                           | $f_{1}(x_1, x2, x3) = x_1 \vee x_2$                         |
+| $Z_{t+1}=X_{t}\vee (\neg Y_{t} \wedge Z_{t})$       | $f_{1}(x_1, x2, x3) = x_2 \vee (\neg x_1 \wedge x_3)$       |
+
+t0 $\rightarrow$ (X,Y,Z) = 1, 0, 1 
+
+t1 $\rightarrow$ (X,Y,Z) = ($1\wedge 0$, $1\vee 0$, $0\vee(\neg 1 \wedge 1)$) = 0, 1, 0 
+#+REVEAL_HTML: </div>
+
+100遺伝子を持つネットワークの状態は $2^{100}$ になる。
+
+** Boolean Modelのattractor
+#+REVEAL_HTML: <div class="column" style="float:left; width:30%; font-size:30px">
+[[./pics/BN_attractor.png]]
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:70%; font-size:20px; margin-top:80px;">
+#+REVEAL_HTML: <div class="column" style="float:left; width:25%; font-size:20px;">
+#+ATTR_HTML: :style font-size:10px
+遺伝子1は、遺伝子３と遺伝子４によりコントロールする。
+
+| 3 4 | 1 |
+|-----+---|
+| 0 0 | 0 |
+| 0 1 | 0 |
+| 1 0 | 1 |
+| 1 1 | 1 |
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:25%; font-size:20px;">
+#+ATTR_HTML: :style font-size:10px
+遺伝子2は、遺伝子１と遺伝子４によりコントロールする。
+
+| 1 4 | 2 |
+|-----+---|
+| 0 0 | 1 |
+| 0 1 | 0 |
+| 1 0 | 0 |
+| 1 1 | 1 |
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:25%; font-size:20px;">
+#+ATTR_HTML: :style font-size:10px
+遺伝子3は、遺伝子1と遺伝子２によりコントロールする。
+
+| 1 2 |3  |
+|-----+---|
+| 0 0 | 1 |
+| 0 1 | 0 |
+| 1 0 | 1 |
+| 1 1 | 0 |
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:25%; font-size:20px;">
+#+ATTR_HTML: :style font-size:10px
+遺伝子４は、遺伝子２と遺伝子３によりコントロールする。
+
+| 2 3 |4  |
+|-----+---|
+| 0 0 | 0 |
+| 0 1 | 1 |
+| 1 0 | 1 |
+| 1 1 | 0 |
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: </div>
+
+#+REVEAL_HTML: <div class="column" style="float:left; font-size:20px;">
+ネットワークの状態が以下の16種類になる。
+\begin{array}{|c|c|c|} \hline
+0,0,0,0 & 1,0,0,0 & 1,1,0,0 & 1,1,1,0   \\ \hline
+1,1,1,1 & 0,1,0,0 & 1,0,1,0 & 1,1,0,1  \\ \hline
+        & 0,0,1,0 & 1,0,0,1 & 1,0,1,1  \\ \hline
+        & 0,0,0,1 & 0,1,0,1 & 0,1,1,1  \\ \hline
+        &         & 0,0,1,1 &          \\ \hline      
+        &         & 0,1,1,0 &          \\ \hline
+\end{array}
+#+REVEAL_HTML: </div>
+
+#+REVEAL: split:t
+#+REVEAL_HTML: <div class="column" style="float:left; width:30%; font-size:20px;">
+| 時刻 | 状態    |
+| t0   | 0,0,0,0 |
+| t1   | 0,1,1,0 |
+| t2   | 1,1,0,0 |
+| t3   | 0,0,0,1 |
+| t4   | 0,0,1,0 |
+| t5   | 1,1,1,1 |
+| t6   | 1,1,0,0 |
+| t7   | 0,0,0,1 |
+| t8   | 0,0,1,0 |
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width:70%; font-size:20px;">
+[[./pics/BN_attractor_ex.png]]
+#+REVEAL_HTML: </div>
+** Recommened Papers
+   #+ATTR_HTML: :style font-size:30px
+   - Albert, R., Othmer, H. G. 
+     The topology of the regulatory interactions predicts the expression pattern of 
+     the segment polarity genes in Drosophila melanogaster. J. Theor. Biol., 2003, 223, 1-18
+
+   - Tatsuya Akutsu, Satoru Kuhara, Osamu Maruyama, and Satoru Miyano. 
+    Identification of gene regulatory networks by strategic gene disruptions and gene overexpressions. 
+    In Proceedings of the Ninth Annual ACM-SIAM Symposium on Discrete Algorithms, pages 695-702, 
+    San Francisco, California, 25-27 January 1998.
+
+
+
+** Bayesian Model
+
+*** Intro  
+
+*** Recommended papers
+    #+ATTR_HTML: :style font-size:30px;float:left
+    - Friedman N., Linial M., Nachman I., and Pe'er D.Using bayesian networks to analyze expression data. 
+      J. Computational Biology, 7(3):601-620, Nov 1998.
+
+    #+ATTR_HTML: :style font-size:30px;float:left
+    - Imoto S. et al.  (2002) Estimation of genetic networks and functional structures between genes by 
+      using Bayesian networks and nonparametric regression. In: Pacific Symposium on Biocomputing, 
+      The Kauai Marriott Resort, Hawaii, Vol. 7, pp. 175–186.
+
+** Differential equations
+ 
+*** Recommended papers
+    #+ATTR_HTML: :style font-size:30px;float:left
+    Chen T, He HL, Church GM. Modeling gene expression with differential equations. 
+    Pac Symp Biocomput. 1999;29-40.
+
+
+** Graphical Gaussian Model
+
+It is also said 'concentration graph' or 'covariance selection' model.  
+Suppose that a pair of genes, say Genes A and B, show a high correlation in their expression 
+profiles. There are three possible mechanisms to induce a high correlation in the expression 
+levels between them. 
+
+1. Direct interaction.
+2. Indirect interaction.
+3. A common gene, i.e., the expressions of Genes A and B are regulated by a common gene product.
+ 
+
+*** Recommended papers
+    #+ATTR_HTML: :style font-size:30px
+    Hiroyuki Toh,  Katsuhisa Horimoto
+    Bioinformatics, Volume 18, Issue 2, February 2002, Pages 287–297
+
+
+* 遺伝子調節ネットワークの推定 (これから)
+ 
+** Limited to the feasible number of regulatory genes
+   #+ATTR_HTML: :style font-size:20px;float:left
+   - Reveal  
+     Liang S. et al.  (1998) 
+     Reveal, a general reverse engineering algorithm for inference of genetic network architectures. 
+     In Pacific Symposium on Biocomputing, pages 18-29, Maui, Hawaii, 1998. World Scientific Publishing Co.
+   - Best-Fit  
+     Lähdesmäki H. et al.  (2003)
+     On learning gene regulatory networks under the Boolean network model. Mach. Learn., 52, 147–167.
+   - Bayesian inference approach for a Boolean network  
+     Han S. et al.  (2014) 
+     A full bayesian approach for Boolean genetic network inference. PLoS One, 9, e115806.
+   - Genetic algorithm-based  
+     Shohag Barman, Yung-Keun Kwon, 
+     A Boolean network inference from time-series gene expression data using a genetic algorithm
+      Bioinformatics, Volume 34, Issue 17, 01 September 2018, Pages i927–i933
+   - ...
+
+** Mutual Information
+  #+ATTR_HTML: :style font-size:20px;float:left
+   - Relevance networks  
+     Butte A.J., Kohane I.S. (2000) 
+     Mutual information relevance networks: functional genomic clustering using pairwise entropy measurements. 
+     In Pacific Symposium on Biocomputing, The Sheraton Waikiki, Hawaii, Vol. 5, p. 26.
+   - Context likelihood of relatedness (CLR)  
+     Faith J.J. et al.  (2007) 
+     Large-scale mapping and validation of Escherichia coli transcriptional regulation from a compendium of 
+     expression profiles. PLoS Biol., 5, e8.
+   - Reconstruction of accurate cellular networks (ARACNE)   
+     Margolin A.A. et al.  (2006) 
+     Aracne: an algorithm for the reconstruction of gene regulatory networks 
+     in a mammalian cellular context. BMC Bioinformatics, 7, S7.
+   - ...
+
+
+* カイコの遺伝子共発現ネットワークの解析
+
+目的：カイコの遺伝子ネットワークによる有用物質産生関連候補遺伝子の同定
+
+** サンプルデータ
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+#+REVEAL_HTML: <img src="./pics/silk_sample_data.png" class="stretch" >
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+サンプルデータには、51,926遺伝子がある。TPM列を用いて、ネットワークを構築しました。
+#+REVEAL_HTML: </div>
+
+** 構築したネットワーク(fundamental analysis)
+
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+#+REVEAL_HTML: <div class="r-stack">
+#+REVEAL_HTML: <img class="fragment current-visible" data-fragment-index="0" src="./pics/sip_fig_black.png">
+#+REVEAL_HTML: <img class="fragment" data-fragment-index="1" src="./pics/sip_fig_black_closeview.png">
+#+REVEAL_HTML: <img class="fragment" data-fragment-index="2" src="./pics/sip_fig_black_closeview2.png">
+#+REVEAL_HTML: <img class="fragment" data-fragment-index="3" src="./pics/sip_fig_black_closeview3.png">
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: </div>
+
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+#+REVEAL_HTML: <div class="column" style="float:left; font-size:30px">
+サンプルデータには、51,926遺伝子がある。発現値が平均値より大き遺伝子を集め、グラフを構築した。
+city block距離による辺を定義し、ノードペアの距離において、下の25％データの値を域値にしました。
+
+1. ノードの数は2785
+2. edgesの数は129327
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: </div>
+
+** 研究方法
+
+現時点で、51,926遺伝子　x　20種類組織である。
+
+#+ATTR_HTML: :style font-size:30px
+- 共発現ネットワークの構築（Pearson相関）
+  - 組織別のVariance-Covarianceマトリックス
+  - 遺伝子ごとのVariance-Covarianceマトリックス
+- 最小全域木(Minimum spanning tree): Primアルゴリズム
+- グラフの分割（graph partitioning）  
+
+   Metis(c), graph-tool(python), pcsf-fast(python)
+- [$\star$] 各コミュニティにおいて、以下の指標でランキング
+ $$ I \stackrel{\mathrm{def}}{=} \frac{\#E}{\#N}\frac{PCC_d}{PCC_o} $$
+ 式の改良案を考えています。
+- 選択したコミュニティ(遺伝子群)に対して注釈解析
+- [Option?]組織別のネットワークの比較

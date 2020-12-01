@@ -11,11 +11,14 @@
 #include "cli_opt.hpp"
 #include "utility.hpp"
 #include "graph.hpp"
+#include "community_detection.hpp"
 #include "graph_report.hpp"
 #include "FileReaderFactory.hpp"
 #include "TSVReader.hpp"
 #include "graph_util.hpp"
 #include "graph_algo.hpp"
+
+
 
 int main(int argc, const char * argv[]) {
   // ---------------------------------------------------------------------------
@@ -32,8 +35,10 @@ int main(int argc, const char * argv[]) {
   std::string graphviz_file = CLIARG::o_graph_file;
   // graph description file name.
   std::string o_filename = CLIARG::o_filename;
+  // graph component as text
+  std::string comp_filename = "networkz_components.txt";
   // graph title
-  std::string o_graph_name = CLIARG::o_graph_name;
+  const std::string o_graph_name = CLIARG::o_graph_name;
   // distance threshold to create an edge.
   double d_threshold = CLIARG::d_threshold;
   // method name for distance computation
@@ -46,13 +51,18 @@ int main(int argc, const char * argv[]) {
   std::string comment = "#";
   int header = 0;
   
+  // Precision
+  long double precision = 0.000001L;
   // For measuring elapsed time
   std::chrono::duration<double> seconds;
   // manually start timer
   boost::timer::cpu_timer timer;
   // Prepare dataframe to store data.
   NARO::DataFrame *df = new NARO::DataFrame();
-
+  if (df == 0x0) {
+    std::cerr << "Insufficient memory" << std::endl;
+    std::exit(-1);
+  }
   // ---------------------------------------------------------------------------
   // Load the file parsers
   // ---------------------------------------------------------------------------
@@ -107,6 +117,10 @@ int main(int argc, const char * argv[]) {
   // 1.1 Select columns
   // ---------------------------------------------------------------------------
   NARO::DataFrame *dat = new NARO::DataFrame();
+  if (dat == 0x0) {
+    std::cerr << "Insufficient memory" << std::endl;
+    std::exit(-1);
+  }
   if (CLIARG::column_names.empty()) {
     dat = df;
   } else {
@@ -124,7 +138,7 @@ int main(int argc, const char * argv[]) {
     std::cout << " Completed." << std::endl;
   }
   // ---------------------------------------------------------------------------
-  // 2. Compute the cityblock distance between any two genes
+  // 2. Compute the distance between any two genes
   // ---------------------------------------------------------------------------
   // Instantiate a graph
   if (verbose) {
@@ -147,16 +161,57 @@ int main(int argc, const char * argv[]) {
     std::cout << " Completed." << std::endl;
   }
   // ---------------------------------------------------------------------------
-  // Find the minimum spanning tree
+  // Find the minimum spanning tree by prim (more edges)
+  //     or kruskal (more vertices)
   //
-  //genes_graph.m_property->glabel += "-" + mst_algo_name;
-  //NARO::Algo::find_minimum_spanning_tree(
-  //                    genes_graph, mst_algo_name);
+  genes_graph.m_property->glabel += "-" + mst_algo_name;
+  NARO::Algo::find_minimum_spanning_tree(
+                      genes_graph, mst_algo_name);
+  // ---------------------------------------------------------------------------
+  // Find the minimum cut by stoer_wagner_min_cut
+  //NARO::Algo::stoer_wagner_min_cut(genes_graph, true);
+  
+  // ---------------------------------------------------------------------------
+  // modularity::Modularity
+  //int node_size = static_cast<int>(boost::num_vertices(genes_graph));
+  // Store gene names with indice of nodes
+  //std::vector<std::string> lookup_table(node_size);
+  std::map<std::string, unsigned int> n2str_table;
+  //    1. Convert the graph to csr_graph
+  NARO::Algo::Community::CSRgraph csr_g;
+  NARO::convert(genes_graph, csr_g, &n2str_table);
+  //    2. Initialize the quality function
+  NARO::Algo::Community::Modularity quality(csr_g);
+  //    3. Initilaize the louvain
+  NARO::Algo::Community::Louvain<NARO::Algo::Community::Modularity>
+      louvain(-1, precision, &quality);
+  //    4. Execute louvain
+  //       Store community ids with indices of nodes
+  std::vector<int> n2c;
+  double final_quality = -100;
+  int num_levels = -1;
+
+  std::tie(final_quality, num_levels) = louvain.louvain(n2c);
+  std::cout << "Best quality: " << final_quality << std::endl;
+  genes_graph[boost::graph_bundle].level = num_levels;
+  genes_graph[boost::graph_bundle].quality = final_quality;
+  genes_graph[boost::graph_bundle].quality_name = quality.name;
+  //    5. Assign community id
+  NARO::VertexIter vi, vend;
+  for(boost::tie(vi, vend) = boost::vertices(genes_graph); vi != vend; ++vi) {
+    auto vertex_name = genes_graph[*vi].name;
+    auto node = n2str_table[vertex_name];
+    auto communityId = n2c[node];
+    genes_graph[*vi].communityId = communityId;
+  }
+  
   // ---------------------------------------------------------------------------
   // Create a report
   //
-  NARO::Report report{o_graph_name, get_local_time(), "Networkz"};
-  if (!report.write(o_filename, &genes_graph, "md", d_threshold, verbose)){
+  NARO::Report report{o_graph_name, get_local_time(), "Networkz", filename};
+  if (!report.write(o_filename, &genes_graph, "md", d_threshold,
+                    distance_type,
+                    verbose)){
     std::cout << "Failed to write a log." <<std::endl;
     std::exit(-1);
   }
@@ -187,9 +242,14 @@ int main(int argc, const char * argv[]) {
   // Release Memory
   // ---------------------------------------------------------------------------
   genes_graph.clear();
-  delete df;
-  delete dat;
-  
+  // dat and df are the same object
+  if (dat == df) {
+    dat = nullptr;
+    delete df;
+  } else {
+    delete dat;
+    delete df;
+  }
   if (verbose) {
     timer.stop();
     seconds = std::chrono::nanoseconds(timer.elapsed().user);

@@ -43,6 +43,8 @@ set(SOURCE_FILES
   graph_util.cpp
   graph_algo.cpp
   utility.cpp
+  community_detection.cpp
+  modularity.cpp
   main.cpp
 )
 

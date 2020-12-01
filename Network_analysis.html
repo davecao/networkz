@@ -7,19 +7,23 @@
 <style type="text/css">
 .underline { text-decoration: underline; }
 </style>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.css"/>
+<link rel="stylesheet" href="./reveal.js/dist/reveal.css"/>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/theme/moon.css" id="theme"/>
+<link rel="stylesheet" href="./reveal.js/dist/theme/white.css" id="theme"/>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/lib/css/zenburn.css"/>
+<link rel="stylesheet" href="./css/fira-font.css"/>
+
+<link rel="stylesheet" href="./reveal.js/bower_components/reveal.js-menu/menu.css"/>
+
+<link rel="stylesheet" href="./reveal.js/bower_components/reveal.js-menu/font-awesome/css/all.css"/>
+<link rel="stylesheet" href="./reveal.js/lib/css/zenburn.css"/>
 <!-- If the query includes 'print-pdf', include the PDF print sheet -->
 <script>
     if( window.location.search.match( /print-pdf/gi ) ) {
         var link = document.createElement( 'link' );
         link.rel = 'stylesheet';
         link.type = 'text/css';
-        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js/css/print/pdf.css';
+        link.href = './reveal.js/css/print/pdf.css';
         document.getElementsByTagName( 'head' )[0].appendChild( link );
     }
 </script>
@@ -27,26 +31,27 @@
 <meta name="description" content="Introduction of network analysis.">
 </head>
 <body>
+<div class="footer"><p>農研機構　農業情報研究センター</p></div>
 <div class="reveal">
 <div class="slides">
-<section id="sec-title-slide"><h2>ネットワーク(グラフ)の基礎</h2>
+<section id="sec-title-slide"><h1>ネットワーク(グラフ)の基礎</h1>
 <h3>曹　巍</h3>
 <h3>July 15, 2020</h3>
 </section>
 
 <section>
-<section id="slide-org1db0ec4">
-<h2 id="org1db0ec4"><span class="section-number-2">1</span> グラフ（ネットワーク）</h2>
+<section id="slide-orgd9479e8">
+<h2 id="orgd9479e8"><span class="section-number-2">1</span> グラフ（ネットワーク）</h2>
 <div class="outline-text-2" id="text-1">
 </div>
 </section>
-<section id="slide-orgbc50c73">
-<h3 id="orgbc50c73"><span class="section-number-3">1.1</span> ネットワークの役割</h3>
+<section id="slide-org511b41c">
+<h3 id="org511b41c"><span class="section-number-3">1.1</span> ネットワークの役割</h3>
 <div class="outline-text-3" id="text-1-1">
 </div>
 </section>
-<section id="slide-org36f19f1">
-<h4 id="org36f19f1"><span class="section-number-4">1.1.1</span> タンパク質相互作用ネットワーク</h4>
+<section id="slide-org2a8bbc8">
+<h4 id="org2a8bbc8"><span class="section-number-4">1.1.1</span> タンパク質相互作用ネットワーク</h4>
 
 <div class="figure">
 <p><img src="./pics/prInter.png" alt="prInter.png" />
@@ -54,8 +59,8 @@
 </div>
 
 </section>
-<section id="slide-orgc621818">
-<h4 id="orgc621818"><span class="section-number-4">1.1.2</span> 代謝ネットワーク(TCA)</h4>
+<section id="slide-org3d5fcc7">
+<h4 id="org3d5fcc7"><span class="section-number-4">1.1.2</span> 代謝ネットワーク(TCA)</h4>
 
 <div class="figure">
 <p><img src="./pics/TCA.png" alt="TCA.png" />
@@ -63,8 +68,8 @@
 </div>
 
 </section>
-<section id="slide-orge85da6b">
-<h4 id="orge85da6b"><span class="section-number-4">1.1.3</span> インターネットマップ (The Opte Porject, 2005)</h4>
+<section id="slide-orgd502180">
+<h4 id="orgd502180"><span class="section-number-4">1.1.3</span> インターネットマップ (The Opte Porject, 2005)</h4>
 
 <div class="figure">
 <p><img src="./pics/internet.png" alt="internet.png" />
@@ -73,8 +78,8 @@
 
 
 </section>
-<section id="slide-orgc867ba9">
-<h3 id="orgc867ba9"><span class="section-number-3">1.2</span> ネットワークをモデリングは<font color="red">なぜ</font></h3>
+<section id="slide-org42186a4">
+<h3 id="org42186a4"><span class="section-number-3">1.2</span> ネットワークをモデリングは<font color="red">なぜ</font></h3>
 <ul>
 <li>ネットワークモデルの構造  
 <ul>
@@ -100,13 +105,13 @@
 </section>
 </section>
 <section>
-<section id="slide-orgfee3317">
-<h2 id="orgfee3317"><span class="section-number-2">2</span> ネットワークの用語</h2>
+<section id="slide-org1ca3218">
+<h2 id="org1ca3218"><span class="section-number-2">2</span> ネットワークの用語</h2>
 <div class="outline-text-2" id="text-2">
 </div>
 </section>
-<section id="slide-orgbecb1e1">
-<h3 id="orgbecb1e1"><span class="section-number-3">2.1</span> &ldquo;ネットワーク&rdquo; \(\equiv\) &ldquo;グラフ&rdquo;</h3>
+<section id="slide-org5aed88c">
+<h3 id="org5aed88c"><span class="section-number-3">2.1</span> &ldquo;ネットワーク&rdquo; \(\equiv\) &ldquo;グラフ&rdquo;</h3>
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -152,8 +157,8 @@
 </table>
 
 </section>
-<section id="slide-org94bc54d">
-<h3 id="org94bc54d"><span class="section-number-3">2.2</span> 例: Random network and Scale-free network</h3>
+<section id="slide-org26b6781">
+<h3 id="org26b6781"><span class="section-number-3">2.2</span> 例: Random network and Scale-free network</h3>
 
 <div class="figure">
 <p><img src="./pics/networks.jpg" alt="networks.jpg" />
@@ -161,8 +166,8 @@
 </div>
 
 </section>
-<section id="slide-org0f75dc7">
-<h3 id="org0f75dc7"><span class="section-number-3">2.3</span> 有向グラフ(Directed graph)と無向グラフ(undirected graph)</h3>
+<section id="slide-orgedd4ad7">
+<h3 id="orgedd4ad7"><span class="section-number-3">2.3</span> 有向グラフ(Directed graph)と無向グラフ(undirected graph)</h3>
 
 <div class="figure">
 <p><img src="./pics/graph_types.jpg" alt="graph_types.jpg" />
@@ -170,8 +175,8 @@
 </div>
 
 </section>
-<section id="slide-org1ed0214">
-<h3 id="org1ed0214"><span class="section-number-3">2.4</span> 有向グラフ: 非巡回と巡回 (Acyclic and cyclic graph)</h3>
+<section id="slide-org8afa677">
+<h3 id="org8afa677"><span class="section-number-3">2.4</span> 有向グラフ: 非巡回と巡回 (Acyclic and cyclic graph)</h3>
 <div class="column" style="float:left; width: 50%">
 <p>
 有向非巡回グラフ
@@ -196,8 +201,8 @@
 </div>
 
 </section>
-<section id="slide-orge99cb21">
-<h3 id="orge99cb21"><span class="section-number-3">2.5</span> グラフの表現：隣接行列(Adjacency matrix)</h3>
+<section id="slide-org778dc83">
+<h3 id="org778dc83"><span class="section-number-3">2.5</span> グラフの表現：隣接行列(Adjacency matrix)</h3>
 <div class="column" style="float:left; width: 50%">
 <p>
 隣接行列: 無向グラフ 
@@ -217,8 +222,8 @@
 </div>
 
 </section>
-<section id="slide-org045ebe0">
-<h3 id="org045ebe0"><span class="section-number-3">2.6</span> グラフの表現：隣接リスト (Adjacency list)</h3>
+<section id="slide-org2fddc57">
+<h3 id="org2fddc57"><span class="section-number-3">2.6</span> グラフの表現：隣接リスト (Adjacency list)</h3>
 <div class="column" style="float:left; width: 50%">
 <p>
 隣接リスト: 無向グラフ 
@@ -246,16 +251,16 @@
 </section>
 </section>
 <section>
-<section id="slide-org3c0f02b">
-<h2 id="org3c0f02b"><span class="section-number-2">3</span> ネットワークの構築</h2>
+<section id="slide-org56fdfee">
+<h2 id="org56fdfee"><span class="section-number-2">3</span> ネットワークの構築</h2>
 <p>
 論文によく使うシンボルは、グラフG、頂点セットV、辺セットEとし、
 あるグラフGが \(G=(V, E)\) で表す。
 </p>
 
 </section>
-<section id="slide-org337f23f">
-<h3 id="org337f23f"><span class="section-number-3">3.1</span> 頂点間の距離</h3>
+<section id="slide-org22b0c71">
+<h3 id="org22b0c71"><span class="section-number-3">3.1</span> 頂点間の距離</h3>
 <p>
 頂点Aと頂点Bがどのぐらい離れることによって
 頂点Aと頂点Bの間に辺をつけます。いわゆる、<font color="red"> 辺</font>が頂点間の距離による定義します。
@@ -263,8 +268,8 @@
 </p>
 
 </section>
-<section id="slide-org4cdbba9">
-<h3 id="org4cdbba9"><span class="section-number-3">3.2</span> 都市ブロック距離 (City Block Distance)</h3>
+<section id="slide-org3fdc93b">
+<h3 id="org3fdc93b"><span class="section-number-3">3.2</span> 都市ブロック距離 (City Block Distance)</h3>
 <p>
 \[d = \sum_{i=1}^{k} |a_{i} - b_{i}|\]
 </p>
@@ -292,8 +297,8 @@ around the buildings instead of going straight through.
 </aside>
 
 </section>
-<section id="slide-orga87c007">
-<h3 id="orga87c007"><span class="section-number-3">3.3</span> ユークリッド距離 (Euclidean Distance)</h3>
+<section id="slide-org4c9bea8">
+<h3 id="org4c9bea8"><span class="section-number-3">3.3</span> ユークリッド距離 (Euclidean Distance)</h3>
 <p>
 k次元の点aと点bの間のユークリッド距離は次の式で計算する。
 </p>
@@ -316,8 +321,8 @@ The measurement would be zero for identical points and high for points that show
 </aside>
 
 </section>
-<section id="slide-org7673271">
-<h3 id="org7673271"><span class="section-number-3">3.4</span> 平方ユークリッド距離 Squared Euclidean Distance</h3>
+<section id="slide-org1825652">
+<h3 id="org1825652"><span class="section-number-3">3.4</span> 平方ユークリッド距離 Squared Euclidean Distance</h3>
 <p>
 k次元の点aと点bの間の平方ユークリッド距離は次の式で計算する。
 </p>
@@ -327,15 +332,15 @@ k次元の点aと点bの間の平方ユークリッド距離は次の式で計�
 </p>
 
 </section>
-<section id="slide-org9eb8dde">
-<h3 id="org9eb8dde"><span class="section-number-3">3.5</span> Half Squared Eculidean Distance</h3>
+<section id="slide-org196d258">
+<h3 id="org196d258"><span class="section-number-3">3.5</span> Half Squared Eculidean Distance</h3>
 <p>
 \[d = \frac{1}{2}\sum_{i=1}^{k} (a_{i} - b_{i})^2\]
 </p>
 
 </section>
-<section id="slide-orgf6d0975">
-<h3 id="orgf6d0975"><span class="section-number-3">3.6</span> Pearson’s相関係数(Correlation coefficient)</h3>
+<section id="slide-org3197bff">
+<h3 id="org3197bff"><span class="section-number-3">3.6</span> Pearson’s相関係数(Correlation coefficient)</h3>
 <p>
 k次元の点Aと点Bの相関は、以下の計算式で計算する。
 \[d = \frac{cov(A, B)}{\sigma_A\sigma_B} \]
@@ -346,8 +351,8 @@ k次元の点Aと点Bの相関は、以下の計算式で計算する。
 </p>
 
 </section>
-<section id="slide-orgd996f25">
-<h3 id="orgd996f25"><span class="section-number-3">3.7</span> Cosine Correlation</h3>
+<section id="slide-org424d273">
+<h3 id="org424d273"><span class="section-number-3">3.7</span> Cosine Correlation</h3>
 <p>
 k次元の点Aと点Bの相関は、以下の計算式で計算する。
 \[ d = \frac{A\cdot B}{||A||||B||} = \frac{\sum_{i=1}^{k}A_i B_i}{\sqrt{\sum_{i=1}^{k}A_{i}^{2}}\sqrt{\sum_{i=1}^{k}B_{i}^{2}}}\]
@@ -358,8 +363,8 @@ k次元の点Aと点Bの相関は、以下の計算式で計算する。
 </p>
 
 </section>
-<section id="slide-org5959f33">
-<h3 id="org5959f33"><span class="section-number-3">3.8</span> Tanimoto係数(Tanimoto Coefficient)</h3>
+<section id="slide-org71baa4c">
+<h3 id="org71baa4c"><span class="section-number-3">3.8</span> Tanimoto係数(Tanimoto Coefficient)</h3>
 <p>
 k次元の点Aと点Bの相関は、以下の計算式で計算する。
 \[ T_s = \frac{\sum_{i}(A_i \bigwedge B_i)}{\sum_{i}(A_i \bigvee B_i)} \]
@@ -381,8 +386,8 @@ k次元の点Aと点Bの相関は、以下の計算式で計算する。
 </aside>
 
 </section>
-<section id="slide-orgaf9bdd4">
-<h3 id="orgaf9bdd4"><span class="section-number-3">3.9</span> Tanimoto係数(Jaccard係数の拡張バージョン)の例</h3>
+<section id="slide-org98ff85d">
+<h3 id="org98ff85d"><span class="section-number-3">3.9</span> Tanimoto係数(Jaccard係数の拡張バージョン)の例</h3>
 <p>
 A = [&ldquo;リンゴ&rdquo;,&ldquo;ブドウ&rdquo;,&ldquo;イチゴ&rdquo;,&ldquo;パイン&rdquo;,&ldquo;キウイ&rdquo;,&ldquo;メロン&rdquo;]  
 </p>
@@ -402,8 +407,8 @@ AとBをベクトル化する。
 </p>
 
 </section>
-<section id="slide-org34e92b2">
-<h3 id="org34e92b2"><span class="section-number-3">3.10</span> Tanimoto係数とJaccard係数の例 - Con&rsquo;t</h3>
+<section id="slide-orgff233aa">
+<h3 id="orgff233aa"><span class="section-number-3">3.10</span> Tanimoto係数とJaccard係数の例 - Con&rsquo;t</h3>
 <p>
 AとBの長さは、 
 </p>
@@ -417,8 +422,8 @@ AとBの長さは、
 </div>
 
 </section>
-<section id="slide-org43b80d0">
-<h3 id="org43b80d0"><span class="section-number-3">3.11</span> Tanimoto係数とJaccard係数の例 - Con&rsquo;t</h3>
+<section id="slide-org2fae638">
+<h3 id="org2fae638"><span class="section-number-3">3.11</span> Tanimoto係数とJaccard係数の例 - Con&rsquo;t</h3>
 <p>
 Tanimoto係数：　
 </p>
@@ -442,8 +447,8 @@ Jaccard係数: \(A \cap B = 3\) と \(A\cup B = 7\)
 </p>
 
 </section>
-<section id="slide-org17f095d">
-<h3 id="org17f095d"><span class="section-number-3">3.12</span> データからネットワークの構築　</h3>
+<section id="slide-org4192457">
+<h3 id="org4192457"><span class="section-number-3">3.12</span> データからネットワークの構築　</h3>
 <p>
 \[d = \sum_{i=1}^{k} |a_{i} - b_{i}|\]
 </p>
@@ -575,8 +580,8 @@ Jaccard係数: \(A \cap B = 3\) と \(A\cup B = 7\)
 </div>
 
 </section>
-<section id="slide-org923cd5a">
-<h3 id="org923cd5a"><span class="section-number-3">3.13</span> 距離行列からネットワークの構築</h3>
+<section id="slide-org198e430">
+<h3 id="org198e430"><span class="section-number-3">3.13</span> 距離行列からネットワークの構築</h3>
 <div class="column" style="float:left; width: 50%">
 <p>
 距離行列：(City block distance)
@@ -667,12 +672,12 @@ Jaccard係数: \(A \cap B = 3\) と \(A\cup B = 7\)
 </section>
 </section>
 <section>
-<section id="slide-org4d3a5f9">
-<h2 id="org4d3a5f9"><span class="section-number-2">4</span> ネットワークの解析 (undirected graph)</h2>
+<section id="slide-orgea94587">
+<h2 id="orgea94587"><span class="section-number-2">4</span> ネットワークの統計 (undirected graph)</h2>
 
 </section>
-<section id="slide-org5053999">
-<h3 id="org5053999"><span class="section-number-3">4.1</span> クラスタリング係数</h3>
+<section id="slide-org45b50dc">
+<h3 id="org45b50dc"><span class="section-number-3">4.1</span> クラスタリング係数</h3>
 <p>
 クラスタリング係数は、グラフ内のノードが一緒にクラスタ化される傾向の程度の尺度です。
 以下の2つを紹介します。
@@ -685,8 +690,8 @@ Jaccard係数: \(A \cap B = 3\) と \(A\cup B = 7\)
 </ol>
 
 </section>
-<section id="slide-org8fcbc2a">
-<h4 id="org8fcbc2a"><span class="section-number-4">4.1.1</span> Local clustering coefficient</h4>
+<section id="slide-org8c54d38">
+<h4 id="org8c54d38"><span class="section-number-4">4.1.1</span> Local clustering coefficient</h4>
 <div class="column" style="float:left; width: 50%">
 
 <div class="figure">
@@ -714,8 +719,8 @@ since the denominator cannot be zero.
 </div>
 
 </section>
-<section id="slide-orgad1e352">
-<h4 id="orgad1e352"><span class="section-number-4">4.1.2</span> Global clustering coefficient</h4>
+<section id="slide-orge240f28">
+<h4 id="orge240f28"><span class="section-number-4">4.1.2</span> Global clustering coefficient</h4>
 <div class="column" style="float:left; width: 50%">
 
 <div class="figure">
@@ -755,8 +760,8 @@ over the total number of triplets (both open and closed).
 </aside>
 
 </section>
-<section id="slide-orgcecf332">
-<h4 id="orgcecf332"><span class="section-number-4">4.1.3</span> Global clustering coefficientの例</h4>
+<section id="slide-org54aaafb">
+<h4 id="org54aaafb"><span class="section-number-4">4.1.3</span> Global clustering coefficientの例</h4>
 <div class="column" style="float:left; width: 50%; font-size:35px">
 
 <div class="figure">
@@ -828,8 +833,8 @@ over the total number of triplets (both open and closed).
 
 
 </section>
-<section id="slide-org3e58df0">
-<h3 id="org3e58df0"><span class="section-number-3">4.2</span> 平均ノード間距離</h3>
+<section id="slide-org92e663b">
+<h3 id="org92e663b"><span class="section-number-3">4.2</span> 平均ノード間距離</h3>
 <div class="column" style="float:left; width: 50%; font-size:35px">
 
 <div class="figure">
@@ -850,8 +855,8 @@ over the total number of triplets (both open and closed).
 </p>
 </div>
 </section>
-<section id="slide-org7593b3c">
-<h3 id="org7593b3c"><span class="section-number-3">4.3</span> ネットワーク半径(radius)、径(diameter)と離心数(eccentricity)</h3>
+<section id="slide-orgc88d4dd">
+<h3 id="orgc88d4dd"><span class="section-number-3">4.3</span> ネットワーク半径(radius)、径(diameter)と離心数(eccentricity)</h3>
 <div class="column" style="float:left; font-size:30px">
 <p>
 ネットワーク(グラフ) \(G(V, E)\) において, ある頂点 \(v\) の離心数 \(e_{G}(v)\) が \(G\) 内他の頂点と最大距離と定義する。
@@ -878,8 +883,8 @@ denoted by diam(G).
 </aside>
 
 </section>
-<section id="slide-org0457712">
-<h3 id="org0457712"><span class="section-number-3">4.4</span> ネットワークの比較</h3>
+<section id="slide-org8a78c49">
+<h3 id="org8a78c49"><span class="section-number-3">4.4</span> ネットワークの比較</h3>
 <div class="column" style="float:left; font-size:30px">
 <p>
 ある2つ無向グラフ(unweighted) \(G_{1}(V_{1}, E_{1})\) と \(G_{2}(V_{2}, E_{2})\) の
@@ -915,8 +920,8 @@ ffmpeg -i isomorphism.mov -r 24 -vf scale=300:-1 isomorphism.gif
 </aside>
 
 </section>
-<section id="slide-orgbf6998c">
-<h3 id="orgbf6998c"><span class="section-number-3">4.5</span> ネットワークのサブネットワーク</h3>
+<section id="slide-orgf40f7ce">
+<h3 id="orgf40f7ce"><span class="section-number-3">4.5</span> ネットワークのサブネットワーク</h3>
 <div class="column" style="float:left; font-size:30px">
 <p>
 頂点のprizeの和と辺のcostの和を最小化するというPrize Collecting Steiner Forest(PCSF)アルゴリズムによって
@@ -952,11 +957,13 @@ an independent set.</li>
 </ul>
 
 </aside>
+
+
 </section>
 </section>
 <section>
-<section id="slide-org4a4ae38">
-<h2 id="org4a4ae38"><span class="section-number-2">5</span> ネットワークの可視化</h2>
+<section id="slide-orgc3a6cc2">
+<h2 id="orgc3a6cc2"><span class="section-number-2">5</span> ネットワークの可視化</h2>
 <ul>
 <li>Graphviz コマンドラインツール</li>
 <li>Cytoscape</li>
@@ -965,8 +972,8 @@ an independent set.</li>
 </ul>
 
 </section>
-<section id="slide-orgb1a76aa">
-<h3 id="orgb1a76aa"><span class="section-number-3">5.1</span> Graphviz: コマンドラインツール (C)</h3>
+<section id="slide-orgd2b1140">
+<h3 id="orgd2b1140"><span class="section-number-3">5.1</span> Graphviz: コマンドラインツール (C)</h3>
 
 <div class="figure">
 <p><img src="./pics/graphviz.png" alt="graphviz.png" />
@@ -974,51 +981,1162 @@ an independent set.</li>
 </div>
 
 </section>
-<section id="slide-orgb14ec8a">
-<h3 id="orgb14ec8a"><span class="section-number-3">5.2</span> Cytoscape: (Java)</h3>
-
-<div class="figure">
-<p><img src="./pics/cytoscape.png" alt="cytoscape.png" />
-</p>
-</div>
+<section id="slide-org17c17f1">
+<h3 id="org17c17f1"><span class="section-number-3">5.2</span> Cytoscape: (Java)</h3>
+<img src="./pics/cytoscape.png" class="stretch">
 
 <p>
 <a href="https://cytoscape.org/download.html">https://cytoscape.org/download.html</a>
 </p>
 
 </section>
-<section id="slide-orgfbd17bd">
-<h3 id="orgfbd17bd"><span class="section-number-3">5.3</span> Gephi</h3>
-
-<div class="figure">
-<p><img src="./pics/gephi.png" alt="gephi.png" />
-</p>
-</div>
+<section id="slide-org77a1c90">
+<h3 id="org77a1c90"><span class="section-number-3">5.3</span> Gephi</h3>
+<img src="./pics/gephi.png" class="stretch">
 
 <p>
 <a href="https://gephi.org">https://gephi.org</a>
 </p>
 
+
 </section>
 </section>
 <section>
-<section id="slide-org55f627f">
-<h2 id="org55f627f"><span class="section-number-2">6</span> 遺伝子発現によるネットワーク構築</h2>
+<section id="slide-org2be3d32">
+<h2 id="org2be3d32"><span class="section-number-2">6</span> <font size=10> 遺伝子共発現ネットワークの構築</font></h2>
+<img src="./pics/Gene_co-expression_network_construction_steps.png" class="stretch" >
+<p>
+from Wikipidia
+</p>
+
+</section>
+<section id="slide-orgfb723f5">
+<h3 id="orgfb723f5"><span class="section-number-3">6.1</span> Pearson相関係数（Pearson&rsquo;s correlation coefficient）</h3>
+<p>
+ここで、 遺伝子ペアの発現の類似性（\(s_{ij}\)）は、  
+</p>
+
+<ol>
+<li><p>
+絶対値  
+</p>
+
+<p>
+\[ s_{ij} = |corr(i, j)| \]
+</p></li>
+
+<li><p>
+符号を維持するため  
+</p>
+
+<p>
+\[ s_{ij} = \frac{1 + corr(i, j)}{2} \]
+</p></li>
+
+</ol>
+
+</section>
+<section id="slide-org8303199">
+<h3 id="org8303199"><span class="section-number-3">6.2</span> 遺伝子ペア(辺)の選択: threshold</h3>
+<ol>
+<li><p>
+signum関数
+</p>
+
+<p>
+\[a_{ij} = signum(s_{ij}, \tau) \equiv
+   \begin{cases}
+    1 \quad \text{if}\,\, s_{ij} \ge \tau \\
+    0 \quad \text{if}\,\, s_{ij} < \tau
+   \end{cases}\]
+</p></li>
+
+<li><p>
+sigmoid関数
+</p>
+
+<p>
+\[a_{ij}=sigmoid(s_{ij}, \alpha, \tau_0)\equiv\frac{1}{1+e^{-\alpha(s_{ij}-\tau_0)}}\]
+</p></li>
+
+<li><p>
+Power関数
+</p>
+
+<p>
+\[a_{ij}=power(s_{ij}, \beta)\equiv|s_{ij}|^{\beta}\]
+</p></li>
+
+</ol>
+
+</section>
+<section id="slide-org7f650f6">
+<h3 id="org7f650f6"><span class="section-number-3">6.3</span> 遺伝子ペア（辺）の選択: scale free criterion</h3>
+<div class="column" style="float:left; width:50%; font-size:30px">
+
+<div class="figure">
+<p><img src="./pics/TOM_soft_thresholding.png" alt="TOM_soft_thresholding.png" />
+</p>
+</div>
+
+<p>
+赤：A exponentially truncated power law
+黒：冪乗則
+</p>
+
+</div>
+<div class="column" style="float:left; width:50%; font-size:30px">
+<p>
+Scale-free topology
+  \[ p(k) \sim k^{-\gamma} \]
+</p>
+
+<ul>
+<li>線形モデル
+\[ log_{10}(p(k)) \sim log_{10}(k) \]</li>
+<li>A exponentially truncated power law 
+\[ p(k)\sim k^{-\gamma}exp(-\alpha k) \]</li>
+
+</ul>
+</div>
+
+<p style="font-size:20px;float:left">
+Zhang, B., Horvath, S., 2005. A general framework for weighted gene co-expression network analysis. 
+Stat Appl Genet Mol Biol 4, Article17. <a href="10.2202/1544-6115.1128" style="font-size:20px;float:left">10.2202/1544-6115.1128</a>
+</p>
+
+</section>
+<section id="slide-org512ae31">
+<h3 id="org512ae31"><span class="section-number-3">6.4</span> Recommendation of scale free criterion</h3>
+<blockquote >
+<p>
+Only consider those parameter values that lead to a network satisfying scale- free topology at 
+least approximately, e.g. signed \(R^2 > 0.80\). 
+</p>
+</blockquote>
+
+<p style="font-size:20px;float:left">
+Zhang, B., Horvath, S., 2005. A general framework for weighted gene co-expression network analysis. 
+Stat Appl Genet Mol Biol 4, Article17. <a href="10.2202/1544-6115.1128" style="font-size:20px;float:left">10.2202/1544-6115.1128</a>
+</p>
+
+</section>
+<section id="slide-orgb85a6b6">
+<h3 id="orgb85a6b6"><span class="section-number-3">6.5</span> 遺伝子（頂点）の連結度(Connectivity)</h3>
+<ul>
+<li>点連結度
+\[k_i = \sum_{j=1}^{n} a_{ij} \]</li>
+<li>Topological Overlap Matrix(TOM)-based 
+\[w_i = \sum_{j=1}^{n} w_{ij}, \text{where}\quad w_{ij} = \frac{l_{ij}+a_{ij}}{min\{k_i,k_j\}+1-a_{ij}} \] 
+\(l_{ij}=\sum_{u}a_{iu}a_{uj}\), and \(k_i=\sum_{u}a_{iu}\)</li>
+
+</ul>
+
+</section>
+<section id="slide-org9bcf115">
+<h3 id="org9bcf115"><span class="section-number-3">6.6</span> TOMの例</h3>
+<div class="column" style="float:left; width:50%; font-size:30px">
+
+<div class="figure">
+<p><img src="./pics/TOM_eg.png" alt="TOM_eg.png" />
+</p>
+</div>
+
+<p>
+(＊)の数字は頂点のクラスタリング係数です。辺の数字はTOMの値です。
+</p>
+</div>
+<div class="column" style="float:left; width:50%; font-size:30px">
+<p>
+頂点Hと頂点Jの度数は \(k_{H} = 3\) と \(k_{J} = 3\) になり、
+頂点Hと頂点Jと同時に連結の頂点の数は1となります。
+</p>
+
+<div>
+\begin{eqnarray*}
+w(H,J) &=& \frac{l_{ij}+a_{ij}}{min\{k_i,k_j\}+1-a_{ij}} \\
+       &=&\frac{1+1}{3+1-1} \\
+       &=&\frac{2}{3}
+ \end{eqnarray*}
+
+</div>
+</div>
+
+</section>
+<section id="slide-org0c2e477">
+<h3 id="org0c2e477"><span class="section-number-3">6.7</span> Pros and Cons</h3>
+<ul>
+<li>単なるthreshold
+<ul>
+<li>簡単</li>
+<li>実装しやすい</li>
+<li>loss of information</li>
+<li>sensitivity to the choice</li>
+
+</ul></li>
+<li>scale free criterion
+<ul>
+<li>ネットワークはscale-free特性をほぼ満たすことが必要</li>
+<li>選択に非敏感</li>
+<li>計算量が大き</li>
+
+</ul></li>
+
+</ul>
+
+
+</section>
+</section>
+<section>
+<section id="slide-org74b5d67">
+<h2 id="org74b5d67"><span class="section-number-2">7</span> 遺伝子共発現ネットワークの解析</h2>
+<div class="outline-text-2" id="text-7">
+</div>
+</section>
+<section id="slide-orga76ef61">
+<h3 id="orga76ef61"><span class="section-number-3">7.1</span> Scale free v.s. Modularity</h3>
+<img src="./pics/scale_free_vs_modularity.png" class="stretch" >
+
+</section>
+<section id="slide-org6cf370a">
+<h3 id="org6cf370a"><span class="section-number-3">7.2</span> Modularityの仮説</h3>
+<ol>
+<li><p>
+ランダム仮説(Random Hypothesis)
+</p>
+
+<p>
+ランダムネットワークは、コミュニティ構造を持たない。
+</p></li>
+
+<li><p>
+Maximal Modularity Hypothesis  
+</p>
+
+<p>
+特定のネットワークの最大のモジュール性Mを持つパーティションは、最適なコミュニティ構造がある。
+</p></li>
+
+</ol>
+
+<aside class="notes">
+<p>
+The partition with the maximum modularity M for a given network offers the optimal community structure
+</p>
+
+</aside>
+
+</section>
+<section id="slide-org6cf370a-split">
+
+<h3><span class="section-number-3">7.2</span> Modularityの仮説</h3>
+
+<p>
+\[ M = \sum\limits_{c = 1}^{n_c } {\left[ {\frac{{L_c }}{L} - \left( {\frac{{k_c }}{{2L}}} \right)^2 } \right]} \]
+</p>
+
+<p>
+ここで、コミュニティ \(C_c\) 内において、\(L_c\) は辺の総数、\(k_c\) は頂点の次数の総和、
+\(L\) はネットワークの辺の数です。
+</p>
+
+</section>
+<section id="slide-org6cf370a-split">
+
+<h3><span class="section-number-3">7.2</span> Modularityの仮説</h3>
+
+<div class="figure">
+<p><img src="./pics/modularity.jpg" alt="modularity.jpg" />
+</p>
+</div>
+
+</section>
+<section id="slide-org7cbfdd5">
+<h3 id="org7cbfdd5"><span class="section-number-3">7.3</span> Modularityに基づいてコミュニティの識別</h3>
+<aside class="notes">
+<p>
+A greedy algorithm, which iteratively joins nodes if the move increases the new partition’s modularity。
+</p>
+
+</aside>
+
+<img src="./pics/maximum_modularity.png" class="stretch" >
+<p>
+from A.-L. Barabási, Network Science: Communities.
+</p>
+
+</section>
+<section id="slide-org2a27428">
+<h3 id="org2a27428"><span class="section-number-3">7.4</span> モジュール性の限界(Limits of Modularity)</h3>
+<div class="column" style="float:left; width: 50%">
+
+<div class="figure">
+<p><img src="./pics/modularity _limits.png" alt="modularity _limits.png" />
+</p>
+</div>
+</div>
+<div class="column" style="float:left; width: 50%">
+<p>
+\[ \Delta M_{AB}  = \frac{{l_{AB} }}{L} - \frac{{k_A k_B }}{{2L^2 }} \]
+\(k_A\) と \(k_B\) は、それぞれ \(A\) と \(B\) の次数の総数である。
+\(\frac{k_A k_B}{2L}<1, L_{AB}\ge 1 \Longrightarrow \Delta M_{AB} > 0\), \(A\) と \(B\) をマージする。
+</p>
+
+<p>
+\(k_A \sim k_B = k\Longrightarrow k\le \sqrt{2L}\) 
+</p>
+</div>
+
+<p style="font-size:20px;float:left">
+他の方法は:
+</p>
+<ol style="font-size:20px;float:left">
+<li>&ldquo;Fast Modularity&rdquo; Community Structure Inference Algorithm 
+<a href="http://cs.unm.edu/~aaron/research/fastmodularity.htm">http://cs.unm.edu/~aaron/research/fastmodularity.htm</a></li>
+<li>Louvain method: Finding communities in large networks
+<a href="http://cs.unm.edu/~aaron/research/fastmodularity.htm">http://cs.unm.edu/~aaron/research/fastmodularity.htm</a></li>
+
+</ol>
+</section>
+<section id="slide-orgd304df3">
+<h3 id="orgd304df3"><span class="section-number-3">7.5</span> 最小全域木(Minimum spanning tree)</h3>
+<p>
+　最小全域木とは、各辺に重み（コスト）がある場合、最小の総和コストで構成される全域木を最小全域木という。
+</p>
+
+<img src="./pics/Minimum_spanning_tree.png" class="stretch" >
+
+</section>
+<section id="slide-org83df2f9">
+<h4 id="org83df2f9"><span class="section-number-4">7.5.1</span> クラスカル法 (Kruskal&rsquo;s Algorithm)</h4>
+<video controls data-autoplay src="./movies/kruskal_ani.mov"></video>
+<div style="font-size: 60%;">
+<p>
+See: <a href="https://courses.cs.washington.edu/courses/cse373/16wi/Hashing/visualization/Kruskal.html">https://courses.cs.washington.edu/courses/cse373/16wi/Hashing/visualization/Kruskal.html</a>
+</p>
+</div>
+
+</section>
+<section id="slide-org246d753">
+<h4 id="org246d753"><span class="section-number-4">7.5.2</span> プリム法 (Prim&rsquo;s Algorithm)</h4>
+<video controls data-autoplay src="./movies/prim_ani.mov"></video>
+<div style="font-size: 60%;">
+<p>
+See: <a href="https://courses.cs.washington.edu/courses/cse373/16wi/Hashing/visualization/Prim.html">https://courses.cs.washington.edu/courses/cse373/16wi/Hashing/visualization/Prim.html</a>
+</p>
+</div>
+
+
+<p>
+##+begin<sub>notes</sub>
+ COMMENT ネットワークのモジュールの識別(Module detection)
+R - bootnet, which takes a variance-covariance matrix as the input only
+\[EBIC = -2L+Elog(N)+4\gamma Elog(P)\]
+L denotes the log-likelihood, N the sample size, E the number of nonzero edges, and P the number of nodes. 
+#+end<sub>notes</sub>
+</p>
+
+</section>
+<section id="slide-orga50f765">
+<h3 id="orga50f765"><span class="section-number-3">7.6</span> Composite Index of Dynamical network biomarker(DNB)</h3>
+<ol>
+<li>有力なグループを有意性(student-t検定)で決定する</li>
+
+<li>Composite Indexを計算する</li>
+
+</ol>
+
+<p>
+\[ I \stackrel{\mathrm{def}}{=} \frac{SD_d\cdot PCC_d}{PCC_o} \]
+</p>
+
+<p>
+ここで、\(PCC_d\) は有力なグループなPearson相関係数の絶対値の平均値、\(PCC_o\) は
+有力なグループと以外な分子なPearson相関係数の絶対値の平均値です。
+</p>
+<aside class="notes">
+<p>
+\[ I \stackrel{\mathrm{def}}{=} \frac{SD_d\cdot PCC_d}{PCC_o} \]
+where \(PCC_d\) is the average Pearson’s correlation coefficient of the dominant group in absolute
+value; \(PCC_o\) is the average Pearson’s correlation coefficient of the dominant group with 
+other molecules in absolute value; \(SD_d\) is the average standard deviation of the dominant group.
+</p>
+
+</aside>
+
+</section>
+<section id="slide-orga50f765-split">
+
+<h3><span class="section-number-3">7.6</span> Composite Index of Dynamical network biomarker(DNB)</h3>
+
+<img src="./pics/DNB_example.png" class="stretch" >
+
+
+<aside class="notes">
+<p>
+
+</p>
+
+<p>
+Gene GO Enrichment Analysis
+</p>
+
+<p>
+&ldquo;Enrichment&rdquo; - ランダムと比べということ
+</p>
+
+<p>
+To perform functional enrichment analysis, we need to have:
+</p>
+
+<ul>
+<li>A set of genes of interest (e.g., differentially expressed genes): study set (n)</li>
+<li>A set with all the genes to consider in the analysis: population set (N)</li>
+
+</ul>
+<p>
+(which must contain the study set)
+</p>
+<ul>
+<li>GO annotations, associating the genes in the population set to GO terms</li>
+<li>The GO ontology, with the description of GO terms and their relationships</li>
+
+</ul>
+
+<p>
+For each GO term, we need to count the frequency (k) of genes in the study set (n) that are 
+associated to the term, and the frequency (K) of genes in the population set (N) that are 
+associated to the same term. Then we test how likely would it be to obtain at least k genes 
+associated to the term if n genes would be randomly sampled from the population, given the 
+frequency K and size N of the population.
+</p>
+
+<p>
+The appropriate statistical test is the one-tailed variant of Fisher’s exact test, also known as 
+the hypergeometric test for over-representation. When the one-tailed version is applied, this 
+test will compute the probability of observing at least the sample frequency, given the population
+ frequency. The hypergeometric distribution measures precisely the probability of k successes 
+in n draws, without replacement, from a finite population of size N that contains exactly 
+K successful objects:
+</p>
+
+<p>
+\[ P(X=k) = \frac{C_{K}^{k} C_{N-n}^{K-k}}{C_{N}^{n}} \]
+</p>
+
+<p>
+Gene Set Enrichment Analysis and pathway analysis
+</p>
+
+<ul>
+<li><p>
+Gene Set Enrichment Analysis (GSEA, DAVID)  
+</p>
+<p style="font-size:20px;float:left">
+Subramanian et al.Gene set enrichment analysis: A knowledge-based approach for interpreting genome-wide expression profiles, PNAS 102(43)15545-15550, 2005 
+</p></li>
+
+<li><p>
+Pathway analysis (KEGG, Reactome, Ingenuity)  
+</p>
+<p style="font-size:20px;float:left">
+Curtis, R.K., et al. (2005) Pathways to the analysis of microarray data. Trends in Biotechnology 23: 429-435. 
+Werner, T. (2008) Bioinformatics applications for pathway analysis of microarray data. Current Opinion in Biotechnology 19: 50-54.
+</p></li>
+
+</ul>
+
+<p>
+The Gene Ontology, containing standardised annotation of gene products, is commonly used for 
+this purpose. It works by comparing the frequency of individual annotations in the gene list
+(e.g differentially expressed genes) with a reference list (usually all genes on the microarray
+or in the genome). Enrichment of biological pathways supplied by KEGG, Ingenuity, Reactome or 
+WikiPathways can be performed in a similar way.  
+</p>
+
+<p>
+A common approach to interpreting gene expression data is gene set enrichment analysis 
+based on the functional annotation of the differentially expressed genes (Figure 13). 
+This is useful for finding out if the differentially expressed genes are associated 
+with a certain biological process or molecular function.
+</p>
+
+</aside>
+
+
+</section>
+</section>
+<section>
+<section id="slide-org8de5bed">
+<h2 id="org8de5bed"><span class="section-number-2">8</span> 遺伝子調節ネットワークのモデル(これから)</h2>
+<ul>
+<li>Boolean Model (有向グラフ、directed graph)</li>
+<li>Bayesian Model (有向非巡回グラフ、Acyclic directed graph)</li>
+<li>Differential equations (有向グラフ、directed graph)</li>
+<li>Graphical Gaussuan Model (無向グラフ、undirected graph)
+<ul>
+<li>Correlation Coeffcient</li>
+<li>Partial Correlation Coefficient</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-org78ff5c6">
+<h3 id="org78ff5c6"><span class="section-number-3">8.1</span> Boolean Model (Stuart Kauffman, 1969)</h3>
+<ul>
+<li>\(G=(V,E)\) には、頂点（遺伝子）\(x_i\) がOn或いはOff、すなわち１或いは０という２つ状態。</li>
+<li>n個頂点を持つネットワークの状態は、\(V=\{x_1,\ldots,x_n\}\) で表す。</li>
+<li>t+1時刻に、\(x_i\) の状態がt時刻に \(V\) の中にある \(k_i\) 個親調節遺伝子組の状態により決める。
+\(k_i\): 頂点 \(x_i\) の連結といい、親調節遺伝子組の操作は、boolean algebraルールを実行する調節関数 \(f_i\) で定義する。
+\[x_{i}(t+1) = f_i(x_{i1}(t),\ldots,x_{ik}(t))\]</li>
+
+</ul>
+
+</section>
+<section id="slide-orge538707">
+<h3 id="orge538707"><span class="section-number-3">8.2</span> Boolean algebra law(一部)</h3>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" style="font-size:30px">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Boolean Operations</th>
+<th scope="col" class="org-left">Logical form</th>
+<th scope="col" class="org-left">Polynomial form</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">AND (\(\bigwedge\))</td>
+<td class="org-left">\(Z=X\bigwedge Y\)</td>
+<td class="org-left">\(Z = XY\)</td>
+</tr>
+
+<tr>
+<td class="org-left">OR(\(\bigvee\))</td>
+<td class="org-left">\(Z=X\bigvee Y\)</td>
+<td class="org-left">\(Z = X + Y+XY\)</td>
+</tr>
+
+<tr>
+<td class="org-left">NOT (\(\neg\))</td>
+<td class="org-left">\(Z=\bar{X}\)</td>
+<td class="org-left">\(Z = 1 + X\)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+例：AND
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" style="font-size:30px">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Logical form</th>
+<th scope="col" class="org-left">Polynomial form</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">\(0 \wedge 0 = 0\)</td>
+<td class="org-left">\(0\cdot 0=0\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(0 \wedge 1 = 0\)</td>
+<td class="org-left">\(0\cdot 1=0\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(1 \wedge 0 = 0\)</td>
+<td class="org-left">\(1\cdot 0=0\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(1 \wedge 1 = 1\)</td>
+<td class="org-left">\(1\cdot 1=1\)</td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+<section id="slide-org9195ba0">
+<h3 id="org9195ba0"><span class="section-number-3">8.3</span> Boolean Modelの例</h3>
+<div class="column" style="float:left; width:40%; font-size:30px">
+
+<div class="figure">
+<p><img src="./pics/Boolean_model.png" alt="Boolean_model.png" />
+</p>
+</div>
+</div>
+<div class="column" style="float:left; width:60%; font-size:20px; margin-top:80px;">
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">操作</th>
+<th scope="col" class="org-left">関数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">\(X_{t+1}=X_{t}\wedge Y_{t}\)</td>
+<td class="org-left">\(f_{1}(x_1, x2, x3) = x_1 \wedge x_2\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(Y_{t+1}=X_{t}\vee Y_{t}\)</td>
+<td class="org-left">\(f_{1}(x_1, x2, x3) = x_1 \vee x_2\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(Z_{t+1}=X_{t}\vee (\neg Y_{t} \wedge Z_{t})\)</td>
+<td class="org-left">\(f_{1}(x_1, x2, x3) = x_2 \vee (\neg x_1 \wedge x_3)\)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+t0 \(\rightarrow\) (X,Y,Z) = 1, 0, 1 
+</p>
+
+<p>
+t1 \(\rightarrow\) (X,Y,Z) = (\(1\wedge 0\), \(1\vee 0\), \(0\vee(\neg 1 \wedge 1)\)) = 0, 1, 0 
+</p>
+</div>
+
+<p>
+100遺伝子を持つネットワークの状態は \(2^{100}\) になる。
+</p>
+
+</section>
+<section id="slide-orgc6aa8aa">
+<h3 id="orgc6aa8aa"><span class="section-number-3">8.4</span> Boolean Modelのattractor</h3>
+<div class="column" style="float:left; width:30%; font-size:30px">
+
+<div class="figure">
+<p><img src="./pics/BN_attractor.png" alt="BN_attractor.png" />
+</p>
+</div>
+</div>
+<div class="column" style="float:left; width:70%; font-size:20px; margin-top:80px;">
+<div class="column" style="float:left; width:25%; font-size:20px;">
+<p style="font-size:10px">
+遺伝子1は、遺伝子３と遺伝子４によりコントロールする。
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">3 4</th>
+<th scope="col" class="org-right">1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">0 0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">0 1</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">1 0</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-left">1 1</td>
+<td class="org-right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="column" style="float:left; width:25%; font-size:20px;">
+<p style="font-size:10px">
+遺伝子2は、遺伝子１と遺伝子４によりコントロールする。
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">1 4</th>
+<th scope="col" class="org-right">2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">0 0</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-left">0 1</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">1 0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">1 1</td>
+<td class="org-right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="column" style="float:left; width:25%; font-size:20px;">
+<p style="font-size:10px">
+遺伝子3は、遺伝子1と遺伝子２によりコントロールする。
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">1 2</th>
+<th scope="col" class="org-right">3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">0 0</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-left">0 1</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">1 0</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-left">1 1</td>
+<td class="org-right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="column" style="float:left; width:25%; font-size:20px;">
+<p style="font-size:10px">
+遺伝子４は、遺伝子２と遺伝子３によりコントロールする。
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">2 3</th>
+<th scope="col" class="org-right">4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">0 0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">0 1</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-left">1 0</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-left">1 1</td>
+<td class="org-right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="column" style="float:left; font-size:20px;">
+<p>
+ネットワークの状態が以下の16種類になる。
+</p>
+<div>
+\begin{array}{|c|c|c|} \hline
+0,0,0,0 & 1,0,0,0 & 1,1,0,0 & 1,1,1,0   \\ \hline
+1,1,1,1 & 0,1,0,0 & 1,0,1,0 & 1,1,0,1  \\ \hline
+        & 0,0,1,0 & 1,0,0,1 & 1,0,1,1  \\ \hline
+        & 0,0,0,1 & 0,1,0,1 & 0,1,1,1  \\ \hline
+        &         & 0,0,1,1 &          \\ \hline      
+        &         & 0,1,1,0 &          \\ \hline
+\end{array}
+
+</div>
+</div>
+
+</section>
+<section id="slide-orgc6aa8aa-split">
+
+<h3><span class="section-number-3">8.4</span> Boolean Modelのattractor</h3>
+<div class="column" style="float:left; width:30%; font-size:20px;">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">時刻</td>
+<td class="org-left">状態</td>
+</tr>
+
+<tr>
+<td class="org-left">t0</td>
+<td class="org-left">0,0,0,0</td>
+</tr>
+
+<tr>
+<td class="org-left">t1</td>
+<td class="org-left">0,1,1,0</td>
+</tr>
+
+<tr>
+<td class="org-left">t2</td>
+<td class="org-left">1,1,0,0</td>
+</tr>
+
+<tr>
+<td class="org-left">t3</td>
+<td class="org-left">0,0,0,1</td>
+</tr>
+
+<tr>
+<td class="org-left">t4</td>
+<td class="org-left">0,0,1,0</td>
+</tr>
+
+<tr>
+<td class="org-left">t5</td>
+<td class="org-left">1,1,1,1</td>
+</tr>
+
+<tr>
+<td class="org-left">t6</td>
+<td class="org-left">1,1,0,0</td>
+</tr>
+
+<tr>
+<td class="org-left">t7</td>
+<td class="org-left">0,0,0,1</td>
+</tr>
+
+<tr>
+<td class="org-left">t8</td>
+<td class="org-left">0,0,1,0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="column" style="float:left; width:70%; font-size:20px;">
+
+<div class="figure">
+<p><img src="./pics/BN_attractor_ex.png" alt="BN_attractor_ex.png" />
+</p>
+</div>
+</div>
+</section>
+<section id="slide-orgd03f705">
+<h3 id="orgd03f705"><span class="section-number-3">8.5</span> Recommened Papers</h3>
+<ul style="font-size:30px">
+<li>Albert, R., Othmer, H. G. 
+The topology of the regulatory interactions predicts the expression pattern of 
+the segment polarity genes in Drosophila melanogaster. J. Theor. Biol., 2003, 223, 1-18</li>
+
+<li>Tatsuya Akutsu, Satoru Kuhara, Osamu Maruyama, and Satoru Miyano. 
+Identification of gene regulatory networks by strategic gene disruptions and gene overexpressions. 
+In Proceedings of the Ninth Annual ACM-SIAM Symposium on Discrete Algorithms, pages 695-702, 
+San Francisco, California, 25-27 January 1998.</li>
+
+</ul>
+
+
+
+</section>
+<section id="slide-orge30509a">
+<h3 id="orge30509a"><span class="section-number-3">8.6</span> Bayesian Model</h3>
+<div class="outline-text-3" id="text-8-6">
+</div>
+</section>
+<section id="slide-org334ff92">
+<h4 id="org334ff92"><span class="section-number-4">8.6.1</span> Intro</h4>
+
+</section>
+<section id="slide-orgbd7b4b1">
+<h4 id="orgbd7b4b1"><span class="section-number-4">8.6.2</span> Recommended papers</h4>
+<ul style="font-size:30px;float:left">
+<li>Friedman N., Linial M., Nachman I., and Pe&rsquo;er D.Using bayesian networks to analyze expression data. 
+J. Computational Biology, 7(3):601-620, Nov 1998.</li>
+
+</ul>
+
+<ul style="font-size:30px;float:left">
+<li>Imoto S. et al.  (2002) Estimation of genetic networks and functional structures between genes by 
+using Bayesian networks and nonparametric regression. In: Pacific Symposium on Biocomputing, 
+The Kauai Marriott Resort, Hawaii, Vol. 7, pp. 175–186.</li>
+
+</ul>
+
+</section>
+<section id="slide-org6e7001a">
+<h3 id="org6e7001a"><span class="section-number-3">8.7</span> Differential equations</h3>
+<div class="outline-text-3" id="text-8-7">
+</div>
+</section>
+<section id="slide-org0c32439">
+<h4 id="org0c32439"><span class="section-number-4">8.7.1</span> Recommended papers</h4>
+<p style="font-size:30px;float:left">
+Chen T, He HL, Church GM. Modeling gene expression with differential equations. 
+Pac Symp Biocomput. 1999;29-40.
+</p>
+
+
+</section>
+<section id="slide-org4f0570d">
+<h3 id="org4f0570d"><span class="section-number-3">8.8</span> Graphical Gaussian Model</h3>
+<p>
+It is also said &rsquo;concentration graph&rsquo; or &rsquo;covariance selection&rsquo; model.  
+Suppose that a pair of genes, say Genes A and B, show a high correlation in their expression 
+profiles. There are three possible mechanisms to induce a high correlation in the expression 
+levels between them. 
+</p>
+
+<ol>
+<li>Direct interaction.</li>
+<li>Indirect interaction.</li>
+<li>A common gene, i.e., the expressions of Genes A and B are regulated by a common gene product.</li>
+
+</ol>
+
+
+</section>
+<section id="slide-orgea20fb1">
+<h4 id="orgea20fb1"><span class="section-number-4">8.8.1</span> Recommended papers</h4>
+<p style="font-size:30px">
+Hiroyuki Toh,  Katsuhisa Horimoto
+Bioinformatics, Volume 18, Issue 2, February 2002, Pages 287–297
+</p>
+
+
+</section>
+</section>
+<section>
+<section id="slide-org4a492e3">
+<h2 id="org4a492e3"><span class="section-number-2">9</span> 遺伝子調節ネットワークの推定 (これから)</h2>
+<div class="outline-text-2" id="text-9">
+</div>
+</section>
+<section id="slide-orga2390ad">
+<h3 id="orga2390ad"><span class="section-number-3">9.1</span> Limited to the feasible number of regulatory genes</h3>
+<ul style="font-size:20px;float:left">
+<li>Reveal  
+Liang S. et al.  (1998) 
+Reveal, a general reverse engineering algorithm for inference of genetic network architectures. 
+In Pacific Symposium on Biocomputing, pages 18-29, Maui, Hawaii, 1998. World Scientific Publishing Co.</li>
+<li>Best-Fit  
+Lähdesmäki H. et al.  (2003)
+On learning gene regulatory networks under the Boolean network model. Mach. Learn., 52, 147–167.</li>
+<li>Bayesian inference approach for a Boolean network  
+Han S. et al.  (2014) 
+A full bayesian approach for Boolean genetic network inference. PLoS One, 9, e115806.</li>
+<li>Genetic algorithm-based  
+Shohag Barman, Yung-Keun Kwon, 
+A Boolean network inference from time-series gene expression data using a genetic algorithm
+ Bioinformatics, Volume 34, Issue 17, 01 September 2018, Pages i927–i933</li>
+<li>&#x2026;</li>
+
+</ul>
+
+</section>
+<section id="slide-orgb9c96e5">
+<h3 id="orgb9c96e5"><span class="section-number-3">9.2</span> Mutual Information</h3>
+<ul style="font-size:20px;float:left">
+<li>Relevance networks  
+Butte A.J., Kohane I.S. (2000) 
+Mutual information relevance networks: functional genomic clustering using pairwise entropy measurements. 
+In Pacific Symposium on Biocomputing, The Sheraton Waikiki, Hawaii, Vol. 5, p. 26.</li>
+<li>Context likelihood of relatedness (CLR)  
+Faith J.J. et al.  (2007) 
+Large-scale mapping and validation of Escherichia coli transcriptional regulation from a compendium of 
+expression profiles. PLoS Biol., 5, e8.</li>
+<li>Reconstruction of accurate cellular networks (ARACNE)   
+Margolin A.A. et al.  (2006) 
+Aracne: an algorithm for the reconstruction of gene regulatory networks 
+in a mammalian cellular context. BMC Bioinformatics, 7, S7.</li>
+<li>&#x2026;</li>
+
+</ul>
+
+
+</section>
+</section>
+<section>
+<section id="slide-org24fdf84">
+<h2 id="org24fdf84"><span class="section-number-2">10</span> カイコの遺伝子共発現ネットワークの解析</h2>
+<p>
+目的：カイコの遺伝子ネットワークによる有用物質産生関連候補遺伝子の同定
+</p>
+
+</section>
+<section id="slide-orgb6998d0">
+<h3 id="orgb6998d0"><span class="section-number-3">10.1</span> サンプルデータ</h3>
+<div class="column" style="float:left; width: 50%">
+<img src="./pics/silk_sample_data.png" class="stretch" >
+</div>
+<div class="column" style="float:left; width: 50%">
+<p>
+サンプルデータには、51,926遺伝子がある。TPM列を用いて、ネットワークを構築しました。
+</p>
+</div>
+
+</section>
+<section id="slide-org09f73fe">
+<h3 id="org09f73fe"><span class="section-number-3">10.2</span> 構築したネットワーク(fundamental analysis)</h3>
+<div class="column" style="float:left; width: 50%">
+<div class="r-stack">
+<img class="fragment current-visible" data-fragment-index="0" src="./pics/sip_fig_black.png">
+<img class="fragment" data-fragment-index="1" src="./pics/sip_fig_black_closeview.png">
+<img class="fragment" data-fragment-index="2" src="./pics/sip_fig_black_closeview2.png">
+<img class="fragment" data-fragment-index="3" src="./pics/sip_fig_black_closeview3.png">
+</div>
+</div>
+
+<div class="column" style="float:left; width: 50%">
+<div class="column" style="float:left; font-size:30px">
+<p>
+サンプルデータには、51,926遺伝子がある。発現値が平均値より大き遺伝子を集め、グラフを構築した。
+city block距離による辺を定義し、ノードペアの距離において、下の25％データの値を域値にしました。
+</p>
+
+<ol>
+<li>ノードの数は2785</li>
+<li>edgesの数は129327</li>
+
+</ol>
+</div>
+</div>
+
+</section>
+<section id="slide-orgfc37a44">
+<h3 id="orgfc37a44"><span class="section-number-3">10.3</span> 研究方法</h3>
+<p>
+現時点で、51,926遺伝子　x　20種類組織である。
+</p>
+
+<ul style="font-size:30px">
+<li>共発現ネットワークの構築（Pearson相関）
+<ul>
+<li>組織別のVariance-Covarianceマトリックス</li>
+<li>遺伝子ごとのVariance-Covarianceマトリックス</li>
+
+</ul></li>
+<li>最小全域木(Minimum spanning tree): Primアルゴリズム</li>
+<li><p>
+グラフの分割（graph partitioning）  
+</p>
+
+<p>
+Metis(c), graph-tool(python), pcsf-fast(python)
+</p></li>
+<li>[\(\star\)] 各コミュニティにおいて、以下の指標でランキング
+\[ I \stackrel{\mathrm{def}}{=} \frac{\#E}{\#N}\frac{PCC_d}{PCC_o} \]
+式の改良案を考えています。</li>
+<li>選択したコミュニティ(遺伝子群)に対して注釈解析</li>
+<li>[Option?]組織別のネットワークの比較</li>
+
+</ul>
 </section>
 </section>
 </div>
 </div>
-<p> Created by 曹巍. </p>
-<script src="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.js"></script>
+<script src="./reveal.js/dist/reveal.js"></script>
+<script src="./reveal.js/plugin/highlight/highlight.js"></script>
+<script src="./reveal.js/plugin/markdown/markdown.js"></script>
+<script src="./reveal.js/plugin/notes/notes.js"></script>
+<script src="./reveal.js/plugin/menu/menu.js"></script>
+<script src="./reveal.js/plugin/chalkboard/chalkboard.js"></script>
+
 
 <script>
 // Full list of configuration options available here:
 // https://github.com/hakimel/reveal.js#configuration
 Reveal.initialize({
-width:1200, height:800,
+plugins: [RevealHighlight,RevealMarkdown,RevealNotes,RevealMenu,RevealChalkboard],
 margin: 0.04, minScale:0.2, maxScale:2.0, center:'false',
+width:1200, height:800,
+controlsLayout: 'bottom-right',
 slideNumber:'c/t',
-menu: {side: 'left', titleSelector: 'h1, h2, h3, h4', markers: true, custom: false, themes: true, transitions: true, openButton: true, openSlideNumber: false, keyboard: true, sticky: false, autoOpen: true},
+menu: {side: 'left', numbers:true, titleSelector: 'h1, h2, h3, h4', hideMissingTitles:true, markers: true, custom: false, themes: true, transitions: true, openButton: true, openSlideNumber:true, keyboard: true, sticky: false, autoOpen: true},
+chalkboard: {boardmarkerWidth: 8, toggleChalkboardButton: { left: "80px" }, toggleNotesButton: { left: "130px"}},
 multiplex: {
     secret: '', // null if client
     id: '', // id, obtained from socket.io server
@@ -1027,10 +2145,7 @@ multiplex: {
 
 // Optional libraries used to extend on reveal.js
 dependencies: [
- { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
- { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
- { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
- { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+]
 });
 </script>
 </body>

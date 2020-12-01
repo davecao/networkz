@@ -16,6 +16,7 @@
 
 #include "dataframe.hpp"
 #include "graph.hpp"
+#include "csr_graph.hpp"
 
 namespace NARO {
 
@@ -31,7 +32,7 @@ struct CityBlock
    *          an observation..
    * @returns a Eign double matrix.
    */
-  Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat);
+  Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat, bool verbose);
 };
 
 /**
@@ -46,7 +47,7 @@ struct Euclidean
    *         an observation.
    * @return a Eign double matrix.
    */
-  Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat);
+  Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat, bool verbose);
 };
 
 /**
@@ -59,7 +60,7 @@ struct Corrcoef
    *         an observation.
    * @return a Eign double matrix.
    */
-  Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat);
+  Eigen::MatrixXd operator()(const Eigen::MatrixXd& mat, bool verbose);
 };
 /**
  * @brief create_graph: create a graph from a given data
@@ -70,7 +71,7 @@ struct Corrcoef
  *       between two nodes if their distance be lower than this value.
  * @param[in] distance_type the method name for distance computation. ['city', 'euc', 'corr'].
  */
-bool create_graph(Graph* g,
+bool create_graph(NARO::Graph* g,
                   DataFrame* df,
                   double dist_threshold,
                   std::string distance_type);
@@ -84,7 +85,7 @@ bool create_graph(Graph* g,
  * @param[in] dist_functor A template argument for selecting the method to calculate the distance.
  */
 template<class DistType>
-bool create_graph(Graph* g,
+bool create_graph(NARO::Graph* g,
                   DataFrame* df,
                   double dist_threshold,
                   DistType dist_functor);
@@ -97,7 +98,26 @@ bool create_graph(Graph* g,
  * @param[in] g A pointer of a Graph
  * @returns bool, true for success; false for failure
  */
-bool write_to_graphviz(std::string& filename, Graph& g);
+bool write_to_graphviz(std::string& filename, NARO::Graph& g);
+
+/**
+ * @brief A writer for output independent components in the network
+ *
+ * @param[in] filename the path of the output file
+ * @param[in] inputfile the path of the input file
+ * @param[in] g A pointer of a Graph
+ * @param[in] date The created date
+ * @returns bool, true for success; false for failure
+ */
+bool write_components(const std::string& filename,
+                      std::string& inputfile,
+                      NARO::Graph* g,
+                      const std::string& date);
+
+void convert(NARO::Graph& g, Algo::Community::CSRgraph& csr_g,
+             //std::vector<int>* n2c,
+             std::map<std::string, unsigned int>* str2node);
+
 } // Namespace NARO
 
 #endif /* graph_util_hpp */

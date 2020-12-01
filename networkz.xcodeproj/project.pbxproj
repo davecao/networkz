@@ -7,9 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F66E55FB256B977C004AB2C0 /* modularity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66E55F9256B977C004AB2C0 /* modularity.cpp */; };
 		F670420724EDE82700F83258 /* dataframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F670420524EDE82700F83258 /* dataframe.cpp */; };
 		F697A20524FAC393007F38CE /* graph_algo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F697A20324FAC393007F38CE /* graph_algo.cpp */; };
+		F6AAF6C92564BFCC007B3209 /* community_detection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6AAF6C72564BFCC007B3209 /* community_detection.cpp */; };
 		F6B8DC6E24F488160094950C /* graph_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6B8DC6D24F488160094950C /* graph_util.cpp */; };
+		F6CF0364256FDBA7001BF146 /* csr_graph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6CF0362256FDBA7001BF146 /* csr_graph.cpp */; };
 		F6ECDCD924D8CB9E00230768 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6ECDCC824D8CB9E00230768 /* main.cpp */; };
 		F6ECDCDA24D8CB9E00230768 /* TSVReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6ECDCCB24D8CB9E00230768 /* TSVReader.cpp */; };
 		F6ECDCDB24D8CB9E00230768 /* utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6ECDCCC24D8CB9E00230768 /* utility.cpp */; };
@@ -34,12 +37,18 @@
 /* Begin PBXFileReference section */
 		F633D31E24CC448A003EBA00 /* networkz */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = networkz; sourceTree = BUILT_PRODUCTS_DIR; };
 		F633D32B24CC5F7B003EBA00 /* networkz.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = networkz.entitlements; sourceTree = "<group>"; };
+		F66E55F9256B977C004AB2C0 /* modularity.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = modularity.cpp; sourceTree = "<group>"; };
+		F66E55FA256B977C004AB2C0 /* modularity.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = modularity.hpp; sourceTree = "<group>"; };
 		F670420524EDE82700F83258 /* dataframe.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dataframe.cpp; sourceTree = "<group>"; };
 		F670420624EDE82700F83258 /* dataframe.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = dataframe.hpp; sourceTree = "<group>"; };
 		F697A20324FAC393007F38CE /* graph_algo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = graph_algo.cpp; sourceTree = "<group>"; };
 		F697A20424FAC393007F38CE /* graph_algo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = graph_algo.hpp; sourceTree = "<group>"; };
+		F6AAF6C72564BFCC007B3209 /* community_detection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = community_detection.cpp; sourceTree = "<group>"; };
+		F6AAF6C82564BFCC007B3209 /* community_detection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = community_detection.hpp; sourceTree = "<group>"; };
 		F6B8DC6C24F488160094950C /* graph_util.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = graph_util.hpp; sourceTree = "<group>"; };
 		F6B8DC6D24F488160094950C /* graph_util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = graph_util.cpp; sourceTree = "<group>"; };
+		F6CF0362256FDBA7001BF146 /* csr_graph.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = csr_graph.cpp; sourceTree = "<group>"; };
+		F6CF0363256FDBA7001BF146 /* csr_graph.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = csr_graph.hpp; sourceTree = "<group>"; };
 		F6ECDCC824D8CB9E00230768 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		F6ECDCC924D8CB9E00230768 /* common.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = common.hpp; sourceTree = "<group>"; };
 		F6ECDCCA24D8CB9E00230768 /* utility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = utility.hpp; sourceTree = "<group>"; };
@@ -90,8 +99,22 @@
 		F633D32024CC448A003EBA00 /* networkz */ = {
 			isa = PBXGroup;
 			children = (
+				F6ECDCD024D8CB9E00230768 /* graph.cpp */,
+				F6ECDCD124D8CB9E00230768 /* graph.hpp */,
+				F6ECDCCE24D8CB9E00230768 /* graph_report.cpp */,
+				F6ECDCD624D8CB9E00230768 /* graph_report.hpp */,
 				F6B8DC6D24F488160094950C /* graph_util.cpp */,
 				F6B8DC6C24F488160094950C /* graph_util.hpp */,
+				F6CF0362256FDBA7001BF146 /* csr_graph.cpp */,
+				F6CF0363256FDBA7001BF146 /* csr_graph.hpp */,
+				F66E55F9256B977C004AB2C0 /* modularity.cpp */,
+				F66E55FA256B977C004AB2C0 /* modularity.hpp */,
+				F6AAF6C72564BFCC007B3209 /* community_detection.cpp */,
+				F6AAF6C82564BFCC007B3209 /* community_detection.hpp */,
+				F697A20324FAC393007F38CE /* graph_algo.cpp */,
+				F697A20424FAC393007F38CE /* graph_algo.hpp */,
+				F670420524EDE82700F83258 /* dataframe.cpp */,
+				F670420624EDE82700F83258 /* dataframe.hpp */,
 				F6ECDCE024D8D2B000230768 /* CMakeLists.txt */,
 				F6ECDCD524D8CB9E00230768 /* cli_opt.hpp */,
 				F6ECDCC924D8CB9E00230768 /* common.hpp */,
@@ -99,22 +122,14 @@
 				F6ECDCD824D8CB9E00230768 /* FileReaderBase.cpp */,
 				F6ECDCD724D8CB9E00230768 /* FileReaderBase.hpp */,
 				F6ECDCD224D8CB9E00230768 /* FileReaderFactory.hpp */,
-				F6ECDCD024D8CB9E00230768 /* graph.cpp */,
-				F6ECDCD124D8CB9E00230768 /* graph.hpp */,
-				F6ECDCCE24D8CB9E00230768 /* graph_report.cpp */,
-				F6ECDCD624D8CB9E00230768 /* graph_report.hpp */,
 				F6ECDCCF24D8CB9E00230768 /* IFileReaderFuncs.cpp */,
 				F6ECDCCD24D8CB9E00230768 /* IFileReaderFuncs.hpp */,
-				F6ECDCC824D8CB9E00230768 /* main.cpp */,
 				F6ECDCCB24D8CB9E00230768 /* TSVReader.cpp */,
 				F6ECDCD324D8CB9E00230768 /* TSVReader.hpp */,
 				F6ECDCCC24D8CB9E00230768 /* utility.cpp */,
 				F6ECDCCA24D8CB9E00230768 /* utility.hpp */,
 				F633D32B24CC5F7B003EBA00 /* networkz.entitlements */,
-				F670420524EDE82700F83258 /* dataframe.cpp */,
-				F670420624EDE82700F83258 /* dataframe.hpp */,
-				F697A20324FAC393007F38CE /* graph_algo.cpp */,
-				F697A20424FAC393007F38CE /* graph_algo.hpp */,
+				F6ECDCC824D8CB9E00230768 /* main.cpp */,
 			);
 			path = networkz;
 			sourceTree = "<group>";
@@ -145,7 +160,7 @@
 		F633D31624CC448A003EBA00 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1160;
+				LastUpgradeCheck = 1220;
 				ORGANIZATIONNAME = "曹巍";
 				TargetAttributes = {
 					F633D31D24CC448A003EBA00 = {
@@ -176,6 +191,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F697A20524FAC393007F38CE /* graph_algo.cpp in Sources */,
+				F66E55FB256B977C004AB2C0 /* modularity.cpp in Sources */,
+				F6AAF6C92564BFCC007B3209 /* community_detection.cpp in Sources */,
+				F6CF0364256FDBA7001BF146 /* csr_graph.cpp in Sources */,
 				F6B8DC6E24F488160094950C /* graph_util.cpp in Sources */,
 				F6ECDCDB24D8CB9E00230768 /* utility.cpp in Sources */,
 				F6ECDCDD24D8CB9E00230768 /* IFileReaderFuncs.cpp in Sources */,
@@ -185,7 +204,6 @@
 				F6ECDCDC24D8CB9E00230768 /* graph_report.cpp in Sources */,
 				F6ECDCDF24D8CB9E00230768 /* FileReaderBase.cpp in Sources */,
 				F6ECDCD924D8CB9E00230768 /* main.cpp in Sources */,
-				F697A20524FAC393007F38CE /* graph_algo.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,6 +236,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -297,6 +316,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;

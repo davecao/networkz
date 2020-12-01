@@ -107,6 +107,33 @@ std::string repeat(std::string str, const std::size_t n)
 }
 // -----------------------------------------------------------------------------
 //
+std::istream& safeGetLine(std::ifstream& is, std::string& str)
+{
+  str.clear();
+  std::istream::sentry se(is, true);
+  std::streambuf* sb = is.rdbuf();
+  for(;;) {
+    int c = sb->sbumpc();
+    switch (c) {
+    case '\n': // Line feed
+      return is;
+    case '\r': // Carriage return
+      if(sb->sgetc() == '\n')
+        sb->sbumpc();
+      return is;
+    case std::streambuf::traits_type::eof():
+      // Also handle the case when the last line has no line ending
+      if(str.empty())
+        is.setstate(std::ios::eofbit);
+        return is;
+    default:
+        str += (char)c;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
 std::vector<std::string> readFileToLines(const std::string& file,
                                          const std::string& comment="#")
 {
@@ -122,10 +149,8 @@ std::vector<std::string> readFileToLines(const std::string& file,
   if (f) {
     std::string str;
     // Read the next line from File untill it reaches the end.
-    while (std::getline(f, str))
+    while (!safeGetLine(f, str).eof())
     {
-      // Remove the newline
-      str.erase(std::remove(str.begin(), str.end(), '\n'), str.end());
       // Remove the comment lines
       if (str.substr(0, comment.length()) == comment){
         continue;

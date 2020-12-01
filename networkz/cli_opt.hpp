@@ -35,7 +35,7 @@ namespace CLIARG {
   std::string o_graph_name = "Gene Expression Network"; ///< title for graphviz
   std::string o_graph_file = "";  ///< output graphviz file name
   // Distance type for graph construction, default is "city".
-  std::string mst_algo_name = "kruskal"; ///< Name of minimum spanning tree
+  std::string mst_algo_name = "prim"; ///< Name of minimum spanning tree
   std::string distance_type = "city"; ///< distance method
   /**
    * Support distance type:
@@ -88,8 +88,9 @@ namespace CLIARG {
     ("mst,m", po::value<std::string>(&mst_algo_name),
               "Algorithm names of Minmum spanning tree(undirected graph):\n"
               "'kruskal' for Kruskal's algorithm."
-              "'prim' for Prim's algorithm."
-              "Default is 'kruskal'")
+              "'prim' for Prim's algorithm, choiced for the situation that"
+              "       #edges are more than #vertices."
+              "Default is 'prim'")
     ("title,n", po::value<std::string>(&o_graph_name),
               "The title of the graph used to label the png file. "
               "Default is 'Gene Expression Network'.")
@@ -138,13 +139,12 @@ namespace CLIARG {
       //BOOST_CHECK_EQUAL(std::string(e.what()), "Unknown option");
     }
     
-    if( vm.count("help") ){
+    if ( vm.count("help") ){
       // print help info
       std::cout << general << std::endl;
       std::exit(0);
     }
-    
-    if( vm.count("version") ){
+    if ( vm.count("version") ){
       //print version info
       std::cout << VersionInfo::version << std::endl;
       exit(0);
@@ -163,7 +163,6 @@ namespace CLIARG {
         std::exit(-1);
       }
     }
-    // Check required arguments
     if ( vm.count("infile") ) {
       i_filename = vm["infile"].as<std::string>();
       if( !FileExists(i_filename) ) {

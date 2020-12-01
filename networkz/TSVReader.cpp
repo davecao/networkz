@@ -80,13 +80,24 @@ bool NARO::TSVReader::read(const std::string& filename,
   for(size_t i = header + 1; i < lines.size(); i++){
     // split the line by the separator, boost::split
     boost::split(l, lines[i], boost::is_any_of(sep));
-
+    // Check the number of columns whether is consistent with the header cols
+    if (l.size() != ncols) {
+      std::cout << "The " << i << " line: #column != #header" << std::endl;
+      std::exit(-1);
+    }
     // Store record lines
     if (!df->add_row(l, row_counter)) {
       std::cerr << "Failed to parse the format at line " << i << std::endl;
     }
     // increase the index
     ++row_counter;
+  }
+  // Check row number whether it is equal to the number of stored row labels
+  if (row_counter != df->get_rowIndex_names().size()) {
+    std::cerr << "Error: duplicate rows exists.(" << row_counter <<
+    " lines read, but "<< df->get_rowIndex_names().size() <<
+    " unqiue row labels available" << std::endl;
+    std::exit(-1);
   }
   return true;
 }
