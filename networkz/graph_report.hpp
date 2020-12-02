@@ -40,6 +40,7 @@ struct Report
   bool write(const std::string& o_filename, Graph* g,
              const std::string& fmt, double threshold,
              const std::string& distanceType,
+             const std::string& mst_name,
              bool verbose);
 
 };
