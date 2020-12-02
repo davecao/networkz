@@ -101,7 +101,7 @@ int main(int argc, const char * argv[]) {
       std::cout << "Read "<< filename << "(" << filesize  << ") completed."
                 << std::endl;
     }
-    df->head();
+    //df->head();
   } else {
     std::cerr << "Failed to read the input file, " << filename << std::endl;
     std::exit(-1);
@@ -133,7 +133,7 @@ int main(int argc, const char * argv[]) {
     seconds = std::chrono::nanoseconds(timer.elapsed().user);
     std::cout << " Completed in " << seconds.count() << " seconds."
               << std::endl;
-    dat->describe();
+    //dat->describe();
   } else {
     std::cout << " Completed." << std::endl;
   }

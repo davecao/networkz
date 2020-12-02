@@ -72,10 +72,16 @@ void NARO::Algo::find_minimum_spanning_tree(NARO::Graph& g,
     NARO::EdgeIter ei, ei_end;
     for (boost::tie(ei, ei_end) = boost::edges(g); ei != ei_end; ++ei){
       //boost::remove_edge(boost::source(*ei,g), boost::target(*ei, g), g);
-      auto it = std::find (sp_e_tree.begin(), sp_e_tree.end(), *ei);
+      auto src = boost::source(*ei,g);
+      auto dest = boost::target(*ei, g);
+      std::cout << "src:"<< g[src].name <<" -- target:"<< g[dest].name << "("
+                << g[*ei].distance <<")";
+      auto it = std::find(sp_e_tree.begin(), sp_e_tree.end(), *ei);
       if (it == sp_e_tree.end()){
+        std::cout << "Removed" << std::endl;
         boost::remove_edge(*ei, g);
       }
+      std::cout << "" << std::endl;
     }
   } else {
     std::vector<NARO::Vertex> sp_v_tree(boost::num_vertices(g));
