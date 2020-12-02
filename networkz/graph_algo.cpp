@@ -69,19 +69,13 @@ void NARO::Algo::find_minimum_spanning_tree(NARO::Graph& g,
     boost::kruskal_minimum_spanning_tree(
                   g, &sp_e_tree[0], weightMap);
     //remove the edges not in kruskal's result
-    NARO::EdgeIter ei, ei_end;
-    for (boost::tie(ei, ei_end) = boost::edges(g); ei != ei_end; ++ei){
-      //boost::remove_edge(boost::source(*ei,g), boost::target(*ei, g), g);
-      auto src = boost::source(*ei,g);
-      auto dest = boost::target(*ei, g);
-      std::cout << "src:"<< g[src].name <<" -- target:"<< g[dest].name << "("
-                << g[*ei].distance <<")";
+    NARO::EdgeIter ei, ei_end, next;
+    boost::tie(ei, ei_end) = boost::edges(g);
+    for (next = ei; ei != ei_end; ei = next){
+      ++next;
       auto it = std::find(sp_e_tree.begin(), sp_e_tree.end(), *ei);
       if (it == sp_e_tree.end()){
-        std::cout << "Removed" << std::endl;
         boost::remove_edge(*ei, g);
-      }else{
-        std::cout << "\n";
       }
     }
   } else {
