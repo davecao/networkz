@@ -1,7 +1,7 @@
 #  Networkz
 - [x] Add Doxygen to cmake of generating API document.
-- [ ] Minimum spanning tree algorithms, kruskal and prim
-- [ ] Minimum-cut algorithm
+- [x] Minimum spanning tree algorithms, kruskal and prim
+- [x] Community detection, Louvain
 - [ ] Graph partitioning (Add Metis support)
 - [ ] Dynamical network biomarker: index
 - [ ] Add a configuration file support
@@ -12,7 +12,7 @@
 3. C++ compiler (support c++17, clang 9.0 had been tested on MacOS)
 4. [Optional] Eigen (version 3.3.9 or later)
 
-## For MacOS 10.15
+## For MacOS 10.15 or later
 
 ### Install Homebrew
 
@@ -124,4 +124,5 @@ Graph options:
 
 ## Example
 
-    ./networkz -i test/test.tsv -t 2.0 -c tpm -v -g ./test.dot -o test/test.log
+  1. Measure the distance between nodes with correlation coefficient
+    ./networkz -i test/test.tsv -t 2.0 -d corr -v -g ./test.dot -o test/test.log
