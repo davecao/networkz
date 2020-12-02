@@ -1,6 +1,6 @@
 #  Networkz
 - [x] Add Doxygen to cmake of generating API document.
-- [x] Minimum spanning tree algorithms, kruskal and prim
+- [x] Minimum spanning tree algorithms, kruskal and prim
 - [x] Community detection, Louvain
 - [ ] Graph partitioning (Add Metis support)
 - [ ] Dynamical network biomarker: index
