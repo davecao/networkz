@@ -84,26 +84,11 @@ Eigen::MatrixXd NARO::Corrcoef::operator()(const Eigen::MatrixXd& mat,
   Eigen::MatrixXd cc = ((cov.array().rowwise() * D.transpose().array())
                        .colwise() * D.array()).abs();
   Eigen::MatrixXd cc_dist = 1 - cc.array();
-  if (verbose) {
-    mat2file(cov, "networkz_covariance_mat.csv");
-    mat2file(cc, "networkz_corref_mat.csv");
-    mat2file(cc_dist, "networkz_corref_dist_mat.csv");
-  }
-//  std::cout << "Raw matrix: arranged as rows\n";
-//  std::cout << mat << std::endl;
-//  std::cout << "Mean vector: \n";
-//  std::cout << m << std::endl;
-//  std::cout << "Centered matrix:\n";
-//  std::cout << Xc << std::endl;
-//  std::cout << "Covariance matrix:\n";
-//  std::cout << cov << std::endl;
-//  std::cout << "diagnal element in row vector:\n";
-//  std::cout << diag << std::endl;
-//  std::cout << "Inverse of squared root of diagnal element matrix\n";
-//  std::cout << D << std::endl;
-//  std::cout << "correlation coefficient matrix for mat:\n";
-//  std::cout << cc << std::endl;
-
+//  if (verbose) {
+//    mat2file(cov, "networkz_covariance_mat.csv");
+//    mat2file(cc, "networkz_corref_mat.csv");
+//    mat2file(cc_dist, "networkz_corref_dist_mat.csv");
+//  }
   return cc_dist;
 }
 
