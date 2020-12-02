@@ -204,6 +204,7 @@ bool NARO::create_graph(NARO::Graph* g,
   int n_vertices = static_cast<int>(boost::num_vertices(*g));
   std::vector<int> component(n_vertices);
   int num = boost::connected_components(*g, &component[0]);
+  (*g)[boost::graph_bundle].num_component = num;
   int comm_id = 0;
   NARO::VertexIter vi, vend;
   for(boost::tie(vi, vend) = boost::vertices(*g); vi != vend; ++vi) {
