@@ -204,7 +204,7 @@ int main(int argc, const char * argv[]) {
   //
   NARO::Report report{o_graph_name, get_local_time(), "Networkz", filename};
   if (!report.write(o_filename, &genes_graph, "md", d_threshold,
-                    distance_type,
+                    distance_type, mst_algo_name,
                     verbose)){
     std::cout << "Failed to write a log." <<std::endl;
     std::exit(-1);

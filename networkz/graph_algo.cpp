@@ -80,8 +80,9 @@ void NARO::Algo::find_minimum_spanning_tree(NARO::Graph& g,
       if (it == sp_e_tree.end()){
         std::cout << "Removed" << std::endl;
         boost::remove_edge(*ei, g);
+      }else{
+        std::cout << "\n";
       }
-      std::cout << "" << std::endl;
     }
   } else {
     std::vector<NARO::Vertex> sp_v_tree(boost::num_vertices(g));
