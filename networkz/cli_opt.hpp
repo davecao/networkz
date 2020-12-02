@@ -35,7 +35,7 @@ namespace CLIARG {
   std::string o_graph_name = "Gene Expression Network"; ///< title for graphviz
   std::string o_graph_file = "";  ///< output graphviz file name
   // Distance type for graph construction, default is "city".
-  std::string mst_algo_name = "prim"; ///< Name of minimum spanning tree
+  std::string mst_algo_name = "kruskal"; ///< Name of minimum spanning tree
   std::string distance_type = "city"; ///< distance method
   /**
    * Support distance type:
@@ -90,7 +90,7 @@ namespace CLIARG {
               "'kruskal' for Kruskal's algorithm."
               "'prim' for Prim's algorithm, choiced for the situation that"
               "       #edges are more than #vertices."
-              "Default is 'prim'")
+              "Default is 'kruskal'")
     ("title,n", po::value<std::string>(&o_graph_name),
               "The title of the graph used to label the png file. "
               "Default is 'Gene Expression Network'.")
