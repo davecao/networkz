@@ -124,5 +124,5 @@ Graph options:
 
 ## Example
 
-  1. Measure the distance between nodes with correlation coefficient
+  1. Measure the distance between nodes with correlation coefficient  
     ./networkz -i test/test.tsv -t 2.0 -d corr -v -g ./test.dot -o test/test.log
