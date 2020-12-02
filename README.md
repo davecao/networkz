@@ -99,28 +99,28 @@ Tab-Separated Values (TSV) format is only supported now.
 
     networkz -h
 
-General options:
-  -V [ --version ]        Show the version number
-  -p [ --parser ] arg     File parser name. Default is 'TSVReader'.
-  -i [ --infile ] arg     The input data file. Only the tsv format is supported
-                          now.
-  -o [ --outfile ] arg    The output file of clusters in text format. Default
-                          is 'describe_networkz.log'.
-  -c [ --column ] arg     Specify the column names in the input file.
-  -g [ --graph ] arg      Output the graph to a file in the graphviz format.
-  -h [ --help ]           print help info.
+General options:  
+  -V [ --version ]        Show the version number  
+  -p [ --parser ] arg     File parser name. Default is 'TSVReader'.  
+  -i [ --infile ] arg     The input data file. Only the tsv format is supported  
+                          now.  
+  -o [ --outfile ] arg    The output file of clusters in text format. Default  
+                          is 'describe_networkz.log'.  
+  -c [ --column ] arg     Specify the column names in the input file.  
+  -g [ --graph ] arg      Output the graph to a file in the graphviz format.  
+  -h [ --help ]           print help info.  
 
-Graph options:
-  -v [ --verbose ]        The extra verbose.
-  -t [ --threshold ] arg  The threshold between two vertices which are linked
-                          by an edge if the distance less than it. default is
-                          0.01.
-  -d [ --distance ] arg   The distance type(string):
-                           'city' for city-block distance.
-                           'euc' for euclidean distance.
-                           'corr' for pearson correlation coefficient.
-  -n [ --title ] arg      The title of the graph used to label the png file.
-                          'Default is Gene Expression Network'.
+Graph options:  
+  -v [ --verbose ]        The extra verbose.  
+  -t [ --threshold ] arg  The threshold between two vertices which are linked  
+                          by an edge if the distance less than it. default is  
+                          0.01.  
+  -d [ --distance ] arg   The distance type(string):  
+                           'city' for city-block distance.  
+                           'euc' for euclidean distance.  
+                           'corr' for pearson correlation coefficient.  
+  -n [ --title ] arg      The title of the graph used to label the png file.  
+                          'Default is Gene Expression Network'.  
 
 ## Example
 
