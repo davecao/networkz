@@ -62,7 +62,7 @@ namespace CLIARG {
              "Specify the path of a configuration file to analyze the graph.(NOT FINISHED)")
     ("parser,p", po::value<std::string>(&parser_name),
               "File parser name. Default is 'TSVReader'.")
-    ("infile,i", po::value<std::string>(&i_filename)->required(),
+    ("infile,i", po::value<std::string>(&i_filename),
                "The input data file. Only the tsv format is supported now.")
     ("outfile,o", po::value<std::string>(&o_filename),
               "The output file of clusters in text format."

@@ -68,12 +68,20 @@ bool NARO::Report::write(const std::string& o_filename, Graph* g,
     }
   }
   std::ofstream ofile(o_filename);
-  
+  // Final graph info
   auto n_vertices = boost::num_vertices(*g);
   auto n_edges = boost::num_edges(*g);
-  
   std::vector<int> component(n_vertices);
   int num = boost::connected_components(*g, &component[0]);
+  
+  // Initial graph info
+  auto ini_component = (*g)[boost::graph_bundle].num_component;
+  auto ini_vertices = (*g)[boost::graph_bundle].num_vertices;
+  auto ini_edges = (*g)[boost::graph_bundle].num_edges;
+  auto max_weight = (*g)[boost::graph_bundle].max_weights;
+  auto min_weight = (*g)[boost::graph_bundle].min_weights;
+  auto tot_weight = (*g)[boost::graph_bundle].total_weights;
+  auto ave_weight = tot_weight / (*g)[boost::graph_bundle].num_edges;
   
   if (verbose) {
     timer.start();
@@ -92,12 +100,24 @@ bool NARO::Report::write(const std::string& o_filename, Graph* g,
     markdown_writer(ofile, "Distance type: " + distanceType);
     markdown_writer(ofile, "Threshold for distance : " + std::to_string(
                                                             threshold));
+    markdown_writer(ofile, "\n");
+    
+    markdown_writer(ofile, "Initial network info", 2);
+    markdown_writer(ofile, "Nodes : " + std::to_string(ini_vertices));
+    markdown_writer(ofile, "Edges : " + std::to_string(ini_edges));
+    markdown_writer(ofile, "Connected components : " + std::to_string(ini_component));
+    markdown_writer(ofile, "max weight : " + std::to_string(max_weight));
+    markdown_writer(ofile, "min weight : " + std::to_string(min_weight));
+    markdown_writer(ofile, "ave weight : " + std::to_string(ave_weight));
+    markdown_writer(ofile, "\n");
+    
+    markdown_writer(ofile, "Final network info", 2);
+    markdown_writer(ofile, "MST : " + mst_name);
+    markdown_writer(ofile, "Louvain modularity: " + (*g)[boost::graph_bundle].quality_name);
     markdown_writer(ofile, "Nodes : " + std::to_string(n_vertices));
     markdown_writer(ofile, "Edges : " + std::to_string(n_edges));
-    markdown_writer(ofile, "MST : " + mst_name);
     markdown_writer(ofile, "Connected components : " + std::to_string(num));
-    markdown_writer(ofile, "Louvain modularity: " + (*g)[boost::graph_bundle].quality_name);
-    markdown_writer(ofile, "levels: " + std::to_string((*g)[boost::graph_bundle].level));
+    markdown_writer(ofile, "Louvain levels: " + std::to_string((*g)[boost::graph_bundle].level));
     markdown_writer(ofile, "Quality score: " + std::to_string((*g)[boost::graph_bundle].quality));
     markdown_writer(ofile, "\n");
     

@@ -165,6 +165,7 @@ namespace NARO {
    double min_weights; ///< minimum of weights
    int num_vertices; ///< The number of vertices
    int num_edges; ///< The number of edges
+   int num_component; ///<The number of components
    int level; ///< Louvain's level
    double quality; ///< Louvain's quality
    std::string quality_name; ///< Name of quality function
