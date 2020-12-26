@@ -142,10 +142,10 @@ int main(int argc, const char * argv[]) {
   // ---------------------------------------------------------------------------
   // Instantiate a graph
   if (verbose) {
-    std::cout << "Create a graph ... ";
+    std::cout << "Start to create a graph " <<std::endl;
     timer.start();
   } else {
-    std::cout << "Create a graph ... ";
+    std::cout << "Start to create a graph " << std::endl;
   }
   
   NARO::Graph genes_graph(NARO::gGraph{CLIARG::o_graph_name});
@@ -156,20 +156,40 @@ int main(int argc, const char * argv[]) {
   if (verbose) {
     timer.stop();
     seconds = std::chrono::nanoseconds(timer.elapsed().user);
+    std::cout << "Completed in " << seconds.count() << " seconds." << std::endl;
+  } else {
+    std::cout << "Completed." << std::endl;
+  }
+  std::cout << "Number of vertices: "<< boost::num_vertices(genes_graph) << std::endl;
+  std::cout << "Number of edges: " <<  boost::num_edges(genes_graph) << std::endl;
+  // ---------------------------------------------------------------------------
+  // Find the minimum spanning tree by prim (more edges)
+  //     or kruskal (more vertices)
+  //
+  if (verbose) {
+    std::cout << "\nFind minimum spanning tree ... ";
+    timer.start();
+  } else {
+    std::cout << "\nFind minimum spanning tree ";
+  }
+  genes_graph.m_property->glabel += "-" + mst_algo_name;
+  NARO::Algo::find_minimum_spanning_tree(
+                      genes_graph, mst_algo_name);
+  if (verbose) {
+    timer.stop();
+    seconds = std::chrono::nanoseconds(timer.elapsed().user);
     std::cout << " Completed in " << seconds.count() << " seconds." << std::endl;
   } else {
     std::cout << " Completed." << std::endl;
   }
   // ---------------------------------------------------------------------------
-  // Find the minimum spanning tree by prim (more edges)
-  //     or kruskal (more vertices)
-  //
-  genes_graph.m_property->glabel += "-" + mst_algo_name;
-  NARO::Algo::find_minimum_spanning_tree(
-                      genes_graph, mst_algo_name);
-  
-  // ---------------------------------------------------------------------------
   // modularity::Modularity
+  if (verbose) {
+    std::cout << " Detect community ... ";
+    timer.start();
+  } else {
+    std::cout << " Dectect community ";
+  }
   std::map<std::string, unsigned int> n2str_table;
   //    1. Convert the graph to csr_graph
   NARO::Algo::Community::CSRgraph csr_g;
@@ -198,10 +218,22 @@ int main(int argc, const char * argv[]) {
     auto communityId = n2c[node];
     genes_graph[*vi].communityId = communityId;
   }
-  
+  if (verbose) {
+    timer.stop();
+    seconds = std::chrono::nanoseconds(timer.elapsed().user);
+    std::cout << " Completed in " << seconds.count() << " seconds." << std::endl;
+  } else {
+    std::cout << " Completed." << std::endl;
+  }
   // ---------------------------------------------------------------------------
   // Create a report
   //
+  if (verbose) {
+    std::cout << " Create a report ... " <<std::endl;
+    timer.start();
+  } else {
+    std::cout << " Create a report  " << std::endl;
+  }
   NARO::Report report{o_graph_name, get_local_time(), "Networkz", filename};
   if (!report.write(o_filename, &genes_graph, "md", d_threshold,
                     distance_type, mst_algo_name,
@@ -209,7 +241,13 @@ int main(int argc, const char * argv[]) {
     std::cout << "Failed to write a log." <<std::endl;
     std::exit(-1);
   }
-
+  if (verbose) {
+    timer.stop();
+    seconds = std::chrono::nanoseconds(timer.elapsed().user);
+    std::cout << " Completed in " << seconds.count() << " seconds." << std::endl;
+  } else {
+    std::cout << " Completed." << std::endl;
+  }
   // Write to graphviz format if requested.
   if (!graphviz_file.empty()) {
     std::cout << "Write to a " << graphviz_file << " ... ";
@@ -226,15 +264,15 @@ int main(int argc, const char * argv[]) {
       std::cout << " completed." << std::endl;
     }
   }
+  // ---------------------------------------------------------------------------
+  // Release Memory
+  // ---------------------------------------------------------------------------
   if (verbose) {
     std::cout << "Clean memory ... ";
     timer.start();
   } else {
     std::cout << "Clean memory ... ";
   }
-  // ---------------------------------------------------------------------------
-  // Release Memory
-  // ---------------------------------------------------------------------------
   genes_graph.clear();
   // dat and df are the same object
   if (dat == df) {
