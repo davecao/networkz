@@ -500,13 +500,15 @@ set(Boost_ADDITIONAL_VERSIONS
 macro(build_eigen3)
   set(EIGEN3_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/eigen3_ep-prefix/src/eigen3_ep")
   set(EIGEN3_INCLUDE_DIR "${EIGEN3_PREFIX}/include")
-  
+  set(EIGEN3_BUILD_COMMAND ${MAKE} ${MAKE_BUILD_ARGS})
+
   if(CMAKE_OSX_SYSROOT)
     list(APPEND EIGEN3_BUILD_COMMAND "SDKROOT=${CMAKE_OSX_SYSROOT}")
   endif()
+
   externalproject_add(eigen3_ep
                       ${EP_LOG_OPTIONS}
-                      BUILD_COMMAND ""
+                      BUILD_COMMAND ${EIGEN3_BUILD_COMMAND}
                       CONFIGURE_COMMAND ""
                       INSTALL_COMMAND ""
                       URL ${EIGEN3_SOURCE_URL})
