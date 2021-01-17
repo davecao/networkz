@@ -1,0 +1,46 @@
+#
+# File: version.txt
+# Project: thirdparty
+# 
+# 
+# Copyright (c) 2021 国立研究開発法人 農業・食品産業技術総合研究機構 (NARO)
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy 
+# of this software and associated documentation files (the 'Software'), to deal 
+# in the Software without restriction, including without limitation the rights 
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+# copies of the Software, and to permit persons to whom the Software is furnished 
+# to do so, subject to the following conditions:                                  
+#                                                                                 
+# The above copyright notice and this permission notice shall be included in all  
+# copies or substantial portions of the Software.                                 
+#                                                                                 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
+# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
+# OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+# 
+# Author: 曹巍, sou197@affrc.go.jp
+# Created Date: 2021-01-16 09:11:05
+# -----
+# Last Modified: 2021-01-16 09:11:06
+# Modified By: 
+# -----
+# HISTORY:
+# Date      	By	Comments
+# ----------	---	----------------------------------------------------------
+#
+
+NETWORKZ_BOOST_BUILD_VERSION=1.74.0
+NETWORKZ_EIGEN3_BUILD_VERSION=3.3.9
+NETWORKZ_JEMALLOC_BUILD_VERSION=5.2.1
+NETWORKZ_ZLIB_BUILD_VERSION=1.2.11
+
+DEPENDENCIES=(
+    "NETWORKZ_BOOST_URL boost-${NETWORKZ_BOOST_BUILD_VERSION}.tar.gz https://dl.bintray.com/boostorg/release/${NETWORKZ_BOOST_BUILD_VERSION}/source/boost_${NETWORKZ_BOOST_BUILD_VERSION//./_}.tar.gz"
+    "NETWORKZ_EIGEN3_URL eigen-${NETWORKZ_EIGEN3_BUILD_VERSION}.tar.gz https://gitlab.com/libeigen/eigen/-/archive/${NETWORKZ_EIGEN3_BUILD_VERSION}/eigen-${NETWORKZ_EIGEN3_BUILD_VERSION}.tar.gz"
+    "NETWORKZ_JEMALLOC_URL jemalloc-${NETWORKZ_JEMALLOC_BUILD_VERSION}.tar.bz2 https://github.com/jemalloc/jemalloc/releases/download/${NETWORKZ_JEMALLOC_BUILD_VERSION}/jemalloc-${NETWORKZ_JEMALLOC_BUILD_VERSION}.tar.bz2"
+    "NETWORKZ_ZLIB_URL zlib-${NETWORKZ_ZLIB_BUILD_VERSION}.tar.gz https://zlib.net/fossils/zlib-${NETWORKZ_ZLIB_BUILD_VERSION}.tar.gz"
+)
