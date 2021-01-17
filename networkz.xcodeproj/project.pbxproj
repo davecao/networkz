@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F603D4ED2584276B000531E4 /* sysutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F603D4EB2584276B000531E4 /* sysutil.cpp */; };
 		F66E55FB256B977C004AB2C0 /* modularity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66E55F9256B977C004AB2C0 /* modularity.cpp */; };
 		F670420724EDE82700F83258 /* dataframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F670420524EDE82700F83258 /* dataframe.cpp */; };
 		F697A20524FAC393007F38CE /* graph_algo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F697A20324FAC393007F38CE /* graph_algo.cpp */; };
@@ -35,6 +36,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F603D4EB2584276B000531E4 /* sysutil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sysutil.cpp; sourceTree = "<group>"; };
+		F603D4EC2584276B000531E4 /* sysutil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sysutil.hpp; sourceTree = "<group>"; };
 		F633D31E24CC448A003EBA00 /* networkz */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = networkz; sourceTree = BUILT_PRODUCTS_DIR; };
 		F633D32B24CC5F7B003EBA00 /* networkz.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = networkz.entitlements; sourceTree = "<group>"; };
 		F66E55F9256B977C004AB2C0 /* modularity.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = modularity.cpp; sourceTree = "<group>"; };
@@ -130,6 +133,8 @@
 				F6ECDCCA24D8CB9E00230768 /* utility.hpp */,
 				F633D32B24CC5F7B003EBA00 /* networkz.entitlements */,
 				F6ECDCC824D8CB9E00230768 /* main.cpp */,
+				F603D4EB2584276B000531E4 /* sysutil.cpp */,
+				F603D4EC2584276B000531E4 /* sysutil.hpp */,
 			);
 			path = networkz;
 			sourceTree = "<group>";
@@ -198,6 +203,7 @@
 				F6B8DC6E24F488160094950C /* graph_util.cpp in Sources */,
 				F6ECDCDB24D8CB9E00230768 /* utility.cpp in Sources */,
 				F6ECDCDD24D8CB9E00230768 /* IFileReaderFuncs.cpp in Sources */,
+				F603D4ED2584276B000531E4 /* sysutil.cpp in Sources */,
 				F6ECDCDA24D8CB9E00230768 /* TSVReader.cpp in Sources */,
 				F670420724EDE82700F83258 /* dataframe.cpp in Sources */,
 				F6ECDCDE24D8CB9E00230768 /* graph.cpp in Sources */,
