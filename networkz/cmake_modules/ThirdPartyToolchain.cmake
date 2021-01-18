@@ -514,15 +514,74 @@ macro(build_eigen3)
                       URL ${EIGEN3_SOURCE_URL})
 endmacro()
 
+set(NETWORKZ_BOOST_REQUIRED TRUE)
+set(NETWORKZ_BOOST_REQUIRE_LIBRARY TRUE)
 
 # ----------------------------------------------------------------------
 # boost - build boost library
-build_boost()
+if(NETWORKZ_BOOST_REQUIRED)
+  resolve_dependency(Boost
+                     HAVE_ALT
+                     TRUE
+                     REQUIRED_VERSION
+                     ${NETWORKZ_BOOST_REQUIRED_VERSION}
+                     IS_RUNTIME_DEPENDENCY
+                     ${NETWORKZ_BOOST_REQUIRE_LIBRARY})
 
+  if(TARGET Boost::system)
+    set(BOOST_SYSTEM_LIBRARY Boost::system)
+    set(BOOST_FILESYSTEM_LIBRARY Boost::filesystem)
+    set(BOOST_REGEX_LIBRARY Boost::regex)
+  elseif(BoostAlt_FOUND)
+    set(BOOST_SYSTEM_LIBRARY ${Boost_SYSTEM_LIBRARY})
+    set(BOOST_FILESYSTEM_LIBRARY ${Boost_FILESYSTEM_LIBRARY})
+    set(BOOST_REGEX_LIBRARY ${Boost_REGEX_LIBRARY})
+  else()
+    set(BOOST_SYSTEM_LIBRARY boost_system_static)
+    set(BOOST_FILESYSTEM_LIBRARY boost_filesystem_static)
+    set(BOOST_REGEX_LIBRARY boost_regex_static)
+  endif()
+  set(NETWORKS_BOOST_LIBS ${BOOST_SYSTEM_LIBRARY} ${BOOST_FILESYSTEM_LIBRARY})
+
+  message(STATUS "Boost include dir: ${Boost_INCLUDE_DIR}")
+  message(STATUS "Boost libraries: ${ARROW_BOOST_LIBS}")
+
+  include_directories(SYSTEM ${Boost_INCLUDE_DIR})
+endif()
 # ----------------------------------------------------------------------
 # eigen3 - build EIGEN library
-build_eigen3()
+set(NETWORKZ_EIGEN3_REQUIRED TRUE)
+set(NETWORKZ_EIGEN3_REQUIRE_LIBRARY TRUE)
 
+if(NETWORKZ_EIGEN3_REQUIRED)
+  resolve_dependency(Eigen3
+                     HAVE_ALT
+                     TRUE
+                     REQUIRED_VERSION
+                     ${NETWORKZ_EIGEN3_REQUIRED_VERSION}
+                     IS_RUNTIME_DEPENDENCY
+                     ${NETWORKZ_EIGEN3_REQUIRE_LIBRARY})
+
+  if(TARGET Boost::system)
+    set(BOOST_SYSTEM_LIBRARY Boost::system)
+    set(BOOST_FILESYSTEM_LIBRARY Boost::filesystem)
+    set(BOOST_REGEX_LIBRARY Boost::regex)
+  elseif(BoostAlt_FOUND)
+    set(BOOST_SYSTEM_LIBRARY ${Boost_SYSTEM_LIBRARY})
+    set(BOOST_FILESYSTEM_LIBRARY ${Boost_FILESYSTEM_LIBRARY})
+    set(BOOST_REGEX_LIBRARY ${Boost_REGEX_LIBRARY})
+  else()
+    set(BOOST_SYSTEM_LIBRARY boost_system_static)
+    set(BOOST_FILESYSTEM_LIBRARY boost_filesystem_static)
+    set(BOOST_REGEX_LIBRARY boost_regex_static)
+  endif()
+  set(ARROW_BOOST_LIBS ${BOOST_SYSTEM_LIBRARY} ${BOOST_FILESYSTEM_LIBRARY})
+
+  message(STATUS "Boost include dir: ${Boost_INCLUDE_DIR}")
+  message(STATUS "Boost libraries: ${ARROW_BOOST_LIBS}")
+
+  include_directories(SYSTEM ${Boost_INCLUDE_DIR})
+endif()
 # ----------------------------------------------------------------------
 # jemalloc - Unix-only high-performance allocator
 
