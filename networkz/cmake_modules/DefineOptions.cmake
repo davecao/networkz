@@ -275,9 +275,10 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
     # is required on FreeBSD. Lazy-lock feature requires libdl.
     define_option(NETWORKZ_JEMALLOC ${NETWORKZ_JEMALLOC_DESCRIPTION} OFF)
   else()
-    define_option(NETWORKZ_JEMALLOC ${NETWORKZ_JEMALLOC_DESCRIPTION} ON)
+    define_option(NETWORKZ_JEMALLOC ${NETWORKZ_JEMALLOC_DESCRIPTION} OFF)
   endif()
-
+  define_option(NETWORKZ_EIGEN3 "Build the Networkz with Eigen3" ON)
+  
   define_option(NETWORKZ_JNI "Build the Networkz JNI lib" OFF)
 
   define_option(NETWORKZ_JSON "Build Networkz with JSON support (requires RapidJSON)" OFF)

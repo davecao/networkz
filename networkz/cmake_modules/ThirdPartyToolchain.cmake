@@ -129,6 +129,7 @@ macro(resolve_dependency DEPENDENCY_NAME)
   if(ARG_USE_CONFIG)
     list(APPEND FIND_PACKAGE_ARGUMENTS CONFIG)
   endif()
+
   if(${DEPENDENCY_NAME}_SOURCE STREQUAL "AUTO")
     find_package(${FIND_PACKAGE_ARGUMENTS})
     # CMake 3.2 does uppercase the FOUND variable
@@ -210,9 +211,9 @@ else()
     # These are trimmed boost bundles we maintain.
     # See cpp/build-support/trim-boost.sh
     #"https://dl.bintray.com/ursalabs/NETWORKZ-boost/boost_${NETWORKZ_BOOST_BUILD_VERSION_UNDERSCORES}.tar.gz"
-    #"https://dl.bintray.com/boostorg/release/${NETWORKZ_BOOST_BUILD_VERSION_UNDERSCORES}/source/boost_${NETWORKZ_BOOST_BUILD_VERSION_UNDERSCORES}.tar.gz"
+    "https://dl.bintray.com/boostorg/release/${NETWORKZ_BOOST_BUILD_VERSION_UNDERSCORES}/source/boost_${NETWORKZ_BOOST_BUILD_VERSION_UNDERSCORES}.tar.gz"
     #"https://github.com/boostorg/boost/archive/boost-${NETWORKZ_BOOST_BUILD_VERSION_UNDERSCORES}.tar.gz"
-    "https://gitlab.com/libeigen/eigen/-/archive/${NETWORKZ_EIGEN3_BUILD_VERSION}/eigen-${NETWORKZ_EIGEN3_BUILD_VERSION}.tar.gz"
+    #"https://gitlab.com/libeigen/eigen/-/archive/${NETWORKZ_EIGEN3_BUILD_VERSION}/eigen-${NETWORKZ_EIGEN3_BUILD_VERSION}.tar.gz"
   )
 endif()
 
@@ -241,8 +242,8 @@ if(DEFINED ENV{NETWORKZ_ZLIB_URL})
   set(ZLIB_SOURCE_URL "$ENV{NETWORKZ_ZLIB_URL}")
 else()
   set_urls(
-    ZLIB_SOURCE_URL "https://zlib.net/fossils/zlib-${ARROW_ZLIB_BUILD_VERSION}.tar.gz"
-    "https://github.com/ursa-labs/thirdparty/releases/download/latest/zlib-${ARROW_ZLIB_BUILD_VERSION}.tar.gz"
+    ZLIB_SOURCE_URL "https://zlib.net/fossils/zlib-${NETWORKZ_ZLIB_BUILD_VERSION}.tar.gz"
+    "https://github.com/ursa-labs/thirdparty/releases/download/latest/zlib-${NETWORKZ_ZLIB_BUILD_VERSION}.tar.gz"
     )
 endif()
 
@@ -434,16 +435,18 @@ macro(build_boost)
     
     add_thirdparty_lib(boost_timer STATIC_LIB "${BOOST_STATIC_TIMER_LIBRARY}")
 
-    externalproject_add(boost_ep
-                        URL ${BOOST_SOURCE_URL}
-                        BUILD_BYPRODUCTS ${BOOST_BUILD_PRODUCTS}
-                        BUILD_IN_SOURCE 1
-                        CONFIGURE_COMMAND ${BOOST_CONFIGURE_COMMAND}
-                        BUILD_COMMAND ${BOOST_BUILD_COMMAND}
-                        INSTALL_COMMAND "" ${EP_LOG_OPTIONS})
+    externalproject_add(
+      boost_ep
+      URL ${BOOST_SOURCE_URL}
+      BUILD_BYPRODUCTS ${BOOST_BUILD_PRODUCTS}
+      BUILD_IN_SOURCE 1
+      CONFIGURE_COMMAND ${BOOST_CONFIGURE_COMMAND}
+      BUILD_COMMAND ${BOOST_BUILD_COMMAND}
+      INSTALL_COMMAND "" ${EP_LOG_OPTIONS})
     list(APPEND NETWORKZ_BUNDLED_STATIC_LIBS boost_system_static boost_filesystem_static
                 boost_regex_static boost_program_options_static boost_iostreams_static boost_timer_static)
   else()
+    message(status " Add external project boost")
     externalproject_add(boost_ep
                         ${EP_LOG_OPTIONS}
                         BUILD_COMMAND ""
@@ -498,101 +501,35 @@ set(Boost_ADDITIONAL_VERSIONS
 # Eigen3
 
 macro(build_eigen3)
-  set(EIGEN3_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/eigen3_ep-prefix/src/eigen3_ep")
-  set(EIGEN3_INCLUDE_DIR "${EIGEN3_PREFIX}/include")
+  set(EIGEN3_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/eigen3_ep-prefix/src/eigen3_ep/dist")
+  set(EIGEN3_INCLUDE_DIR "${EIGEN3_PREFIX}/include/eigen3")
+  
+  set(EIGEN3_CONFIGURE_COMMAND cmake )
+  list(APPEND EIGEN3_CONFIGURE_COMMAND
+              "-DCMAKE_BUILD_TYPE=Release"
+              "-DCMAKE_INSTALL_PREFIX=${EIGEN3_PREFIX}"
+              "${EIGEN3_PREFIX}/..")
   set(EIGEN3_BUILD_COMMAND ${MAKE} ${MAKE_BUILD_ARGS})
-
   if(CMAKE_OSX_SYSROOT)
     list(APPEND EIGEN3_BUILD_COMMAND "SDKROOT=${CMAKE_OSX_SYSROOT}")
   endif()
-
-  externalproject_add(eigen3_ep
-                      ${EP_LOG_OPTIONS}
-                      BUILD_COMMAND ${EIGEN3_BUILD_COMMAND}
-                      CONFIGURE_COMMAND ""
-                      INSTALL_COMMAND ""
-                      URL ${EIGEN3_SOURCE_URL})
+  
+  externalproject_add(
+    eigen3_ep
+    URL ${EIGEN3_SOURCE_URL}
+    PATCH_COMMAND ""
+    CONFIGURE_COMMAND ${EIGEN3_CONFIGURE_COMMAND}
+    BUILD_COMMAND ${EIGEN3_BUILD_COMMAND}
+    INSTALL_COMMAND ${MAKE} -j${NPROC} install
+    )
+  include_directories(SYSTEM "${EIGEN3_INCLUDE_DIR}")
+  #file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/eigen3_ep-prefix/src/")  
+  #include_directories(SYSTEM ${EIGEN3_INCLUDE_DIR})
+  add_dependencies(toolchain eigen3_ep)
 endmacro()
 
-set(NETWORKZ_BOOST_REQUIRED TRUE)
-set(NETWORKZ_BOOST_REQUIRE_LIBRARY TRUE)
-
-# ----------------------------------------------------------------------
-# boost - build boost library
-if(NETWORKZ_BOOST_REQUIRED)
-  resolve_dependency(Boost
-                     HAVE_ALT
-                     TRUE
-                     REQUIRED_VERSION
-                     ${NETWORKZ_BOOST_REQUIRED_VERSION}
-                     IS_RUNTIME_DEPENDENCY
-                     ${NETWORKZ_BOOST_REQUIRE_LIBRARY})
-
-  if(TARGET Boost::system)
-    set(BOOST_SYSTEM_LIBRARY Boost::system)
-    set(BOOST_FILESYSTEM_LIBRARY Boost::filesystem)
-    set(BOOST_REGEX_LIBRARY Boost::regex)
-  elseif(BoostAlt_FOUND)
-    set(BOOST_SYSTEM_LIBRARY ${Boost_SYSTEM_LIBRARY})
-    set(BOOST_FILESYSTEM_LIBRARY ${Boost_FILESYSTEM_LIBRARY})
-    set(BOOST_REGEX_LIBRARY ${Boost_REGEX_LIBRARY})
-  else()
-    set(BOOST_SYSTEM_LIBRARY boost_system_static)
-    set(BOOST_FILESYSTEM_LIBRARY boost_filesystem_static)
-    set(BOOST_REGEX_LIBRARY boost_regex_static)
-  endif()
-  set(NETWORKS_BOOST_LIBS ${BOOST_SYSTEM_LIBRARY} ${BOOST_FILESYSTEM_LIBRARY})
-
-  message(STATUS "Boost include dir: ${Boost_INCLUDE_DIR}")
-  message(STATUS "Boost libraries: ${ARROW_BOOST_LIBS}")
-
-  include_directories(SYSTEM ${Boost_INCLUDE_DIR})
-endif()
-# ----------------------------------------------------------------------
-# eigen3 - build EIGEN library
-set(NETWORKZ_EIGEN3_REQUIRED TRUE)
-set(NETWORKZ_EIGEN3_REQUIRE_LIBRARY TRUE)
-
-if(NETWORKZ_EIGEN3_REQUIRED)
-  resolve_dependency(Eigen3
-                     HAVE_ALT
-                     TRUE
-                     REQUIRED_VERSION
-                     ${NETWORKZ_EIGEN3_REQUIRED_VERSION}
-                     IS_RUNTIME_DEPENDENCY
-                     ${NETWORKZ_EIGEN3_REQUIRE_LIBRARY})
-
-  if(TARGET Boost::system)
-    set(BOOST_SYSTEM_LIBRARY Boost::system)
-    set(BOOST_FILESYSTEM_LIBRARY Boost::filesystem)
-    set(BOOST_REGEX_LIBRARY Boost::regex)
-  elseif(BoostAlt_FOUND)
-    set(BOOST_SYSTEM_LIBRARY ${Boost_SYSTEM_LIBRARY})
-    set(BOOST_FILESYSTEM_LIBRARY ${Boost_FILESYSTEM_LIBRARY})
-    set(BOOST_REGEX_LIBRARY ${Boost_REGEX_LIBRARY})
-  else()
-    set(BOOST_SYSTEM_LIBRARY boost_system_static)
-    set(BOOST_FILESYSTEM_LIBRARY boost_filesystem_static)
-    set(BOOST_REGEX_LIBRARY boost_regex_static)
-  endif()
-  set(ARROW_BOOST_LIBS ${BOOST_SYSTEM_LIBRARY} ${BOOST_FILESYSTEM_LIBRARY})
-
-  message(STATUS "Boost include dir: ${Boost_INCLUDE_DIR}")
-  message(STATUS "Boost libraries: ${ARROW_BOOST_LIBS}")
-
-  include_directories(SYSTEM ${Boost_INCLUDE_DIR})
-endif()
-# ----------------------------------------------------------------------
-# jemalloc - Unix-only high-performance allocator
-
-if(NETWORKZ_JEMALLOC)
-  message(STATUS "Building (vendored) jemalloc from source")
-  # We only use a vendored jemalloc as we want to control its version.
-  # Also our build of jemalloc is specially prefixed so that it will not
-  # conflict with the default allocator as well as other jemalloc
-  # installations.
-  # find_package(jemalloc)
-
+# ----------- [ MACRO: build_jemalloc ] --------------
+macro(build_jemalloc)
   set(NETWORKZ_JEMALLOC_USE_SHARED OFF)
   set(JEMALLOC_PREFIX
       "${CMAKE_CURRENT_BINARY_DIR}/jemalloc_ep-prefix/src/jemalloc_ep/dist/")
@@ -644,4 +581,37 @@ if(NETWORKZ_JEMALLOC)
   add_dependencies(jemalloc::jemalloc jemalloc_ep)
 
   list(APPEND NETWORKZ_BUNDLED_STATIC_LIBS jemalloc::jemalloc)
+endmacro()
+
+# ----------------------------------------------------------------------
+# eigen3 - build EIGEN library
+#set(NETWORKZ_EIGEN3 ON)
+
+if(NETWORKZ_EIGEN3)
+  message(STATUS "Building eigen3 from source")
+  build_eigen3()
+  # message(STATUS "EIGEN3 include dir: ${EIGEN3_INCLUDE_DIR}")
+endif()
+
+# ----------------------------------------------------------------------
+# boost - build boost library
+set(NETWORKZ_BOOST_REQUIRED ON)
+if(NETWORKZ_BOOST_REQUIRED)
+  message(STATUS "Building boost from source")
+  set(NETWORKZ_BOOST_REQUIRE_LIBRARY ON)
+  build_boost()
+endif()
+
+# ----------------------------------------------------------------------
+# jemalloc - Unix-only high-performance allocator
+
+if(NETWORKZ_JEMALLOC)
+  message(STATUS "Building (vendored) jemalloc from source")
+  # We only use a vendored jemalloc as we want to control its version.
+  # Also our build of jemalloc is specially prefixed so that it will not
+  # conflict with the default allocator as well as other jemalloc
+  # installations.
+  # find_package(jemalloc)
+  build_jemalloc()
+  
 endif()
