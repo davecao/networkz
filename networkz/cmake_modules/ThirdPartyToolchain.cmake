@@ -210,10 +210,12 @@ else()
     BOOST_SOURCE_URL
     # These are trimmed boost bundles we maintain.
     # See cpp/build-support/trim-boost.sh
+    #"https://dl.bintray.com/boostorg/release/1.74.0/source/boost_1_74_0.tar.gz"
+    "https://github.com/boostorg/boost/archive/boost-${NETWORKZ_BOOST_BUILD_VERSION}.tar.gz"
+    #"https://dl.bintray.com/boostorg/release/${NETWORKZ_BOOST_BUILD_VERSION}/source/boost_${NETWORKZ_BOOST_BUILD_VERSION}.tar.gz"
     #"https://dl.bintray.com/ursalabs/NETWORKZ-boost/boost_${NETWORKZ_BOOST_BUILD_VERSION_UNDERSCORES}.tar.gz"
-    "https://dl.bintray.com/boostorg/release/${NETWORKZ_BOOST_BUILD_VERSION_UNDERSCORES}/source/boost_${NETWORKZ_BOOST_BUILD_VERSION_UNDERSCORES}.tar.gz"
+    #"https://dl.bintray.com/boostorg/release/${NETWORKZ_BOOST_BUILD_VERSION_UNDERSCORES}/source/boost_${NETWORKZ_BOOST_BUILD_VERSION_UNDERSCORES}.tar.gz"
     #"https://github.com/boostorg/boost/archive/boost-${NETWORKZ_BOOST_BUILD_VERSION_UNDERSCORES}.tar.gz"
-    #"https://gitlab.com/libeigen/eigen/-/archive/${NETWORKZ_EIGEN3_BUILD_VERSION}/eigen-${NETWORKZ_EIGEN3_BUILD_VERSION}.tar.gz"
   )
 endif()
 
@@ -334,9 +336,9 @@ find_package(Threads REQUIRED)
 
 macro(build_boost)
   set(BOOST_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/boost_ep-prefix/src/boost_ep")
-
-  # This is needed by the thrift_ep build
+  message(status " BOOST_SOURCE_URL:${BOOST_SOURCE_URL}")
   set(BOOST_ROOT ${BOOST_PREFIX})
+  set(NETWORKZ_BOOST_REQUIRE_LIBRARY ON)
 
   if(NETWORKZ_BOOST_REQUIRE_LIBRARY)
     set(BOOST_LIB_DIR "${BOOST_PREFIX}/stage/lib")
@@ -352,7 +354,7 @@ macro(build_boost)
       set(BOOST_CONFIGURE_COMMAND "./bootstrap.sh")
     endif()
 
-    set(BOOST_BUILD_WITH_LIBRARIES "filesystem" "regex" "system")
+    set(BOOST_BUILD_WITH_LIBRARIES "filesystem" "regex" "system" "program_options" "timer" "iostreams")
     string(REPLACE ";" "," BOOST_CONFIGURE_LIBRARIES "${BOOST_BUILD_WITH_LIBRARIES}")
     list(APPEND BOOST_CONFIGURE_COMMAND "--prefix=${BOOST_PREFIX}"
                 "--with-libraries=${BOOST_CONFIGURE_LIBRARIES}")
@@ -438,6 +440,7 @@ macro(build_boost)
     externalproject_add(
       boost_ep
       URL ${BOOST_SOURCE_URL}
+      URL_HASH SHA256=afff36d392885120bcac079148c177d1f6f7730ec3d47233aa51b0afa4db94a5
       BUILD_BYPRODUCTS ${BOOST_BUILD_PRODUCTS}
       BUILD_IN_SOURCE 1
       CONFIGURE_COMMAND ${BOOST_CONFIGURE_COMMAND}
@@ -454,10 +457,26 @@ macro(build_boost)
                         INSTALL_COMMAND ""
                         URL ${BOOST_SOURCE_URL})
   endif()
+
   set(Boost_INCLUDE_DIR "${BOOST_PREFIX}")
   set(Boost_INCLUDE_DIRS "${Boost_INCLUDE_DIR}")
   add_dependencies(toolchain boost_ep)
   set(BOOST_VENDORED TRUE)
+
+  include_directories(SYSTEM "${BOOST_ROOT}/")
+  # The include directory must exist before it is referenced by a target.
+  file(MAKE_DIRECTORY "${BOOST_ROOT}/")
+  add_library(boost::boost STATIC IMPORTED)
+  set_target_properties(boost::boost
+                        PROPERTIES INTERFACE_LINK_LIBRARIES
+                                   Threads::Threads
+                                   IMPORTED_LOCATION
+                                   "${BOOST_BUILD_PRODUCTS}"
+                                   INTERFACE_INCLUDE_DIRECTORIES
+                                   "${CMAKE_CURRENT_BINARY_DIR}/boost_ep-prefix/src")
+  add_dependencies(boost::boost boost_ep)
+
+  list(APPEND NETWORKZ_THIRDPARTY_DEPENDENCIES boost::boost)
 endmacro()
 
 set(Boost_USE_MULTITHREADED ON)
@@ -465,67 +484,47 @@ if(MSVC AND NETWORKZ_USE_STATIC_CRT)
   set(Boost_USE_STATIC_RUNTIME ON)
 endif()
 
-set(Boost_ADDITIONAL_VERSIONS
-    "1.74.0"
-    "1.74"
-    "1.73.0"
-    "1.73"
-    "1.72.0"
-    "1.72"
-    "1.71.0"
-    "1.71"
-    "1.70.0"
-    "1.70"
-    "1.69.0"
-    "1.69"
-    "1.68.0"
-    "1.68"
-    "1.67.0"
-    "1.67"
-    "1.66.0"
-    "1.66"
-    "1.65.0"
-    "1.65"
-    "1.64.0"
-    "1.64"
-    "1.63.0"
-    "1.63"
-    "1.62.0"
-    "1.61"
-    "1.61.0"
-    "1.62"
-    "1.60.0"
-    "1.60")
-
 # ----------- [ MACRO: build_eigen3 ] ---------
 # Eigen3
 
 macro(build_eigen3)
   set(EIGEN3_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/eigen3_ep-prefix/src/eigen3_ep/dist")
-  set(EIGEN3_INCLUDE_DIR "${EIGEN3_PREFIX}/include/eigen3")
   
-  set(EIGEN3_CONFIGURE_COMMAND cmake )
-  list(APPEND EIGEN3_CONFIGURE_COMMAND
-              "-DCMAKE_BUILD_TYPE=Release"
-              "-DCMAKE_INSTALL_PREFIX=${EIGEN3_PREFIX}"
-              "${EIGEN3_PREFIX}/..")
+  set(EIGEN3_CMAKE_ARGS "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX=${EIGEN3_PREFIX}/dist")
+  message("NETWORKZ_THIRDPARTY_DEPENDENCIES: ${NETWORKZ_THIRDPARTY_DEPENDENCIES}")
+
   set(EIGEN3_BUILD_COMMAND ${MAKE} ${MAKE_BUILD_ARGS})
   if(CMAKE_OSX_SYSROOT)
-    list(APPEND EIGEN3_BUILD_COMMAND "SDKROOT=${CMAKE_OSX_SYSROOT}")
+    list(APPEND EIGEN3_CMAKE_ARGS "-DCMAKE_OSX_SYSROOT=${CMAKE_OSX_SYSROOT}")
   endif()
-  
+
   externalproject_add(
     eigen3_ep
+    DEPENDS boost_ep
     URL ${EIGEN3_SOURCE_URL}
-    PATCH_COMMAND ""
-    CONFIGURE_COMMAND ${EIGEN3_CONFIGURE_COMMAND}
+    URL_HASH SHA256=7985975b787340124786f092b3a07d594b2e9cd53bbfe5f3d9b1daee7d55f56f
+    UPDATE_COMMAND ""
     BUILD_COMMAND ${EIGEN3_BUILD_COMMAND}
     INSTALL_COMMAND ${MAKE} -j${NPROC} install
+    CMAKE_ARGS ${EIGEN3_CMAKE_ARGS}
     )
-  include_directories(SYSTEM "${EIGEN3_INCLUDE_DIR}")
-  #file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/eigen3_ep-prefix/src/")  
-  #include_directories(SYSTEM ${EIGEN3_INCLUDE_DIR})
-  add_dependencies(toolchain eigen3_ep)
+  #set(EIGEN3_INCLUDE_DIR "${EIGEN3_PREFIX}/dist/include/eigen3")
+  #include_directories(SYSTEM "$${EIGEN3_PREFIX}/dist/include/eigen3")
+  file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/eigen3_ep-prefix/src/eigen3_ep")
+  add_library(eigen3::eigen3 STATIC IMPORTED)
+  #include_directories(SYSTEM ${EIGEN3_PREFIX}/dist/include/eigen3)
+  set_target_properties(eigen3::eigen3
+                        PROPERTIES 
+                          IMPORTED_LOCATION
+                          "${EIGEN3_PREFIX}"
+                          #INTERFACE_INCLUDE_DIRECTORIES
+                          #"${EIGEN3_PREFIX}/include/eigen3"
+                      )
+  add_dependencies(eigen3::eigen3 eigen3_ep)
+
+  list(APPEND NETWORKZ_THIRDPARTY_DEPENDENCIES eigen3::eigen3)
+  #list(APPEND NETWORKZ_HEADERS_DIR ${EIGEN3_PREFIX}/dist/include/eigen3)
+
 endmacro()
 
 # ----------- [ MACRO: build_jemalloc ] --------------
@@ -584,22 +583,21 @@ macro(build_jemalloc)
 endmacro()
 
 # ----------------------------------------------------------------------
-# eigen3 - build EIGEN library
-#set(NETWORKZ_EIGEN3 ON)
-
-if(NETWORKZ_EIGEN3)
-  message(STATUS "Building eigen3 from source")
-  build_eigen3()
-  # message(STATUS "EIGEN3 include dir: ${EIGEN3_INCLUDE_DIR}")
-endif()
-
-# ----------------------------------------------------------------------
 # boost - build boost library
 set(NETWORKZ_BOOST_REQUIRED ON)
 if(NETWORKZ_BOOST_REQUIRED)
   message(STATUS "Building boost from source")
   set(NETWORKZ_BOOST_REQUIRE_LIBRARY ON)
   build_boost()
+endif()
+
+# ----------------------------------------------------------------------
+# eigen3 - build EIGEN library
+
+if(NETWORKZ_EIGEN3)
+  message(STATUS "Building eigen3 from source")
+  build_eigen3()
+  # message(STATUS "EIGEN3 include dir: ${EIGEN3_INCLUDE_DIR}")
 endif()
 
 # ----------------------------------------------------------------------

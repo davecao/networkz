@@ -301,6 +301,8 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
 
   define_option(NETWORKZ_TESTING "Build the Networkz testing libraries" OFF)
 
+  define_option(NETWORTKZ_BUILD_DOC "Build API documents by Oxygen" OFF)
+
   #----------------------------------------------------------------------
   set_option_category("Thirdparty toolchain")
 

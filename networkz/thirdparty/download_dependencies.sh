@@ -37,6 +37,7 @@ main() {
     IFS=" " read -r dep_url_var dep_tar_name dep_url <<< "${dep_packed}"
 
     local out=${DESTDIR}/${dep_tar_name}
+    echo "Download from ${dep_url}"
     download_dependency "${dep_url}" "${out}"
 
     echo "export ${dep_url_var}=${out}"

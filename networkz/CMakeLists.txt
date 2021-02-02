@@ -148,9 +148,6 @@ endif()
 # set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 # set(CMAKE_CXX_FLAGS_RELEASE "-fvisibility=hidden -Os")
 
-# ----- [ Various options ] ------
-option(NETWORTKZ_BUILD_DOC "Build API documents by Oxygen" OFF)
-
 # ----- [ Compiler flags ] -----
 include(SetupCxxFlags)
 
