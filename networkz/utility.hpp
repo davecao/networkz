@@ -37,10 +37,16 @@ namespace NARO {
   typedef std::error_code ErrorCode;
 }
 #    elif __has_include(<experimental/filesystem>)
-#include <experimental/filesystem>
+/*#include <experimental/filesystem>
 namespace NARO {
   namespace fs = std::experimental::filesystem;
   typedef fs::error_code ErrorCode;
+}
+*/
+#include <boost/filesystem.hpp>
+namespace NARO {
+  namespace fs = boost::filesystem;
+  typedef boost::system::error_code ErrorCode;
 }
 #    endif
 #  else
