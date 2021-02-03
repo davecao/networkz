@@ -357,7 +357,7 @@ macro(build_boost)
 
     set(BOOST_BUILD_WITH_LIBRARIES "filesystem" "regex" "system" "program_options" "timer" "iostreams")
     string(REPLACE ";" "," BOOST_CONFIGURE_LIBRARIES "${BOOST_BUILD_WITH_LIBRARIES}")
-    list(APPEND BOOST_CONFIGURE_COMMAND "--prefix=${BOOST_PREFIX}"
+    list(APPEND BOOST_CONFIGURE_COMMAND "--prefix=${BOOST_PREFIX}" "cxxstd=${CMAKE_CXX_STANDARD}"
                 "--with-libraries=${BOOST_CONFIGURE_LIBRARIES}")
     set(BOOST_BUILD_COMMAND "./b2" "-j${NPROC}" "link=${BOOST_BUILD_LINK}"
                             "variant=${BOOST_BUILD_VARIANT}")
