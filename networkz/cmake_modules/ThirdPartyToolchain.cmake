@@ -211,7 +211,8 @@ else()
     # These are trimmed boost bundles we maintain.
     # See cpp/build-support/trim-boost.sh
     #"https://dl.bintray.com/boostorg/release/1.74.0/source/boost_1_74_0.tar.gz"
-    "https://github.com/boostorg/boost/archive/boost-${NETWORKZ_BOOST_BUILD_VERSION}.tar.gz"
+    "https://dl.bintray.com/boostorg/release/${NETWORKZ_BOOST_BUILD_VERSION}/source/boost_${NETWORKZ_BOOST_BUILD_VERSION//./_}.tar.gz"
+    #"https://github.com/boostorg/boost/archive/boost-${NETWORKZ_BOOST_BUILD_VERSION}.tar.gz"
     #"https://dl.bintray.com/boostorg/release/${NETWORKZ_BOOST_BUILD_VERSION}/source/boost_${NETWORKZ_BOOST_BUILD_VERSION}.tar.gz"
     #"https://dl.bintray.com/ursalabs/NETWORKZ-boost/boost_${NETWORKZ_BOOST_BUILD_VERSION_UNDERSCORES}.tar.gz"
     #"https://dl.bintray.com/boostorg/release/${NETWORKZ_BOOST_BUILD_VERSION_UNDERSCORES}/source/boost_${NETWORKZ_BOOST_BUILD_VERSION_UNDERSCORES}.tar.gz"
