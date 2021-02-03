@@ -28,6 +28,7 @@
 #include <string.h>
 #include <array>
 #include <fstream>
+#include <unordered_set> 
 
 #if (!defined(__APPLE__) && !defined(__WIN32__) && !defined(__WIN64__))
 #include <sys/sysinfo.h>

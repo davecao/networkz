@@ -12,7 +12,7 @@
 #include <iostream>
 #include <vector>
 #include <assert.h>
-
+#include <algorithm>  // std::max_element
 
 namespace NARO::Algo::Community {
 
