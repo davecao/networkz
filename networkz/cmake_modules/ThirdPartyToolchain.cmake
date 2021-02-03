@@ -490,9 +490,7 @@ endif()
 macro(build_eigen3)
   set(EIGEN3_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/eigen3_ep-prefix/src/eigen3_ep/dist")
   
-  set(EIGEN3_CMAKE_ARGS "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX=${EIGEN3_PREFIX}/dist")
-  message("NETWORKZ_THIRDPARTY_DEPENDENCIES: ${NETWORKZ_THIRDPARTY_DEPENDENCIES}")
-
+  set(EIGEN3_CMAKE_ARGS "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX=${EIGEN3_PREFIX}")
   set(EIGEN3_BUILD_COMMAND ${MAKE} ${MAKE_BUILD_ARGS})
   if(CMAKE_OSX_SYSROOT)
     list(APPEND EIGEN3_CMAKE_ARGS "-DCMAKE_OSX_SYSROOT=${CMAKE_OSX_SYSROOT}")
@@ -508,11 +506,11 @@ macro(build_eigen3)
     INSTALL_COMMAND ${MAKE} -j${NPROC} install
     CMAKE_ARGS ${EIGEN3_CMAKE_ARGS}
     )
-  #set(EIGEN3_INCLUDE_DIR "${EIGEN3_PREFIX}/dist/include/eigen3")
-  #include_directories(SYSTEM "$${EIGEN3_PREFIX}/dist/include/eigen3")
+
+  include_directories(SYSTEM "${EIGEN3_PREFIX}/include/eigen3")
   file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/eigen3_ep-prefix/src/eigen3_ep")
   add_library(eigen3::eigen3 STATIC IMPORTED)
-  #include_directories(SYSTEM ${EIGEN3_PREFIX}/dist/include/eigen3)
+  #include_directories(SYSTEM ${EIGEN3_PREFIX}/include/eigen3)
   set_target_properties(eigen3::eigen3
                         PROPERTIES 
                           IMPORTED_LOCATION
@@ -521,9 +519,8 @@ macro(build_eigen3)
                           #"${EIGEN3_PREFIX}/include/eigen3"
                       )
   add_dependencies(eigen3::eigen3 eigen3_ep)
-
   list(APPEND NETWORKZ_THIRDPARTY_DEPENDENCIES eigen3::eigen3)
-  #list(APPEND NETWORKZ_HEADERS_DIR ${EIGEN3_PREFIX}/dist/include/eigen3)
+  list(APPEND NETWORKZ_HEADERS_DIR ${EIGEN3_PREFIX}/include/eigen3)
 
 endmacro()
 

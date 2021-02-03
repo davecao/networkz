@@ -137,17 +137,6 @@ if(NETWORKZ_OPTIONAL_INSTALL)
   set(INSTALL_IS_OPTIONAL OPTIONAL)
 endif()
 
-# Add self-contained eigen3 
-# include(${CMAKE_SOURCE_DIR}/thirdparty/eigen/share/eigen3/cmake/Eigen3Config.cmake)
-# set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/thirdparty/eigen/share/eigen3/cmake:${CMAKE_MODULE_PATH}")
-# message(status " CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
-# set(Eigen3_DIR "${CMAKE_SOURCE_DIR}/thirdparty/eigen/share/eigen3/cmake")
-
-# Compiler options 
-# set(CMAKE_CXX_FLAGS "-fdeclspec")
-# set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
-# set(CMAKE_CXX_FLAGS_RELEASE "-fvisibility=hidden -Os")
-
 # ----- [ Compiler flags ] -----
 include(SetupCxxFlags)
 
