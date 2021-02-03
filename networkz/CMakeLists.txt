@@ -183,7 +183,7 @@ endif()
 include(BuildUtils)
 enable_testing()
 
-include(ThirdpartyToolchain)
+include(ThirdPartyToolchain)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_COMMON_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NETWORKZ_CXXFLAGS}")
