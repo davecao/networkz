@@ -213,10 +213,10 @@ size_t get_core_id(const std::string &cpu_path)
 int get_physical_core_count(size_t n_cpu)
 {
 #if defined(__linux__)
-  unordered_set<size_t> cores;
+  std::unordered_set<size_t> cores;
   for (size_t i = 0; i < n_cpu; ++i)
   {
-    std::string cpu_path = "/sys/devices/system/cpu/cpu" + to_string(i) + "/topology/";
+    std::string cpu_path = "/sys/devices/system/cpu/cpu" + std::to_string(i) + "/topology/";
     size_t core_id = get_core_id(cpu_path);
     size_t node_id = get_numa_node_id(cpu_path);
     size_t uniq_core_id = (node_id << 16) + core_id;
