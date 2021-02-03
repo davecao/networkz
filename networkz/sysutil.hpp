@@ -25,6 +25,7 @@
 #include <stdexcept>
 
 #include <string>
+#include <string.h>
 #include <array>
 #include <fstream>
 

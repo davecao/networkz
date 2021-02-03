@@ -239,13 +239,13 @@ static bool ht_enabled()
 }
 
 #if defined(__linux__)
-static string get_cpuinfo_linux(const string& key)
+static std::string get_cpuinfo_linux(const std::string& key)
 {
-  string value = "(not found)";
-  ifstream fs("/proc/cpuinfo");
+  std::string value = "(not found)";
+  std::ifstream fs("/proc/cpuinfo");
   if (fs.good())
   {
-    string line;
+    std::string line;
     while (!fs.eof())
     {
       std::getline(fs, line, '\n');
