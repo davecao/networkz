@@ -13,8 +13,8 @@
 
 #include <iostream>
 #include <vector>
-#include <string>
-//#include <filesystem>
+#include <string>     // std::to_string
+#include <algorithm>  // std::max_element
 
 #ifdef __cpp_lib_system
 #include <filesystem>
