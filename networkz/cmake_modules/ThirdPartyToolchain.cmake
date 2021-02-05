@@ -476,7 +476,9 @@ macro(build_boost)
                                    INTERFACE_INCLUDE_DIRECTORIES
                                    "${CMAKE_CURRENT_BINARY_DIR}/boost_ep-prefix/src")
   add_dependencies(boost::boost boost_ep)
-
+  message( " build-boost NETWORKZ_SYSTEM_DEPENDENCIES: ${NETWORKZ_SYSTEM_DEPENDENCIES}")
+  message( " build-boost NETWORKZ_THIRDPARTY_DEPENDENCIES: ${NETWORKZ_THIRDPARTY_DEPENDENCIES}")
+  message( " build-boost NETWORKZ_LINK_LIBS: ${NETWORKZ_LINK_LIBS}")
   list(APPEND NETWORKZ_THIRDPARTY_DEPENDENCIES boost::boost)
 endmacro()
 
