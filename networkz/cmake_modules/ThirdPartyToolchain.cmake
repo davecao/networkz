@@ -464,22 +464,22 @@ macro(build_boost)
   add_dependencies(toolchain boost_ep)
   set(BOOST_VENDORED TRUE)
 
-  include_directories(SYSTEM "${BOOST_ROOT}/")
-  # The include directory must exist before it is referenced by a target.
-  file(MAKE_DIRECTORY "${BOOST_ROOT}/")
-  add_library(boost::boost STATIC IMPORTED)
-  set_target_properties(boost::boost
-                        PROPERTIES INTERFACE_LINK_LIBRARIES
-                                   Threads::Threads
-                                   IMPORTED_LOCATION
-                                   "${BOOST_BUILD_PRODUCTS}"
-                                   INTERFACE_INCLUDE_DIRECTORIES
-                                   "${CMAKE_CURRENT_BINARY_DIR}/boost_ep-prefix/src")
-  add_dependencies(boost::boost boost_ep)
-  message( " build-boost NETWORKZ_SYSTEM_DEPENDENCIES: ${NETWORKZ_SYSTEM_DEPENDENCIES}")
-  message( " build-boost NETWORKZ_THIRDPARTY_DEPENDENCIES: ${NETWORKZ_THIRDPARTY_DEPENDENCIES}")
-  message( " build-boost NETWORKZ_LINK_LIBS: ${NETWORKZ_LINK_LIBS}")
-  list(APPEND NETWORKZ_THIRDPARTY_DEPENDENCIES boost::boost)
+  # include_directories(SYSTEM "${BOOST_ROOT}/")
+  # # The include directory must exist before it is referenced by a target.
+  # file(MAKE_DIRECTORY "${BOOST_ROOT}/")
+  # add_library(boost::boost STATIC IMPORTED)
+  # set_target_properties(boost::boost
+  #                       PROPERTIES INTERFACE_LINK_LIBRARIES
+  #                                  Threads::Threads
+  #                                  IMPORTED_LOCATION
+  #                                  "${BOOST_BUILD_PRODUCTS}"
+  #                                  INTERFACE_INCLUDE_DIRECTORIES
+  #                                  "${CMAKE_CURRENT_BINARY_DIR}/boost_ep-prefix/src")
+  # add_dependencies(boost::boost boost_ep)
+  # #message( " build-boost NETWORKZ_SYSTEM_DEPENDENCIES: ${NETWORKZ_SYSTEM_DEPENDENCIES}")
+  # #message( " build-boost NETWORKZ_THIRDPARTY_DEPENDENCIES: ${NETWORKZ_THIRDPARTY_DEPENDENCIES}")
+  # #message( " build-boost NETWORKZ_LINK_LIBS: ${NETWORKZ_LINK_LIBS}")
+  # #list(APPEND NETWORKZ_THIRDPARTY_DEPENDENCIES boost::boost)
 endmacro()
 
 set(Boost_USE_MULTITHREADED ON)
