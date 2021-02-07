@@ -464,22 +464,22 @@ macro(build_boost)
 
   set(Boost_INCLUDE_DIR "${BOOST_PREFIX}")
   set(Boost_INCLUDE_DIRS "${Boost_INCLUDE_DIR}")
-  #add_dependencies(toolchain boost_ep)
+  add_dependencies(Boost boost_ep)
   set(BOOST_VENDORED TRUE)
 
   #include_directories(SYSTEM "${BOOST_ROOT}/")
   # # The include directory must exist before it is referenced by a target.
-  file(MAKE_DIRECTORY "${BOOST_ROOT}/")
-  add_library(Boost STATIC IMPORTED)
-  set_target_properties(Boost
-                         PROPERTIES INTERFACE_LINK_LIBRARIES
-                                    Threads::Threads
-                                    IMPORTED_LOCATION
-                                    "${BOOST_BUILD_PRODUCTS}"
-                                    INTERFACE_INCLUDE_DIRECTORIES
-                                    "${BOOST_PREFIX}"
-                                    #"${CMAKE_CURRENT_BINARY_DIR}/boost_ep-prefix/src/boost_ep"
-                                    )
+  #file(MAKE_DIRECTORY "${BOOST_ROOT}/")
+  #add_library(Boost STATIC IMPORTED)
+  #set_target_properties(Boost
+  #                       PROPERTIES INTERFACE_LINK_LIBRARIES
+  #                                  Threads::Threads
+  #                                  IMPORTED_LOCATION
+  #                                  "${BOOST_BUILD_PRODUCTS}"
+  #                                  INTERFACE_INCLUDE_DIRECTORIES
+  #                                  "${BOOST_PREFIX}"
+  #                                  #"${CMAKE_CURRENT_BINARY_DIR}/boost_ep-prefix/src/boost_ep"
+  #                                  )
   #add_dependencies(Boost boost_ep)
   # #message( " build-boost NETWORKZ_SYSTEM_DEPENDENCIES: ${NETWORKZ_SYSTEM_DEPENDENCIES}")
   # #message( " build-boost NETWORKZ_THIRDPARTY_DEPENDENCIES: ${NETWORKZ_THIRDPARTY_DEPENDENCIES}")
