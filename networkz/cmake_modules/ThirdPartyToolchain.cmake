@@ -36,7 +36,7 @@
 include(ProcessorCount)
 processorcount(NPROC)
 
-add_custom_target(toolchain)
+# add_custom_target(toolchain)
 
 # Accumulate all bundled targets and we will splice them together later as
 # libarrow_dependencies.a so that third party libraries have something usable
@@ -461,10 +461,10 @@ macro(build_boost)
 
   set(Boost_INCLUDE_DIR "${BOOST_PREFIX}")
   set(Boost_INCLUDE_DIRS "${Boost_INCLUDE_DIR}")
-  add_dependencies(toolchain boost_ep)
+  #add_dependencies(toolchain boost_ep)
   set(BOOST_VENDORED TRUE)
 
-  include_directories(SYSTEM "${BOOST_ROOT}/")
+  #include_directories(SYSTEM "${BOOST_ROOT}/")
   # # The include directory must exist before it is referenced by a target.
   file(MAKE_DIRECTORY "${BOOST_ROOT}/")
   add_library(Boost STATIC IMPORTED)
@@ -474,12 +474,12 @@ macro(build_boost)
                                     IMPORTED_LOCATION
                                     "${BOOST_BUILD_PRODUCTS}"
                                     INTERFACE_INCLUDE_DIRECTORIES
-                                    "${CMAKE_CURRENT_BINARY_DIR}/boost_ep-prefix/src")
-  # add_dependencies(boost::boost boost_ep)
+                                    "${CMAKE_CURRENT_BINARY_DIR}/boost_ep-prefix/src/boost_ep"
+                                    )
+  #add_dependencies(Boost boost_ep)
   # #message( " build-boost NETWORKZ_SYSTEM_DEPENDENCIES: ${NETWORKZ_SYSTEM_DEPENDENCIES}")
   # #message( " build-boost NETWORKZ_THIRDPARTY_DEPENDENCIES: ${NETWORKZ_THIRDPARTY_DEPENDENCIES}")
   # #message( " build-boost NETWORKZ_LINK_LIBS: ${NETWORKZ_LINK_LIBS}")
-  # #list(APPEND NETWORKZ_THIRDPARTY_DEPENDENCIES boost::boost)
 endmacro()
 
 set(Boost_USE_MULTITHREADED ON)
@@ -514,21 +514,18 @@ macro(build_eigen3)
     CMAKE_ARGS ${EIGEN3_CMAKE_ARGS}
     )
 
-  include_directories(SYSTEM "${EIGEN3_PREFIX}/include/eigen3")
   file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/eigen3_ep-prefix/src/eigen3_ep")
-  add_library(eigen3::eigen3 STATIC IMPORTED)
-  #include_directories(SYSTEM ${EIGEN3_PREFIX}/include/eigen3)
-  set_target_properties(eigen3::eigen3
-                        PROPERTIES 
-                          IMPORTED_LOCATION
-                          "${EIGEN3_PREFIX}"
+  #add_library(Eigen3 STATIC IMPORTED)
+  include_directories(SYSTEM ${EIGEN3_PREFIX}/include/eigen3)
+  #set_target_properties(Eigen3
+                        #PROPERTIES 
+                          #IMPORTED_LOCATION
+                          #"${EIGEN3_PREFIX}"
                           #INTERFACE_INCLUDE_DIRECTORIES
                           #"${EIGEN3_PREFIX}/include/eigen3"
-                      )
-  add_dependencies(eigen3::eigen3 eigen3_ep)
-  list(APPEND NETWORKZ_THIRDPARTY_DEPENDENCIES eigen3::eigen3)
-  list(APPEND NETWORKZ_HEADERS_DIR ${EIGEN3_PREFIX}/include/eigen3)
-
+  #                    )
+  #add_dependencies(Eigen3 eigen3_ep)
+  #list(APPEND NETWORKZ_HEADERS_DIR ${EIGEN3_PREFIX}/include/eigen3)
 endmacro()
 
 # ----------- [ MACRO: build_jemalloc ] --------------
@@ -615,5 +612,4 @@ if(NETWORKZ_JEMALLOC)
   # installations.
   # find_package(jemalloc)
   build_jemalloc()
-  
 endif()

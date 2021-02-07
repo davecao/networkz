@@ -205,8 +205,8 @@ message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 # Add location of Header Files
 set(NETWORKZ_HEADERS_DIR
   ${PROJECT_SOURCE_DIR}
-  ${EIGEN3_INCLUDE_DIR}
-  ${Boost_INCLUDE_DIRS}
+  #${EIGEN3_INCLUDE_DIR}
+  #${Boost_INCLUDE_DIRS}
 )
 
 # ----- [ make ctags target ] -----
