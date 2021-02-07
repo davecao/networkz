@@ -337,9 +337,9 @@ find_package(Threads REQUIRED)
 
 macro(build_boost)
   set(BOOST_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/boost_ep-prefix/src/boost_ep")
-  message(status " BOOST_SOURCE_URL:${BOOST_SOURCE_URL}")
+  message(STATUS "BOOST_SOURCE_URL: ${BOOST_SOURCE_URL}")
   set(BOOST_ROOT ${BOOST_PREFIX})
-  set(NETWORKZ_BOOST_REQUIRE_LIBRARY ON)
+  # set(NETWORKZ_BOOST_REQUIRE_LIBRARY ON)
 
   if(NETWORKZ_BOOST_REQUIRE_LIBRARY)
     set(BOOST_LIB_DIR "${BOOST_PREFIX}/stage/lib")
@@ -416,13 +416,13 @@ macro(build_boost)
       BOOST_STATIC_GRAPH_LIBRARY
       "${BOOST_LIB_DIR}/libboost_graph${BOOST_LIBRARY_SUFFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}"
       )
-    set(BOOST_STATIC_SYSTEM_LIBRARY boost_system_static)
-    set(BOOST_STATIC_FILESYSTEM_LIBRARY boost_filesystem_static)
-    set(BOOST_STATIC_REGEX_LIBRARY boost_regex_static)
-    set(BOOST_STATIC_PROGRAM_OPTIONS_LIBRARY boost_program_options_static)
-    set(BOOST_STATIC_IOSTREAMS_LIBRARY boost_iostreams_static)
-    set(BOOST_STATIC_TIMER_LIBRARY boost_timer_static)
-    set(BOOST_STATIC_TIMER_LIBRARY boost_graph_static)
+    set(BOOST_SYSTEM_LIBRARY boost_system_static)
+    set(BOOST_FILESYSTEM_LIBRARY boost_filesystem_static)
+    set(BOOST_REGEX_LIBRARY boost_regex_static)
+    set(BOOST_PROGRAM_OPTIONS_LIBRARY boost_program_options_static)
+    set(BOOST_IOSTREAMS_LIBRARY boost_iostreams_static)
+    set(BOOST_TIMER_LIBRARY boost_timer_static)
+    set(BOOST_GRAPH_LIBRARY boost_graph_static)
     set(BOOST_BUILD_PRODUCTS ${BOOST_STATIC_SYSTEM_LIBRARY}
                              ${BOOST_STATIC_FILESYSTEM_LIBRARY}
                              ${BOOST_STATIC_REGEX_LIBRARY}
@@ -496,7 +496,7 @@ endif()
 
 macro(build_eigen3)
   set(EIGEN3_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/eigen3_ep-prefix/src/eigen3_ep/dist")
-  
+  message(STATUS "EIGEN3_SOURCE_URL: ${EIGEN3_SOURCE_URL}")
   set(EIGEN3_CMAKE_ARGS 
     "-DCMAKE_BUILD_TYPE=Release" 
     "-DCMAKE_INSTALL_PREFIX=${EIGEN3_PREFIX}"
