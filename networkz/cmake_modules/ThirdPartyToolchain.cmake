@@ -355,7 +355,7 @@ macro(build_boost)
       set(BOOST_CONFIGURE_COMMAND "./bootstrap.sh")
     endif()
 
-    set(BOOST_BUILD_WITH_LIBRARIES "filesystem" "regex" "system" "program_options" "timer" "iostreams")
+    set(BOOST_BUILD_WITH_LIBRARIES "filesystem" "graph" "graph_parallel" "mpi" "regex" "system" "program_options" "timer" "iostreams")
     string(REPLACE ";" "," BOOST_CONFIGURE_LIBRARIES "${BOOST_BUILD_WITH_LIBRARIES}")
     list(APPEND BOOST_CONFIGURE_COMMAND "--prefix=${BOOST_PREFIX}" "cxxstd=${CMAKE_CXX_STANDARD}"
                 "--with-libraries=${BOOST_CONFIGURE_LIBRARIES}")
@@ -474,7 +474,8 @@ macro(build_boost)
                                     IMPORTED_LOCATION
                                     "${BOOST_BUILD_PRODUCTS}"
                                     INTERFACE_INCLUDE_DIRECTORIES
-                                    "${CMAKE_CURRENT_BINARY_DIR}/boost_ep-prefix/src/boost_ep"
+                                    "${BOOST_PREFIX}"
+                                    #"${CMAKE_CURRENT_BINARY_DIR}/boost_ep-prefix/src/boost_ep"
                                     )
   #add_dependencies(Boost boost_ep)
   # #message( " build-boost NETWORKZ_SYSTEM_DEPENDENCIES: ${NETWORKZ_SYSTEM_DEPENDENCIES}")
