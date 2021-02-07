@@ -412,31 +412,33 @@ macro(build_boost)
       BOOST_STATIC_TIMER_LIBRARY
       "${BOOST_LIB_DIR}/libboost_timer${BOOST_LIBRARY_SUFFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}"
       )
-    set(BOOST_SYSTEM_LIBRARY boost_system_static)
-    set(BOOST_FILESYSTEM_LIBRARY boost_filesystem_static)
-    set(BOOST_REGEX_LIBRARY boost_regex_static)
-    set(BOOST_STATIC_PROGRAM_OPTIONS_LIBRARY boost_program_options)
-    set(BOOST_STATIC_IOSTREAMS_LIBRARY boost_iostreams)
-    set(BOOST_STATIC_TIMER_LIBRARY boost_timer)
+    set(
+      BOOST_STATIC_GRAPH_LIBRARY
+      "${BOOST_LIB_DIR}/libboost_graph${BOOST_LIBRARY_SUFFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}"
+      )
+    set(BOOST_STATIC_SYSTEM_LIBRARY boost_system_static)
+    set(BOOST_STATIC_FILESYSTEM_LIBRARY boost_filesystem_static)
+    set(BOOST_STATIC_REGEX_LIBRARY boost_regex_static)
+    set(BOOST_STATIC_PROGRAM_OPTIONS_LIBRARY boost_program_options_static)
+    set(BOOST_STATIC_IOSTREAMS_LIBRARY boost_iostreams_static)
+    set(BOOST_STATIC_TIMER_LIBRARY boost_timer_static)
+    set(BOOST_STATIC_TIMER_LIBRARY boost_graph_static)
     set(BOOST_BUILD_PRODUCTS ${BOOST_STATIC_SYSTEM_LIBRARY}
                              ${BOOST_STATIC_FILESYSTEM_LIBRARY}
                              ${BOOST_STATIC_REGEX_LIBRARY}
                              ${BOOST_STATIC_PROGRAM_OPTIONS_LIBRARY}
                              ${BOOST_STATIC_IOSTREAMS_LIBRARY}
                              ${BOOST_STATIC_TIMER_LIBRARY}
+                             ${BOOST_STATIC_GRAPH_LIBRARY}
                              )
 
     add_thirdparty_lib(boost_system STATIC_LIB "${BOOST_STATIC_SYSTEM_LIBRARY}")
-
     add_thirdparty_lib(boost_filesystem STATIC_LIB "${BOOST_STATIC_FILESYSTEM_LIBRARY}")
-
     add_thirdparty_lib(boost_regex STATIC_LIB "${BOOST_STATIC_REGEX_LIBRARY}")
-    
     add_thirdparty_lib(boost_program_options STATIC_LIB "${BOOST_STATIC_PROGRAM_OPTIONS_LIBRARY}")
-    
     add_thirdparty_lib(boost_iostreams STATIC_LIB "${BOOST_STATIC_IOSTREAMS_LIBRARY}")
-    
     add_thirdparty_lib(boost_timer STATIC_LIB "${BOOST_STATIC_TIMER_LIBRARY}")
+    add_thirdparty_lib(boost_graph STATIC_LIB "${BOOST_STATIC_GRAPH_LIBRARY}")
 
     externalproject_add(
       boost_ep
@@ -448,7 +450,8 @@ macro(build_boost)
       BUILD_COMMAND ${BOOST_BUILD_COMMAND}
       INSTALL_COMMAND "" ${EP_LOG_OPTIONS})
     list(APPEND NETWORKZ_BUNDLED_STATIC_LIBS boost_system_static boost_filesystem_static
-                boost_regex_static boost_program_options_static boost_iostreams_static boost_timer_static)
+                boost_regex_static boost_program_options_static boost_iostreams_static 
+                boost_timer_static boost_graph_static)
   else()
     message(status " Add external project boost")
     externalproject_add(boost_ep
