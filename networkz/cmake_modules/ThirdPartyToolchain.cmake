@@ -453,7 +453,7 @@ macro(build_boost)
     add_thirdparty_lib(boost_regex STATIC_LIB "${BOOST_STATIC_REGEX_LIBRARY}")
     add_thirdparty_lib(boost_program_options STATIC_LIB "${BOOST_STATIC_PROGRAM_OPTIONS_LIBRARY}")
     add_thirdparty_lib(boost_iostreams STATIC_LIB "${BOOST_STATIC_IOSTREAMS_LIBRARY}")
-    add_thirdparty_lib(boost_chrono_static STATIC_LIB "${BOOST_STATIC_CHRONO_LIBRARY}")
+    add_thirdparty_lib(boost_chrono STATIC_LIB "${BOOST_STATIC_CHRONO_LIBRARY}")
     add_thirdparty_lib(boost_timer STATIC_LIB "${BOOST_STATIC_TIMER_LIBRARY}")
     add_thirdparty_lib(boost_graph STATIC_LIB "${BOOST_STATIC_GRAPH_LIBRARY}")
 
