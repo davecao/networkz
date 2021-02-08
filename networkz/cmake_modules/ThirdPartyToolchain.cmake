@@ -401,11 +401,11 @@ macro(build_boost)
       )
     set(
       BOOST_STATIC_PROGRAM_OPTIONS_LIBRARY
-      "${BOOST_LIB_DIR}/libboost_iostreams${BOOST_LIBRARY_SUFFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}"
+      "${BOOST_LIB_DIR}/libboost_program_options${BOOST_LIBRARY_SUFFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}"
       )
     set(
       BOOST_STATIC_IOSTREAMS_LIBRARY
-      "${BOOST_LIB_DIR}/libboost_graph${BOOST_LIBRARY_SUFFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}"
+      "${BOOST_LIB_DIR}/libboost_iostreams${BOOST_LIBRARY_SUFFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}"
       )
     set(
       BOOST_STATIC_TIMER_LIBRARY
