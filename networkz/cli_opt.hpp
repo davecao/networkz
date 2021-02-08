@@ -124,6 +124,10 @@ namespace CLIARG {
       // initialize options
       init();
       po::store(parse_command_line(argc, argv, general),vm);
+      if (vm.count("help")) {
+        std::cout << general << std::endl;
+        std::exit(0);
+      }
       po::notify(vm);
     }catch(po::ambiguous_option& e){
       //std::cout<<"Program is terminated for the following reason(s):\n\n";
@@ -138,12 +142,7 @@ namespace CLIARG {
       //BOOST_CHECK_EQUAL(e.get_option_name(), "option name");
       //BOOST_CHECK_EQUAL(std::string(e.what()), "Unknown option");
     }
-    
-    if ( vm.count("help") ){
-      // print help info
-      std::cout << general << std::endl;
-      std::exit(0);
-    }
+
     if ( vm.count("version") ){
       //print version info
       std::cout << VersionInfo::version << std::endl;
@@ -167,8 +166,8 @@ namespace CLIARG {
       i_filename = vm["infile"].as<std::string>();
       if( !FileExists(i_filename) ) {
         std::cout << "Could not find the file: "<< i_filename <<std::endl;
-        std::cout << "Program terminated." << std::endl;
-        exit(0);
+        std::cout << "Program terminated. See -help for usage." << std::endl;
+        std::exit(0);
       }
     }else{
       std::cout << general << std::endl;
