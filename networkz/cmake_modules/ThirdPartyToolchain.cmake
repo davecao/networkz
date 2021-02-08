@@ -36,10 +36,10 @@
 include(ProcessorCount)
 processorcount(NPROC)
 
-# add_custom_target(toolchain)
+add_custom_target(toolchain)
 
 # Accumulate all bundled targets and we will splice them together later as
-# libarrow_dependencies.a so that third party libraries have something usable
+# libnetworkz_dependencies.a so that third party libraries have something usable
 # to create statically-linked builds with some BUNDLED dependencies, including
 # allocators like jemalloc and mimalloc
 set(NETWORKZ_BUNDLED_STATIC_LIBS)
@@ -464,7 +464,7 @@ macro(build_boost)
 
   set(Boost_INCLUDE_DIR "${BOOST_PREFIX}")
   set(Boost_INCLUDE_DIRS "${Boost_INCLUDE_DIR}")
-  add_dependencies(Boost boost_ep)
+  add_dependencies(toolchain boost_ep)
   set(BOOST_VENDORED TRUE)
 
   #include_directories(SYSTEM "${BOOST_ROOT}/")
@@ -528,7 +528,7 @@ macro(build_eigen3)
                           #INTERFACE_INCLUDE_DIRECTORIES
                           #"${EIGEN3_PREFIX}/include/eigen3"
   #                    )
-  #add_dependencies(Eigen3 eigen3_ep)
+  add_dependencies(toolchain eigen3_ep)
   #list(APPEND NETWORKZ_HEADERS_DIR ${EIGEN3_PREFIX}/include/eigen3)
 endmacro()
 
