@@ -53,6 +53,7 @@ set(NETWORKZ_SYSTEM_DEPENDENCIES)
 
 set(NETWORKZ_THIRDPARTY_DEPENDENCIES
     Boost
+    Eigen3
 )
 
 # For backward compatibility. We use "BOOST_SOURCE" if "Boost_SOURCE"
@@ -490,6 +491,7 @@ macro(build_boost)
   add_dependencies(toolchain boost_ep)
   set(BOOST_VENDORED TRUE)
 
+  # Put the header files on the system path
   include_directories(SYSTEM "${Boost_INCLUDE_DIR}")
   # The include directory must exist before it is referenced by a target.
   file(MAKE_DIRECTORY "${BOOST_ROOT}/")
@@ -504,7 +506,10 @@ macro(build_boost)
   #                                  #"${CMAKE_CURRENT_BINARY_DIR}/boost_ep-prefix/src/boost_ep"
                                     )
   add_dependencies(Boost boost_ep)
-
+  #if(CMAKE_OSX_SYSROOT)
+  # On MacOS, cmake does not compile the custom target, toolchain, automatically.
+  # list(APPEND NETWORKZ_THIRDPARTY_DEPENDENCIES Boost)
+  #endif()
 endmacro()
 
 set(Boost_USE_MULTITHREADED ON)
@@ -542,6 +547,12 @@ macro(build_eigen3)
   file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/eigen3_ep-prefix/src/eigen3_ep")
   include_directories(SYSTEM ${EIGEN3_PREFIX}/include/eigen3)
   add_dependencies(toolchain eigen3_ep)
+  if(CMAKE_OSX_SYSROOT)
+    # On MacOS, cmake does not compile the custom target, toolchain, automatically.
+    add_library(Eigen3 INTERFACE)
+    add_dependencies(Eigen3 eigen3_ep)
+    list(APPEND NETWORKZ_BUNDLED_STATIC_LIBS Eigen3)
+  endif()
 endmacro()
 
 # ----------- [ MACRO: build_jemalloc ] --------------

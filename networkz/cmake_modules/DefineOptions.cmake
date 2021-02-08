@@ -493,6 +493,7 @@ macro(config_summary_message)
   message(STATUS "  Generator: ${CMAKE_GENERATOR}")
   message(STATUS "  Build type: ${CMAKE_BUILD_TYPE}")
   message(STATUS "  Source directory: ${CMAKE_CURRENT_SOURCE_DIR}")
+  message(STATUS "  Binary directory: ${CMAKE_CURRENT_BINARY_DIR}")
   message(STATUS "  Install prefix: ${CMAKE_INSTALL_PREFIX}")
   if(${CMAKE_EXPORT_COMPILE_COMMANDS})
     message(
