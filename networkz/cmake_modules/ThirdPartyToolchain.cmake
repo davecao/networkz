@@ -466,9 +466,14 @@ macro(build_boost)
       CONFIGURE_COMMAND ${BOOST_CONFIGURE_COMMAND}
       BUILD_COMMAND ${BOOST_BUILD_COMMAND}
       INSTALL_COMMAND "" ${EP_LOG_OPTIONS})
+
+    # Pay attention to the order of the timer and chrono for statically link.
+    # The timer library should appear before the boost_chrono library.
+    # e.g. libboost_timer.a libboost_chrono.a
+
     list(APPEND NETWORKZ_BUNDLED_STATIC_LIBS boost_system_static boost_filesystem_static
                 boost_regex_static boost_program_options_static boost_iostreams_static 
-                boost_chrono_static boost_timer_static boost_graph_static)
+                boost_timer_static boost_chrono_static boost_graph_static)
     message(STATUS "NETWORKZ_BUNDLED_STATIC_LIBS: ${NETWORKZ_BUNDLED_STATIC_LIBS}")
   else()
     message(status " Add external project boost")
