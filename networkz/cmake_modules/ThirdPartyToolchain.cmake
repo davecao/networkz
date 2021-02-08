@@ -469,6 +469,7 @@ macro(build_boost)
     list(APPEND NETWORKZ_BUNDLED_STATIC_LIBS boost_system_static boost_filesystem_static
                 boost_regex_static boost_program_options_static boost_iostreams_static 
                 boost_chrono_static boost_timer_static boost_graph_static)
+    message(STATUS "NETWORKZ_BUNDLED_STATIC_LIBS: ${NETWORKZ_BUNDLED_STATIC_LIBS}")
   else()
     message(status " Add external project boost")
     externalproject_add(boost_ep
