@@ -498,9 +498,7 @@ macro(build_boost)
   #                                  #"${CMAKE_CURRENT_BINARY_DIR}/boost_ep-prefix/src/boost_ep"
                                     )
   add_dependencies(Boost boost_ep)
-  # #message( " build-boost NETWORKZ_SYSTEM_DEPENDENCIES: ${NETWORKZ_SYSTEM_DEPENDENCIES}")
-  # #message( " build-boost NETWORKZ_THIRDPARTY_DEPENDENCIES: ${NETWORKZ_THIRDPARTY_DEPENDENCIES}")
-  # #message( " build-boost NETWORKZ_LINK_LIBS: ${NETWORKZ_LINK_LIBS}")
+
 endmacro()
 
 set(Boost_USE_MULTITHREADED ON)
@@ -536,17 +534,8 @@ macro(build_eigen3)
     )
 
   file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/eigen3_ep-prefix/src/eigen3_ep")
-  #add_library(Eigen3 STATIC IMPORTED)
   include_directories(SYSTEM ${EIGEN3_PREFIX}/include/eigen3)
-  #set_target_properties(Eigen3
-                        #PROPERTIES 
-                          #IMPORTED_LOCATION
-                          #"${EIGEN3_PREFIX}"
-                          #INTERFACE_INCLUDE_DIRECTORIES
-                          #"${EIGEN3_PREFIX}/include/eigen3"
-  #                    )
   add_dependencies(toolchain eigen3_ep)
-  #list(APPEND NETWORKZ_HEADERS_DIR ${EIGEN3_PREFIX}/include/eigen3)
 endmacro()
 
 # ----------- [ MACRO: build_jemalloc ] --------------
