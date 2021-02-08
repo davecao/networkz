@@ -354,7 +354,17 @@ macro(build_boost)
       set(BOOST_CONFIGURE_COMMAND "./bootstrap.sh")
     endif()
 
-    set(BOOST_BUILD_WITH_LIBRARIES "filesystem" "graph" "graph_parallel" "mpi" "regex" "system" "program_options" "timer" "iostreams")
+    set(BOOST_BUILD_WITH_LIBRARIES 
+        "filesystem"
+        "graph"
+        "graph_parallel"
+        "mpi"
+        "regex"
+        "system"
+        "program_options"
+        "chrono"
+        "timer"
+        "iostreams")
     string(REPLACE ";" "," BOOST_CONFIGURE_LIBRARIES "${BOOST_BUILD_WITH_LIBRARIES}")
     list(APPEND BOOST_CONFIGURE_COMMAND "--prefix=${BOOST_PREFIX}" "cxxstd=${CMAKE_CXX_STANDARD}"
                 "--with-libraries=${BOOST_CONFIGURE_LIBRARIES}")
@@ -458,7 +468,7 @@ macro(build_boost)
       INSTALL_COMMAND "" ${EP_LOG_OPTIONS})
     list(APPEND NETWORKZ_BUNDLED_STATIC_LIBS boost_system_static boost_filesystem_static
                 boost_regex_static boost_program_options_static boost_iostreams_static 
-                boost_timer_static boost_graph_static)
+                boost_chrono_static boost_timer_static boost_graph_static)
   else()
     message(status " Add external project boost")
     externalproject_add(boost_ep
