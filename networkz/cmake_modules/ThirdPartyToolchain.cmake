@@ -467,6 +467,7 @@ macro(build_boost)
   add_dependencies(toolchain boost_ep)
   set(BOOST_VENDORED TRUE)
 
+  include_directories(SYSTEM "${Boost_INCLUDE_DIR}")
   #include_directories(SYSTEM "${BOOST_ROOT}/")
   # # The include directory must exist before it is referenced by a target.
   #file(MAKE_DIRECTORY "${BOOST_ROOT}/")
