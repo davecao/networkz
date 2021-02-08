@@ -53,7 +53,6 @@ set(NETWORKZ_SYSTEM_DEPENDENCIES)
 
 set(NETWORKZ_THIRDPARTY_DEPENDENCIES
     Boost
-    Eigen3
 )
 
 # For backward compatibility. We use "BOOST_SOURCE" if "Boost_SOURCE"
@@ -468,20 +467,19 @@ macro(build_boost)
   set(BOOST_VENDORED TRUE)
 
   include_directories(SYSTEM "${Boost_INCLUDE_DIR}")
-  #include_directories(SYSTEM "${BOOST_ROOT}/")
-  # # The include directory must exist before it is referenced by a target.
-  #file(MAKE_DIRECTORY "${BOOST_ROOT}/")
-  #add_library(Boost STATIC IMPORTED)
-  #set_target_properties(Boost
-  #                       PROPERTIES INTERFACE_LINK_LIBRARIES
-  #                                  Threads::Threads
-  #                                  IMPORTED_LOCATION
-  #                                  "${BOOST_BUILD_PRODUCTS}"
+  # The include directory must exist before it is referenced by a target.
+  file(MAKE_DIRECTORY "${BOOST_ROOT}/")
+  add_library(Boost STATIC IMPORTED)
+  set_target_properties(Boost
+                         PROPERTIES INTERFACE_LINK_LIBRARIES
+                                    Threads::Threads
+                                    IMPORTED_LOCATION
+                                    "${BOOST_BUILD_PRODUCTS}"
   #                                  INTERFACE_INCLUDE_DIRECTORIES
   #                                  "${BOOST_PREFIX}"
   #                                  #"${CMAKE_CURRENT_BINARY_DIR}/boost_ep-prefix/src/boost_ep"
-  #                                  )
-  #add_dependencies(Boost boost_ep)
+                                    )
+  add_dependencies(Boost boost_ep)
   # #message( " build-boost NETWORKZ_SYSTEM_DEPENDENCIES: ${NETWORKZ_SYSTEM_DEPENDENCIES}")
   # #message( " build-boost NETWORKZ_THIRDPARTY_DEPENDENCIES: ${NETWORKZ_THIRDPARTY_DEPENDENCIES}")
   # #message( " build-boost NETWORKZ_LINK_LIBS: ${NETWORKZ_LINK_LIBS}")
