@@ -128,26 +128,31 @@ namespace CLIARG {
         std::cout << general << std::endl;
         std::exit(0);
       }
+      if ( vm.count("version") ){
+        //print version info
+        std::cout << VersionInfo::version << std::endl;
+        std::exit(0);
+      }
       po::notify(vm);
+    }catch(po::required_option& e) {
+      // required options error
+      std::cout<<e.get_option_name()<<" is a required but missing. \n";
+      std::cout << general << std::endl;
+      std::exit(0);
     }catch(po::ambiguous_option& e){
       //std::cout<<"Program is terminated for the following reason(s):\n\n";
       std::cout<<e.get_option_name()<<" is an ambiguous option name.\n";
       std::cout << general << std::endl;
-      exit(0);
+      std::exit(0);
       //BOOST_CHECK_EQUAL(std::string(e.what()), "Unknown option");
     }catch(po::unknown_option& e){
       std::cout<<e.get_option_name()<<" is an unknown option name.\n";
       std::cout << general << std::endl;
-      exit(0);
+      std::exit(0);
       //BOOST_CHECK_EQUAL(e.get_option_name(), "option name");
       //BOOST_CHECK_EQUAL(std::string(e.what()), "Unknown option");
     }
 
-    if ( vm.count("version") ){
-      //print version info
-      std::cout << VersionInfo::version << std::endl;
-      exit(0);
-    }
     if ( vm.count("verbose") ){
       verbose = true;
     }
