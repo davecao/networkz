@@ -6,6 +6,7 @@
 //  Copyright © 2020 曹巍. All rights reserved.
 //
 #include <limits>  // std::numeric_limits<T>::max()
+#include <boost/timer/timer.hpp>
 
 #include "graph_util.hpp"
 // -----------------------------------------------------------------------------
@@ -63,6 +64,13 @@ Eigen::MatrixXd NARO::Euclidean::operator()(const Eigen::MatrixXd& mat,
 //
 Eigen::MatrixXd NARO::Corrcoef::operator()(const Eigen::MatrixXd& mat,
                                            bool verbose=false) {
+  const double epsilon = 1e-9;
+  // For measuring elasped time
+  std::chrono::duration<double> seconds;
+  // manually start timer
+  boost::timer::cpu_timer timer;
+  timer.start();
+  std::cout<< " Compute correlation matrix ...";
   double nrows = static_cast<double>(mat.rows());
   if (nrows == 1) {
     std::cerr << "Error: the input matrix at least contains two rows"
@@ -84,26 +92,20 @@ Eigen::MatrixXd NARO::Corrcoef::operator()(const Eigen::MatrixXd& mat,
   Eigen::MatrixXd cc = ((cov.array().rowwise() * D.transpose().array())
                        .colwise() * D.array()).abs();
   Eigen::MatrixXd cc_dist = 1 - cc.array();
+
+  // Correct values close to zero to be zero
+  cc_dist = (cc_dist.array().abs() < epsilon).select(0., cc_dist);
+  /*
   if (verbose) {
     mat2file(cov, "networkz_covariance_mat.csv");
     mat2file(cc, "networkz_corref_mat.csv");
     mat2file(cc_dist, "networkz_corref_dist_mat.csv");
   }
-//  std::cout << "Raw matrix: arranged as rows\n";
-//  std::cout << mat << std::endl;
-//  std::cout << "Mean vector: \n";
-//  std::cout << m << std::endl;
-//  std::cout << "Centered matrix:\n";
-//  std::cout << Xc << std::endl;
-//  std::cout << "Covariance matrix:\n";
-//  std::cout << cov << std::endl;
-//  std::cout << "diagnal element in row vector:\n";
-//  std::cout << diag << std::endl;
-//  std::cout << "Inverse of squared root of diagnal element matrix\n";
-//  std::cout << D << std::endl;
-//  std::cout << "correlation coefficient matrix for mat:\n";
-//  std::cout << cc << std::endl;
-
+  */
+  timer.stop();
+  seconds = std::chrono::nanoseconds(timer.elapsed().user);
+  std::cout << " Completed in " << seconds.count() << " seconds."
+            << std::endl;
   return cc_dist;
 }
 
@@ -413,7 +415,6 @@ void NARO::convert(NARO::Graph& g,
     if (src != dest) {
       links[nId_dest].push_back(std::make_pair(nId_src, weight));
     }
-    //csr_g.nb_links += 1ULL;
   }
 
   int s = static_cast<int>(links.size());
@@ -423,7 +424,6 @@ void NARO::convert(NARO::Graph& g,
       long double weight = links[i][j].second;
       csr_g.links.push_back(dest);
       csr_g.weights.push_back(weight);
-      //csr_g.nb_links += 1ULL;
     }
   }
   // Compute total weight
