@@ -143,7 +143,7 @@ std::vector<int> Louvain<QualityType>::display_partition()
 
   for (int i = 0; i < qual->node_size; i++) {
     node2community[i] = renumber[qual->n2c[i]];
-    std::cout << i << " " << renumber[qual->n2c[i]] << std::endl;
+    //std::cout << i << " " << renumber[qual->n2c[i]] << std::endl;
   }
   return node2community;
 }
