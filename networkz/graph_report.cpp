@@ -110,11 +110,11 @@ bool NARO::Report::write(const std::string& o_filename, Graph* g,
       auto degree = boost::degree(*vi, *g);
       auto component_num = component[*vi];
       auto communityId = (*g)[*vi].communityId;
-      markdown_writer(ofile,
-                      vertex_name + ":" +
-                      std::to_string(component_num) + ":" +
-                      std::to_string(communityId) + ":" +
-                      std::to_string(degree));
+      auto message = vertex_name + ":" +
+                     std::to_string(component_num) + ":" +
+                     std::to_string(communityId) + ":" +
+                     std::to_string(degree);
+      markdown_writer(ofile, message);
     }
 
   }else{
