@@ -1,8 +1,8 @@
 # Notice
 The program `networkz` used in the following paper had been renamed to `GeneNetAnalysis`.   
 National Agriculture and Foold Research Organization (**NARO**) will manage the distribtuion of the source code which is freely available for non-commercial use.  
-One can send a request of the source code via https://www.naro.go.jp/collab/program/index.html. 
-
+You can send a request of the source code via https://www.naro.go.jp/collab/program/index.html.   
+If you have any questions or troubles to contact with NARO office, please send an e-mail to sou197@affrc.go.jp 
 
 # networkz -> GeneNetAnalysis
 BGL-based graph tools for gene co-expression analysis
